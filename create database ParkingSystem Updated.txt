@@ -1,0 +1,58 @@
+create database ParkingSystem
+use ParkingSystem
+
+-- Create the Client table with ClientID as NVARCHAR
+CREATE TABLE Client (
+    ClientID NVARCHAR(10) PRIMARY KEY, -- Changed to NVARCHAR for custom ID format
+    Name NVARCHAR(100) NOT NULL,
+    Address NVARCHAR(255),
+    CpNumber NVARCHAR(20),
+    IDPicture NVARCHAR(MAX) -- Changed to NVARCHAR(MAX) to store Base64 string of the image
+);
+
+-- Create the Vehicle table with VehicleID as NVARCHAR, and ClientID as NVARCHAR
+CREATE TABLE Vehicle (
+    VehicleID NVARCHAR(10) PRIMARY KEY, -- Changed to NVARCHAR for custom ID format
+    Brand NVARCHAR(50),
+    Color NVARCHAR(50),
+    PlateNumber NVARCHAR(20) NOT NULL,
+    ClientID NVARCHAR(10) NOT NULL, -- Changed to NVARCHAR to match Client.ClientID
+    VehicleType NVARCHAR(50),
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
+);
+
+-- Create the Fee table (no changes needed here)
+CREATE TABLE Fee (
+    FeeID INT PRIMARY KEY IDENTITY(1,1),
+    VehicleType NVARCHAR(50),
+    FeePerHour DECIMAL(10,2) NOT NULL
+);
+
+-- Insert initial data into Fee table
+INSERT INTO Fee (VehicleType, FeePerHour)
+VALUES
+('2-Wheels', 25.00),
+('4-Wheels', 50.00);
+
+CREATE TABLE VehicleSessions (
+    SessionID INT PRIMARY KEY Identity(1,1) NOT NULL,
+    VehicleID VARCHAR(50) NOT NULL,
+    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Weekly', 'Monthly', 'Yearly')),
+    StartTime TIME NOT NULL,
+    StartDate DATE NOT NULL,
+    EndDateTime DATETIME NOT NULL,
+    TotalAmount DECIMAL(10, 2) NOT NULL
+); 
+
+
+
+CREATE TABLE RegularParkingSessions (
+    SessionID INT IDENTITY(1,1) PRIMARY KEY,
+    RegularVehicleID NVARCHAR(10) NOT NULL,
+    PlateNumber NVARCHAR(20) NOT NULL,
+    VehicleType NVARCHAR(50) NOT NULL,
+    TimeIn DATETIME NOT NULL,
+    TimeOut DATETIME NULL,
+    TotalAmount DECIMAL(10,2) NULL,
+    QRCodeData NVARCHAR(MAX) NULL
+);
