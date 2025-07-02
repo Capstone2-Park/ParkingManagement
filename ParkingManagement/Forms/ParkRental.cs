@@ -30,7 +30,6 @@ namespace ParkingManagement.Forms
             InitializeComponent();
             InitializeDbContext();
             InitializeDataGridView();
-            SetupTimeComboBoxes();
             SetupDurationTypeComboBox();
 
             // Initialize the CancellationTokenSource here
@@ -127,56 +126,6 @@ namespace ParkingManagement.Forms
             dgvVehicles.MultiSelect = false;
         }
 
-
-        private void SetupTimeComboBoxes()
-        {
-            cmbTimeStart.Items.Clear();
-            for (int hour = 1; hour <= 12; hour++)
-            {
-                for (int minute = 0; minute < 60; minute += 30) // 30-minute intervals
-                {
-                    cmbTimeStart.Items.Add($"{hour:D2}:{minute:D2} AM");
-                    if (hour != 12) // Don't add 12 PM twice if already covered
-                    {
-                        cmbTimeStart.Items.Add($"{hour:D2}:{minute:D2} PM");
-                    }
-                }
-            }
-            // Explicitly ensure 12 PM and 12:30 PM are present if loop doesn't cover
-            if (!cmbTimeStart.Items.Contains("12:00 PM")) cmbTimeStart.Items.Add("12:00 PM");
-            if (!cmbTimeStart.Items.Contains("12:30 PM")) cmbTimeStart.Items.Add("12:30 PM");
-
-
-            // Select current time as default, rounded to nearest 30 mins
-            DateTime now = DateTime.Now;
-            int currentHour = now.Hour;
-            int currentMinute = now.Minute;
-
-            string defaultTime;
-            if (currentMinute < 15) // Round down to :00
-            {
-                defaultTime = $"{((currentHour == 0 || currentHour == 12) ? 12 : currentHour % 12):D2}:00 {(currentHour < 12 ? "AM" : "PM")}";
-            }
-            else if (currentMinute < 45) // Round to :30
-            {
-                defaultTime = $"{((currentHour == 0 || currentHour == 12) ? 12 : currentHour % 12):D2}:30 {(currentHour < 12 ? "AM" : "PM")}";
-            }
-            else // Round up to next hour :00
-            {
-                currentHour++;
-                defaultTime = $"{((currentHour == 0 || currentHour == 12) ? 12 : currentHour % 12):D2}:00 {(currentHour < 12 ? "AM" : "PM")}";
-            }
-
-            if (cmbTimeStart.Items.Contains(defaultTime))
-            {
-                cmbTimeStart.SelectedItem = defaultTime;
-            }
-            else if (cmbTimeStart.Items.Count > 0)
-            {
-                cmbTimeStart.SelectedIndex = 0; // Fallback to first item
-            }
-        }
-
         private void SetupDurationTypeComboBox()
         {
             cmbDurationType.Items.Clear();
@@ -185,7 +134,6 @@ namespace ParkingManagement.Forms
             cmbDurationType.Items.Add("Yearly");
             cmbDurationType.SelectedIndex = 0; // Default to Weekly
         }
-
 
         private async void txtSearch_TextChanged(object sender, EventArgs e)
         {
@@ -268,20 +216,16 @@ namespace ParkingManagement.Forms
 
                 _selectedClient = selectedRow.Cells["ClientObject"].Value as Client;
                 _selectedVehicle = selectedRow.Cells["VehicleObject"].Value as Vehicle;
-
-              
             }
             else
             {
                 _selectedClient = null;
                 _selectedVehicle = null;
-              
+
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
             }
-        } 
-
-     
+        }
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
@@ -292,9 +236,9 @@ namespace ParkingManagement.Forms
             }
 
             // Ensure we have valid inputs for calculation
-            if (cmbTimeStart.SelectedItem == null || cmbDurationType.SelectedItem == null)
+            if (cmbDurationType.SelectedItem == null)
             {
-                MessageBox.Show("Please select a Start Time and Duration Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a Duration Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -308,7 +252,6 @@ namespace ParkingManagement.Forms
 
             // Now, _calculatedEndDateTime and _calculatedTotalAmount are set
             DateTime startDate = dtpDateStart.Value.Date;
-            TimeSpan startTime = ParseTimeSpan(cmbTimeStart.SelectedItem.ToString());
             string durationType = cmbDurationType.SelectedItem.ToString();
 
             // Final validation before saving
@@ -320,7 +263,7 @@ namespace ParkingManagement.Forms
 
             // Validate that the end date is not in the past relative to the current time,
             // or if it makes sense for a pre-booked future rental, validate against start time.
-            if (_calculatedEndDateTime < startDate.Add(startTime))
+            if (_calculatedEndDateTime < startDate)
             {
                 MessageBox.Show("The calculated end date/time is in the past. Please adjust start date or duration.", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -330,7 +273,6 @@ namespace ParkingManagement.Forms
             {
                 VehicleID = _selectedVehicle.VehicleID,
                 DurationType = durationType,
-                StartTime = startTime,
                 StartDate = startDate,
                 EndDateTime = _calculatedEndDateTime, // Use the calculated value
                 TotalAmount = _calculatedTotalAmount  // Use the calculated value
@@ -354,20 +296,10 @@ namespace ParkingManagement.Forms
             }
         }
 
-        private TimeSpan ParseTimeSpan(string timeString)
-        {
-            DateTime tempDate;
-            if (DateTime.TryParseExact(timeString, "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out tempDate))
-            {
-                return tempDate.TimeOfDay;
-            }
-            return TimeSpan.Zero;
-        }
-
         // Renamed and modified to store values internally, not display on labels
         private async Task<bool> CalculateAndSetRentalDetailsForSave()
         {
-            if (_selectedVehicle == null || cmbTimeStart.SelectedItem == null || cmbDurationType.SelectedItem == null)
+            if (_selectedVehicle == null || cmbDurationType.SelectedItem == null)
             {
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
@@ -376,8 +308,6 @@ namespace ParkingManagement.Forms
             }
 
             DateTime startDate = dtpDateStart.Value.Date;
-            TimeSpan startTime = ParseTimeSpan(cmbTimeStart.SelectedItem.ToString());
-            DateTime startDateTime = startDate.Add(startTime);
             string durationType = cmbDurationType.SelectedItem.ToString();
 
             decimal feePerHour = 0;
@@ -409,16 +339,16 @@ namespace ParkingManagement.Forms
             switch (durationType)
             {
                 case "Weekly":
-                    _calculatedEndDateTime = startDateTime.AddDays(7);
+                    _calculatedEndDateTime = startDate.AddDays(7);
                     _calculatedTotalAmount = feePerHour * 24 * 7;
                     break;
                 case "Monthly":
-                    _calculatedEndDateTime = startDateTime.AddMonths(1);
+                    _calculatedEndDateTime = startDate.AddMonths(1);
                     // For monthly, you might have a fixed monthly fee or use an average (e.g., 30 days)
                     _calculatedTotalAmount = feePerHour * 24 * 30; // Using 30 days for calculation
                     break;
                 case "Yearly":
-                    _calculatedEndDateTime = startDateTime.AddYears(1);
+                    _calculatedEndDateTime = startDate.AddYears(1);
                     // For yearly, use 365 days or 366 for leap years if precision matters
                     _calculatedTotalAmount = feePerHour * 24 * 365; // Using 365 days for calculation
                     break;
@@ -438,14 +368,11 @@ namespace ParkingManagement.Forms
             _selectedClient = null;
             _selectedVehicle = null;
             dtpDateStart.Value = DateTime.Now; // Reset to current date
-            cmbTimeStart.SelectedIndex = (cmbTimeStart.Items.Count > 0) ? 0 : -1;
             cmbDurationType.SelectedIndex = 0; // Default to Weekly
 
             _calculatedEndDateTime = DateTime.MinValue;
             _calculatedTotalAmount = 0;
         }
-
-
 
         private void ParkRental_FormClosing(object sender, FormClosingEventArgs e)
         {

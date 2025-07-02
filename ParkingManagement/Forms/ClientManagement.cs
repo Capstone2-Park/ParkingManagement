@@ -2,6 +2,7 @@ using AForge.Video;
 using AForge.Video.DirectShow;
 using Microsoft.EntityFrameworkCore;
 using ParkingManagement.Model;
+using ParkingManagement.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -447,6 +448,14 @@ namespace ParkingManagement
 
                 // --- CHANGE HERE: Call ClearForm(true) to clear all inputs AND reset DGV to empty for new entry ---
                 await ClearForm(true); // Clear input fields AND reset dgvInformation to empty for new client
+
+                // After successful save:
+                var homePage = this.ParentForm as HomePage;
+                if (homePage != null)
+                {
+                    var parkRentalForm = new ParkRental();
+                    homePage.ShowFormInPanel(parkRentalForm);
+                }
             }
             catch (DbUpdateException ex)
             {

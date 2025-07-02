@@ -15,9 +15,7 @@ namespace ParkingManagement
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Fee> Fees { get; set; }
         public DbSet<VehicleSession> VehicleSessions { get; set; }
-        // ADD THIS NEW DbSet:
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,29 +44,28 @@ namespace ParkingManagement
             modelBuilder.Entity<Fee>().Property(f => f.VehicleType).HasMaxLength(50);
             modelBuilder.Entity<Fee>().Property(f => f.FeePerHour).HasColumnType("DECIMAL(10,2)");
 
-            // Configure VehicleSession entity
+            // Configure VehicleSession entity to match the new table structure
             modelBuilder.Entity<VehicleSession>().ToTable("VehicleSessions");
             modelBuilder.Entity<VehicleSession>().HasKey(vs => vs.SessionID);
-            // This line is CORRECT for an INT IDENTITY column:
             modelBuilder.Entity<VehicleSession>().Property(vs => vs.SessionID).ValueGeneratedOnAdd();
             modelBuilder.Entity<VehicleSession>().Property(vs => vs.VehicleID).HasColumnType("VARCHAR(50)").IsRequired();
             modelBuilder.Entity<VehicleSession>().Property(vs => vs.DurationType).HasMaxLength(50).IsRequired();
-            modelBuilder.Entity<VehicleSession>().Property(vs => vs.StartTime).HasColumnType("TIME").IsRequired();
+            // Removed StartTime property mapping
             modelBuilder.Entity<VehicleSession>().Property(vs => vs.StartDate).HasColumnType("DATE").IsRequired();
             modelBuilder.Entity<VehicleSession>().Property(vs => vs.EndDateTime).HasColumnType("DATETIME").IsRequired();
             modelBuilder.Entity<VehicleSession>().Property(vs => vs.TotalAmount).HasColumnType("DECIMAL(10,2)").IsRequired();
 
-            // ADD CONFIGURATION FOR RegularParkingSession
-            modelBuilder.Entity<RegularParkingSession>().ToTable("RegularParkingSessions"); // Match table name in DB
+            // RegularParkingSession configuration
+            modelBuilder.Entity<RegularParkingSession>().ToTable("RegularParkingSessions");
             modelBuilder.Entity<RegularParkingSession>().HasKey(rps => rps.SessionID);
-            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.SessionID).ValueGeneratedOnAdd(); // Auto-increment
+            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.SessionID).ValueGeneratedOnAdd();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.RegularVehicleID).HasMaxLength(10).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.PlateNumber).HasMaxLength(20).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.VehicleType).HasMaxLength(50).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeIn).IsRequired();
-            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeOut).IsRequired(false); // Nullable
-            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TotalAmount).HasColumnType("DECIMAL(10,2)").IsRequired(false); // Nullable
-            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.QRCodeData).HasColumnType("NVARCHAR(MAX)").IsRequired(false); // Nullable
+            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeOut).IsRequired(false);
+            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TotalAmount).HasColumnType("DECIMAL(10,2)").IsRequired(false);
+            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.QRCodeData).HasColumnType("NVARCHAR(MAX)").IsRequired(false);
         }
     }
 }

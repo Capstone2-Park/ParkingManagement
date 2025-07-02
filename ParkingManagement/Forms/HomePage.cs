@@ -19,6 +19,15 @@ namespace ParkingManagement
             InitializeComponent();
         }
 
+        public void ShowFormInPanel(Form childForm)
+        {
+            panelHome.Controls.Clear();
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            panelHome.Controls.Add(childForm);
+            childForm.Show();
+        }
 
         private void btnRental_Click(object sender, EventArgs e)
         {
@@ -28,38 +37,12 @@ namespace ParkingManagement
 
         private void btnClientM_Click_1(object sender, EventArgs e)
         {
-            panelHome.Controls.Clear();
-
-
-            ClientManagement rentForm = new ClientManagement();
-
-            rentForm.TopLevel = false;
-            rentForm.FormBorderStyle = FormBorderStyle.None;
-            rentForm.Dock = DockStyle.Fill;
-
-
-            panelHome.Controls.Add(rentForm);
-
-
-            rentForm.Show();
+            ShowFormInPanel(new ClientManagement());
         }
 
         private void btnParkRental_Click_1(object sender, EventArgs e)
         {
-            panelHome.Controls.Clear();
-
-
-            ParkRental rentForm = new ParkRental();
-
-            rentForm.TopLevel = false;
-            rentForm.FormBorderStyle = FormBorderStyle.None;
-            rentForm.Dock = DockStyle.Fill;
-
-
-            panelHome.Controls.Add(rentForm);
-
-
-            rentForm.Show();
+            ShowFormInPanel(new ParkRental());
         }
 
         private void btnFeeM_Click(object sender, EventArgs e)
@@ -79,20 +62,7 @@ namespace ParkingManagement
 
         private void btnRegularParking_Click(object sender, EventArgs e)
         {
-            panelHome.Controls.Clear();
-
-
-            Regular_Parking RegPark = new Regular_Parking();
-
-            RegPark.TopLevel = false;
-            RegPark.FormBorderStyle = FormBorderStyle.None;
-            RegPark.Dock = DockStyle.Fill;
-
-
-            panelHome.Controls.Add(RegPark);
-
-
-            RegPark.Show();
+            ShowFormInPanel(new Regular_Parking());
         }
     }
 }
