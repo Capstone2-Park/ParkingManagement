@@ -38,11 +38,11 @@ CREATE TABLE VehicleSessions (
     SessionID INT PRIMARY KEY Identity(1,1) NOT NULL,
     VehicleID VARCHAR(50) NOT NULL,
     DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Weekly', 'Monthly', 'Yearly')),
-    StartTime TIME NOT NULL,
     StartDate DATE NOT NULL,
     EndDateTime DATETIME NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL
 ); 
+
 
 
 
