@@ -34,7 +34,6 @@
             panel1 = new Panel();
             btnRegularParking = new Button();
             btnFeeM = new Button();
-            btnParkRental = new Button();
             btnClientM = new Button();
             btnRental = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbLogo).BeginInit();
@@ -63,7 +62,6 @@
             // 
             panel1.Controls.Add(btnRegularParking);
             panel1.Controls.Add(btnFeeM);
-            panel1.Controls.Add(btnParkRental);
             panel1.Controls.Add(btnClientM);
             panel1.Controls.Add(btnRental);
             panel1.Location = new Point(13, 189);
@@ -75,7 +73,7 @@
             // 
             btnRegularParking.BackColor = Color.FromArgb(255, 128, 128);
             btnRegularParking.Dock = DockStyle.Top;
-            btnRegularParking.Location = new Point(0, 180);
+            btnRegularParking.Location = new Point(0, 135);
             btnRegularParking.Name = "btnRegularParking";
             btnRegularParking.Size = new Size(161, 45);
             btnRegularParking.TabIndex = 7;
@@ -87,25 +85,13 @@
             // 
             btnFeeM.BackColor = Color.FromArgb(255, 128, 128);
             btnFeeM.Dock = DockStyle.Top;
-            btnFeeM.Location = new Point(0, 135);
+            btnFeeM.Location = new Point(0, 90);
             btnFeeM.Name = "btnFeeM";
             btnFeeM.Size = new Size(161, 45);
             btnFeeM.TabIndex = 6;
             btnFeeM.Text = "Fee management";
             btnFeeM.UseVisualStyleBackColor = false;
             btnFeeM.Click += btnFeeM_Click;
-            // 
-            // btnParkRental
-            // 
-            btnParkRental.BackColor = Color.FromArgb(255, 192, 192);
-            btnParkRental.Dock = DockStyle.Top;
-            btnParkRental.Location = new Point(0, 90);
-            btnParkRental.Name = "btnParkRental";
-            btnParkRental.Size = new Size(161, 45);
-            btnParkRental.TabIndex = 5;
-            btnParkRental.Text = "Park Rental";
-            btnParkRental.UseVisualStyleBackColor = false;
-            btnParkRental.Click += btnParkRental_Click_1;
             // 
             // btnClientM
             // 
@@ -155,7 +141,6 @@
         private PictureBox ptbLogo;
         private Panel panel1;
         private Button btnRental;
-        private Button btnParkRental;
         private Button btnClientM;
         private Button btnFeeM;
         private Button btnRegularParking;

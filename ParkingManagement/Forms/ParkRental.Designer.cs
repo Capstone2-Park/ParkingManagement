@@ -30,9 +30,7 @@
         {
             dgvVehicles = new DataGridView();
             txtSearch = new TextBox();
-            cmbTimeStart = new ComboBox();
             dtpDateStart = new DateTimePicker();
-            label1 = new Label();
             label2 = new Label();
             cmbDurationType = new ComboBox();
             label3 = new Label();
@@ -57,29 +55,12 @@
             txtSearch.TabIndex = 1;
             txtSearch.TextChanged += txtSearch_TextChanged;
             // 
-            // cmbTimeStart
-            // 
-            cmbTimeStart.FormattingEnabled = true;
-            cmbTimeStart.Location = new Point(295, 236);
-            cmbTimeStart.Name = "cmbTimeStart";
-            cmbTimeStart.Size = new Size(121, 23);
-            cmbTimeStart.TabIndex = 2;
-            // 
             // dtpDateStart
             // 
             dtpDateStart.Location = new Point(295, 178);
             dtpDateStart.Name = "dtpDateStart";
             dtpDateStart.Size = new Size(200, 23);
             dtpDateStart.TabIndex = 3;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(200, 244);
-            label1.Name = "label1";
-            label1.Size = new Size(61, 15);
-            label1.TabIndex = 4;
-            label1.Text = "Time Start";
             // 
             // label2
             // 
@@ -93,7 +74,7 @@
             // cmbDurationType
             // 
             cmbDurationType.FormattingEnabled = true;
-            cmbDurationType.Location = new Point(295, 284);
+            cmbDurationType.Location = new Point(295, 249);
             cmbDurationType.Name = "cmbDurationType";
             cmbDurationType.Size = new Size(121, 23);
             cmbDurationType.TabIndex = 6;
@@ -101,7 +82,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(197, 292);
+            label3.Location = new Point(197, 257);
             label3.Name = "label3";
             label3.Size = new Size(81, 15);
             label3.TabIndex = 7;
@@ -126,9 +107,7 @@
             Controls.Add(label3);
             Controls.Add(cmbDurationType);
             Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(dtpDateStart);
-            Controls.Add(cmbTimeStart);
             Controls.Add(txtSearch);
             Controls.Add(dgvVehicles);
             Name = "ParkRental";
@@ -143,9 +122,7 @@
 
         private DataGridView dgvVehicles;
         private TextBox txtSearch;
-        private ComboBox cmbTimeStart;
         private DateTimePicker dtpDateStart;
-        private Label label1;
         private Label label2;
         private ComboBox cmbDurationType;
         private Label label3;
