@@ -20,7 +20,7 @@ namespace ParkingManagement
 {
     public partial class ClientManagement : Form
     {
-        private ParkingDbContext _context; // EF Core DbContext instance
+        private ParkingDbContext _context; 
 
         // --- Camera Variables ---
         private FilterInfoCollection videoDevices;
