@@ -8,13 +8,13 @@ namespace ParkingManagement.Models
 {
     internal class RegularParkingSession
     {
-        public int SessionID { get; set; }                // Primary Key, auto-incremented
+        public int SessionID { get; set; }               
         public string RegularVehicleID { get; set; }      // Auto-generated ID like "RP000001" for display
         public string PlateNumber { get; set; }
         public string VehicleType { get; set; }
         public DateTime TimeIn { get; set; }
-        public DateTime? TimeOut { get; set; }            // Nullable for when vehicle hasn't left
-        public decimal? TotalAmount { get; set; }         // Nullable for when amount isn't calculated yet
+        public DateTime? TimeOut { get; set; }          
+        public decimal? TotalAmount { get; set; }      
         public string QRCodeData { get; set; }            // Data that was encoded into the QR (e.g., SessionID)
     }
 }
