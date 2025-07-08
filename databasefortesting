@@ -56,3 +56,23 @@ CREATE TABLE RegularParkingSessions (
     TotalAmount DECIMAL(10,2) NULL,
     QRCodeData NVARCHAR(MAX) NULL
 );
+
+
+//Next database is for slot
+
+
+CREATE TABLE vehicleSlot (
+ParkCode INT IDENTITY(1,1) PRIMARY KEY,
+VehicleType NVARCHAR (50) NOT NULL,
+VehicleStatus VARCHAR (50) NOT NULL,
+
+FOREIGN KEY (ClientID) REFERENCES Client (ClientID) 
+FOREIGN KEY (SessionID) REFERENCES RegularParkingSession (SessionID)
+)
+
+
+
+
+
+
+
