@@ -18,7 +18,7 @@ namespace ParkingManagement
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.Dpi;
-            this.MinimumSize = new Size(800, 600); // Adjust as needed
+            this.MinimumSize = new Size(800, 600); 
         }
 
         public void ShowFormInPanel(Form childForm)
