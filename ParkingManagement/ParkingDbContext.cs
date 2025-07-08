@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ParkingManagement
 {
     internal class ParkingDbContext : DbContext
-    {
+    {// Configure VehicleSession entity to match the new table structu
         public DbSet<Client> Clients { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Fee> Fees { get; set; }
