@@ -16,5 +16,10 @@ namespace ParkingManagement.Forms
         {
             InitializeComponent();
         }
+
+        private void flpPakingSlot_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
