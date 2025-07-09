@@ -56,8 +56,10 @@
             dgvInformation = new DataGridView();
             btnSave = new Button();
             btnCancel = new Button();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // txtClientID
@@ -248,7 +250,7 @@
             label9.AutoSize = true;
             label9.Location = new Point(667, 468);
             label9.Name = "label9";
-            label9.Size = new Size(72, 15);
+            label9.Size = new Size(71, 15);
             label9.TabIndex = 22;
             label9.Text = "Vehicle Type";
             // 
@@ -274,17 +276,19 @@
             // 
             // dgvInformation
             // 
+            dgvInformation.Anchor = AnchorStyles.None;
             dgvInformation.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvInformation.Location = new Point(322, 612);
+            dgvInformation.Location = new Point(3, 3);
             dgvInformation.Name = "dgvInformation";
-            dgvInformation.Size = new Size(673, 150);
+            dgvInformation.Size = new Size(770, 184);
             dgvInformation.TabIndex = 25;
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(894, 800);
+            btnSave.Anchor = AnchorStyles.None;
+            btnSave.Location = new Point(3, 193);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(75, 23);
+            btnSave.Size = new Size(75, 36);
             btnSave.TabIndex = 26;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
@@ -292,22 +296,32 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(1012, 800);
+            btnCancel.Anchor = AnchorStyles.None;
+            btnCancel.Location = new Point(84, 193);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(75, 23);
+            btnCancel.Size = new Size(75, 36);
             btnCancel.TabIndex = 27;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
-            // ParkRental
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(dgvInformation);
+            flowLayoutPanel1.Controls.Add(btnSave);
+            flowLayoutPanel1.Controls.Add(btnCancel);
+            flowLayoutPanel1.Location = new Point(324, 594);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(773, 291);
+            flowLayoutPanel1.TabIndex = 28;
+            // 
+            // ClientManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1266, 890);
-            Controls.Add(btnCancel);
-            Controls.Add(btnSave);
-            Controls.Add(dgvInformation);
+            AutoScroll = true;
+            ClientSize = new Size(1266, 749);
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(btnRemoveVehicle);
             Controls.Add(btnAddVehicle);
             Controls.Add(label9);
@@ -333,12 +347,13 @@
             Controls.Add(txtAddress);
             Controls.Add(txtName);
             Controls.Add(txtClientID);
-            Name = "ParkRental";
+            Name = "ClientManagement";
             Text = "Rent";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -373,5 +388,6 @@
         private DataGridView dgvInformation;
         private Button btnSave;
         private Button btnCancel;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }
