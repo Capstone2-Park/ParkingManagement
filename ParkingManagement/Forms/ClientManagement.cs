@@ -32,6 +32,9 @@ namespace ParkingManagement
         private List<Vehicle> currentClientVehicles; // List to hold vehicle objects for the current client
 
         public ClientManagement()
+
+
+
         {
             InitializeComponent();
             InitializeCamera();
