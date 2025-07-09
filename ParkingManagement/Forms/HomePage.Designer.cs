@@ -42,6 +42,8 @@
             // 
             // panelHome
             // 
+            panelHome.Anchor = AnchorStyles.None;
+            panelHome.AutoScroll = true;
             panelHome.BackColor = Color.White;
             panelHome.Location = new Point(191, 15);
             panelHome.Name = "panelHome";
@@ -122,7 +124,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(128, 64, 64);
-            ClientSize = new Size(1481, 954);
+            ClientSize = new Size(1370, 749);
             Controls.Add(panel1);
             Controls.Add(ptbLogo);
             Controls.Add(panelHome);
