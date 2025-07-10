@@ -75,6 +75,8 @@
             label20 = new Label();
             panel24 = new Panel();
             label21 = new Label();
+            panel11 = new Panel();
+            label8 = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             panel25 = new Panel();
             label22 = new Label();
@@ -124,10 +126,10 @@
             label45 = new Label();
             panel35 = new Panel();
             label32 = new Label();
-            panel11 = new Panel();
-            label8 = new Label();
             label46 = new Label();
             label47 = new Label();
+            textBox1 = new TextBox();
+            textBox2 = new TextBox();
             flpPakingSlot.SuspendLayout();
             panel3.SuspendLayout();
             panel4.SuspendLayout();
@@ -152,6 +154,7 @@
             panel22.SuspendLayout();
             panel23.SuspendLayout();
             panel24.SuspendLayout();
+            panel11.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panel25.SuspendLayout();
             panel26.SuspendLayout();
@@ -177,7 +180,6 @@
             panel47.SuspendLayout();
             panel48.SuspendLayout();
             panel35.SuspendLayout();
-            panel11.SuspendLayout();
             SuspendLayout();
             // 
             // flpPakingSlot
@@ -206,9 +208,9 @@
             flpPakingSlot.Controls.Add(panel23);
             flpPakingSlot.Controls.Add(panel24);
             flpPakingSlot.Controls.Add(panel11);
-            flpPakingSlot.Location = new Point(135, 107);
+            flpPakingSlot.Location = new Point(81, 107);
             flpPakingSlot.Name = "flpPakingSlot";
-            flpPakingSlot.Size = new Size(730, 224);
+            flpPakingSlot.Size = new Size(726, 224);
             flpPakingSlot.TabIndex = 0;
             flpPakingSlot.Paint += flpPakingSlot_Paint;
             // 
@@ -672,6 +674,26 @@
             label21.TabIndex = 0;
             label21.Text = "V23";
             // 
+            // panel11
+            // 
+            panel11.BackColor = Color.Green;
+            panel11.Controls.Add(label8);
+            panel11.Location = new Point(608, 267);
+            panel11.Name = "panel11";
+            panel11.Size = new Size(115, 82);
+            panel11.TabIndex = 24;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.ForeColor = Color.White;
+            label8.Location = new Point(39, 27);
+            label8.Name = "label8";
+            label8.Size = new Size(47, 25);
+            label8.TabIndex = 0;
+            label8.Text = "V24";
+            // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Controls.Add(panel25);
@@ -698,7 +720,7 @@
             flowLayoutPanel1.Controls.Add(panel47);
             flowLayoutPanel1.Controls.Add(panel48);
             flowLayoutPanel1.Controls.Add(panel35);
-            flowLayoutPanel1.Location = new Point(135, 416);
+            flowLayoutPanel1.Location = new Point(81, 416);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(726, 223);
             flowLayoutPanel1.TabIndex = 1;
@@ -1183,30 +1205,10 @@
             label32.TabIndex = 0;
             label32.Text = "M34";
             // 
-            // panel11
-            // 
-            panel11.BackColor = Color.Green;
-            panel11.Controls.Add(label8);
-            panel11.Location = new Point(608, 267);
-            panel11.Name = "panel11";
-            panel11.Size = new Size(115, 82);
-            panel11.TabIndex = 24;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.ForeColor = Color.White;
-            label8.Location = new Point(39, 27);
-            label8.Name = "label8";
-            label8.Size = new Size(47, 25);
-            label8.TabIndex = 0;
-            label8.Text = "V24";
-            // 
             // label46
             // 
             label46.AutoSize = true;
-            label46.Location = new Point(138, 89);
+            label46.Location = new Point(84, 89);
             label46.Name = "label46";
             label46.Size = new Size(44, 15);
             label46.TabIndex = 2;
@@ -1215,17 +1217,33 @@
             // label47
             // 
             label47.AutoSize = true;
-            label47.Location = new Point(141, 401);
+            label47.Location = new Point(87, 401);
             label47.Name = "label47";
             label47.Size = new Size(67, 15);
             label47.TabIndex = 3;
             label47.Text = "Motorcycle";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(855, 110);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(132, 23);
+            textBox1.TabIndex = 4;
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(855, 169);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(132, 23);
+            textBox2.TabIndex = 5;
             // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
+            Controls.Add(textBox2);
+            Controls.Add(textBox1);
             Controls.Add(label47);
             Controls.Add(label46);
             Controls.Add(flowLayoutPanel1);
@@ -1279,6 +1297,8 @@
             panel23.PerformLayout();
             panel24.ResumeLayout(false);
             panel24.PerformLayout();
+            panel11.ResumeLayout(false);
+            panel11.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             panel25.ResumeLayout(false);
             panel25.PerformLayout();
@@ -1328,8 +1348,6 @@
             panel48.PerformLayout();
             panel35.ResumeLayout(false);
             panel35.PerformLayout();
-            panel11.ResumeLayout(false);
-            panel11.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1436,5 +1454,7 @@
         private Label label8;
         private Label label46;
         private Label label47;
+        private TextBox textBox1;
+        private TextBox textBox2;
     }
 }
