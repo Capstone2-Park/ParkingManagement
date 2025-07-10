@@ -60,15 +60,22 @@ CREATE TABLE RegularParkingSessions (
 
 //Next database is for slot
 
-
 CREATE TABLE vehicleSlot (
-ParkCode INT IDENTITY(1,1) PRIMARY KEY,
+SlotID INT IDENTITY(1,1) PRIMARY KEY,
 VehicleType NVARCHAR (50) NOT NULL,
 VehicleStatus VARCHAR (50) NOT NULL,
+FOREIGN KEY (VehicleID) REFERENCES Vehicle (VehicleID),
+FOREIGN KEY (ClientID) REFERENCES Client (ClientID), 
+FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions (SessionID)
+);
+//for 4 wheels table
+CREAT TABLE 4WHEELS
+(
 
-FOREIGN KEY (ClientID) REFERENCES Client (ClientID) 
-FOREIGN KEY (SessionID) REFERENCES RegularParkingSession (SessionID)
+
+
 )
+
 
 
 
