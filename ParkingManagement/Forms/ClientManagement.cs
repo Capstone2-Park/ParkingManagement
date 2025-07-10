@@ -20,7 +20,7 @@ namespace ParkingManagement
 {
     public partial class ClientManagement : Form
     {
-        private ParkingDbContext _context; 
+        private ParkingDbContext _context;
 
         // --- Camera Variables ---
         private FilterInfoCollection videoDevices;
@@ -94,7 +94,7 @@ namespace ParkingManagement
             vehicleDataTable.Columns.Add("Color", typeof(string));
             vehicleDataTable.Columns.Add("PlateNumber", typeof(string));
             vehicleDataTable.Columns.Add("VehicleType", typeof(string));
-          
+
         }
 
         // --- Helper: Initialize New Client Object and DbContext ---
@@ -336,7 +336,7 @@ namespace ParkingManagement
                 newRow["Color"] = vehicle.Color;
                 newRow["PlateNumber"] = vehicle.PlateNumber;
                 newRow["VehicleType"] = vehicle.VehicleType;
-  
+
                 vehicleDataTable.Rows.Add(newRow);
             }
             // The dgvInformation is already bound to vehicleDataTable, so it updates automatically.
@@ -568,7 +568,7 @@ namespace ParkingManagement
             dgvInformation.Columns["Color"].HeaderText = "Color";
             dgvInformation.Columns["PlateNumber"].HeaderText = "Plate No.";
             dgvInformation.Columns["VehicleType"].HeaderText = "Type of Vehicle"; // Vehicle Type in Filipino
-         
+
 
             // Clear any image column formatting from the "All Data" view
             foreach (DataGridViewColumn col in dgvInformation.Columns)
@@ -594,6 +594,11 @@ namespace ParkingManagement
             {
                 _context.Dispose();
             }
+        }
+
+        private void cmbVehicleType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
