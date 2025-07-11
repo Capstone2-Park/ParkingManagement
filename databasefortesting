@@ -1,51 +1,28 @@
-create database ParkingSystem
+CREATE DATABASE ParkingSystem
+
 use ParkingSystem
 
--- Create the Client table with ClientID as NVARCHAR
+-- Client Table
 CREATE TABLE Client (
-    ClientID NVARCHAR(10) PRIMARY KEY, -- Changed to NVARCHAR for custom ID format
+    ClientID NVARCHAR(10) PRIMARY KEY,
     Name NVARCHAR(100) NOT NULL,
     Address NVARCHAR(255),
     CpNumber NVARCHAR(20),
-    IDPicture NVARCHAR(MAX) -- Changed to NVARCHAR(MAX) to store Base64 string of the image
+    IDPicture NVARCHAR(MAX)
 );
 
--- Create the Vehicle table with VehicleID as NVARCHAR, and ClientID as NVARCHAR
+-- Vehicle Table
 CREATE TABLE Vehicle (
-    VehicleID NVARCHAR(10) PRIMARY KEY, -- Changed to NVARCHAR for custom ID format
+    VehicleID NVARCHAR(10) PRIMARY KEY,
     Brand NVARCHAR(50),
     Color NVARCHAR(50),
     PlateNumber NVARCHAR(20) NOT NULL,
-    ClientID NVARCHAR(10) NOT NULL, -- Changed to NVARCHAR to match Client.ClientID
+    ClientID NVARCHAR(10) NOT NULL,
     VehicleType NVARCHAR(50),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
 );
 
--- Create the Fee table (no changes needed here)
-CREATE TABLE Fee (
-    FeeID INT PRIMARY KEY IDENTITY(1,1),
-    VehicleType NVARCHAR(50),
-    FeePerHour DECIMAL(10,2) NOT NULL
-);
-
--- Insert initial data into Fee table
-INSERT INTO Fee (VehicleType, FeePerHour)
-VALUES
-('2-Wheels', 25.00),
-('4-Wheels', 50.00);
-
-CREATE TABLE VehicleSessions (
-    SessionID INT PRIMARY KEY Identity(1,1) NOT NULL,
-    VehicleID VARCHAR(50) NOT NULL,
-    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Weekly', 'Monthly', 'Yearly')),
-    StartDate DATE NOT NULL,
-    EndDateTime DATETIME NOT NULL,
-    TotalAmount DECIMAL(10, 2) NOT NULL
-); 
-
-
-
-
+-- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
     SessionID INT IDENTITY(1,1) PRIMARY KEY,
     RegularVehicleID NVARCHAR(10) NOT NULL,
@@ -56,3 +33,97 @@ CREATE TABLE RegularParkingSessions (
     TotalAmount DECIMAL(10,2) NULL,
     QRCodeData NVARCHAR(MAX) NULL
 );
+
+-- Now create the Fee table
+CREATE TABLE Fee (
+    FeeID INT PRIMARY KEY IDENTITY(1,1),
+    ClientID NVARCHAR(10) NULL,
+    SessionID INT NULL,
+    VehicleType NVARCHAR(50),
+    FeePerHour DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
+);
+
+-- Insert initial data into Fee table
+INSERT INTO Fee (VehicleType, FeePerHour)
+VALUES
+('2-Wheels', 25.00),
+('4-Wheels', 50.00);
+
+-- VehicleSessions Table
+CREATE TABLE VehicleSessions (
+    SessionID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    VehicleID VARCHAR(50) NOT NULL,
+    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Weekly', 'Monthly', 'Yearly')),
+    StartDate DATE NOT NULL,
+    EndDateTime DATETIME NOT NULL,
+    TotalAmount DECIMAL(10, 2) NOT NULL
+);
+
+-- vehicleSlot Table
+CREATE TABLE Parkingslot (
+    SlotID INT IDENTITY(1,1) PRIMARY KEY,
+    VehicleID NVARCHAR(10)NULL,
+    ClientID NVARCHAR(10)NULL,
+    SessionID INT NULL,
+    VehicleStatus VARCHAR(50),
+	SlotStatus VARCHAR(50) NOT NULL,
+	SlotNumber VARCHAR(50) NOT NULL,
+    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
+);
+
+Drop table Parkingslot
+
+INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber)
+VALUES
+('NotParked', 'available', 'V1'),
+('NotParked', 'available', 'V2'),
+('NotParked', 'available', 'V3'),
+('NotParked', 'available', 'V4'),
+('NotParked', 'available', 'V5'),
+('NotParked', 'available', 'V6'),
+('NotParked', 'available', 'V7'),
+('NotParked', 'available', 'V8'),
+('NotParked', 'available', 'V9'),
+('NotParked', 'available', 'V10'),
+('NotParked', 'available', 'V11'),
+('NotParked', 'available', 'V12'),
+('NotParked', 'available', 'V13'),
+('NotParked', 'available', 'V14'),
+('NotParked', 'available', 'V15'),
+('NotParked', 'available', 'V16'),
+('NotParked', 'available', 'V17'),
+('NotParked', 'available', 'V18'),
+('NotParked', 'available', 'V19'),
+('NotParked', 'available', 'V20'),
+('NotParked', 'available', 'V21'),
+('NotParked', 'available', 'V22'),
+('NotParked', 'available', 'V23'),
+('NotParked', 'available', 'V24'),
+('NotParked', 'available', 'M1'),
+('NotParked', 'available', 'M2'),
+('NotParked', 'available', 'M3'),
+('NotParked', 'available', 'M4'),
+('NotParked', 'available', 'M5'),
+('NotParked', 'available', 'M6'),
+('NotParked', 'available', 'M7'),
+('NotParked', 'available', 'M8'),
+('NotParked', 'available', 'M9'),
+('NotParked', 'available', 'M10'),
+('NotParked', 'available', 'M11'),
+('NotParked', 'available', 'M12'),
+('NotParked', 'available', 'M13'),
+('NotParked', 'available', 'M14'),
+('NotParked', 'available', 'M15'),
+('NotParked', 'available', 'M16'),
+('NotParked', 'available', 'M17'),
+('NotParked', 'available', 'M18'),
+('NotParked', 'available', 'M19'),
+('NotParked', 'available', 'M20'),
+('NotParked', 'available', 'M21'),
+('NotParked', 'available', 'M22'),
+('NotParked', 'available', 'M23'),
+('NotParked', 'available', 'M24');
