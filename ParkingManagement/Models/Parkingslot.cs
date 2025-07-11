@@ -14,24 +14,20 @@ namespace ParkingManagement.Models
         [Key]
         public int SlotID { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string VehicleType { get; set; }
 
-        [Required]
+
+      
         [StringLength(50)]
         public string VehicleStatus { get; set; }
 
-        [Required]
+       
         public string VehicleID { get; set; }
 
-        [Required]
+       
         public string ClientID { get; set; }
 
-        [Required]
         public string SlotNumber { get; set; }
 
-        [Required]
         public string SlotStatus { get; set; }
 
         // Navigation properties

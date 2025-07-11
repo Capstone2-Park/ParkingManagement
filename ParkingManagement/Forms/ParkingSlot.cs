@@ -1,53 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using ParkingManagement.Models;
+using Microsoft.EntityFrameworkCore;
 using ParkingManagement.Model;
-using ParkingManagement.Models; // Make sure to include the namespace for your Client class
-using Microsoft.EntityFrameworkCore; // Add this at the top if not present
 
 namespace ParkingManagement.Forms
 {
     public partial class ParkingSlot : Form
     {
-        List<Client> clients = new List<Client>();
-        List<Parkingslot> slots = new List<Parkingslot>();
+        private List<Client> clients;
+        private List<Vehicle> vehicles;
+        private List<Parkingslot> slots;
 
         public ParkingSlot()
         {
             InitializeComponent();
-            this.Load += ParkingSlot_Load;
+            Load += ParkingSlot_Load;
             cbName.SelectedIndexChanged += cbName_SelectedIndexChanged;
+            cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
             cbSlotV.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
             cbSlotM.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
-            btnAdd.Click += btnPark_Click; // Add a button for parking action
+            btnAdd.Click += btnPark_Click;
         }
 
         private void ParkingSlot_Load(object sender, EventArgs e)
         {
             using (var db = new ParkingDbContext())
             {
+                // Load clients and vehicles
                 clients = db.Clients.Include(c => c.VehicleList).ToList();
-                slots = db.Parkingslots.ToList();
+                vehicles = db.Vehicles.ToList();
+                slots = db.Parkingslot.ToList();
             }
 
             cbName.DataSource = clients;
             cbName.DisplayMember = "Name";
             cbName.ValueMember = "ClientID";
+            cbVehicle.Enabled = false;
+            cbSlotV.Enabled = false;
+            cbSlotM.Enabled = false;
 
-
-            cbSlotV.DataSource = slots;
-            cbSlotV.DisplayMember = "SlotNumber";
-            cbSlotV.ValueMember = "SlotNumber";
-            
-            cbSlotM.DataSource = slots;
-            cbSlotM.DisplayMember = "SlotNumber";
-            cbSlotM.ValueMember = "SlotNumber";
+          
         }
 
         private void cbName_SelectedIndexChanged(object sender, EventArgs e)
@@ -56,12 +52,60 @@ namespace ParkingManagement.Forms
             if (selectedClient != null)
             {
                 cbVehicle.DataSource = selectedClient.VehicleList.ToList();
-                cbVehicle.DisplayMember = "PlateNumber"; // or any property you want to show
+                cbVehicle.DisplayMember = "PlateNumber";
                 cbVehicle.ValueMember = "VehicleID";
+                cbVehicle.Enabled = true;
+
+                // Select first vehicle if available and trigger event
+                if (cbVehicle.Items.Count > 0)
+                {
+                    cbVehicle.SelectedIndex = 0;
+                    cbVehicle_SelectedIndexChanged(cbVehicle, EventArgs.Empty);
+                }
+                else
+                {
+                    cbSlotV.Enabled = false;
+                    cbSlotM.Enabled = false;
+                }
             }
             else
             {
                 cbVehicle.DataSource = null;
+                cbVehicle.Enabled = false;
+                cbSlotV.Enabled = false;
+                cbSlotM.Enabled = false;
+            }
+        }
+
+        private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+            if (selectedVehicle == null) return;
+
+            var vehicleType = selectedVehicle.VehicleType;
+
+            if (vehicleType == "2-wheels")
+            {
+                cbSlotM.DataSource = slots
+                    .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
+                    .Select(s => s.SlotNumber)
+                    .ToList();
+                cbSlotM.Enabled = true;
+                cbSlotV.Enabled = false;
+            }
+            else if (vehicleType == "4-wheels")
+            {
+                cbSlotV.DataSource = slots
+                    .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
+                    .Select(s => s.SlotNumber)
+                    .ToList();
+                cbSlotV.Enabled = true;
+                cbSlotM.Enabled = false;
+            }
+            else
+            {
+                cbSlotV.Enabled = false;
+                cbSlotM.Enabled = false;
             }
         }
 
@@ -70,20 +114,11 @@ namespace ParkingManagement.Forms
             string selectedSlot = (sender == cbSlotV) ? cbSlotV.SelectedItem?.ToString() : cbSlotM.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(selectedSlot)) return;
 
-            // Find the panel by name (e.g., panelV1, panelM1)
+            var slot = slots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
             var panel = this.Controls.Find("panel" + selectedSlot, true).FirstOrDefault() as Panel;
             if (panel != null)
             {
-                // Check if slot is occupied
-                var slot = slots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
-                if (slot != null && slot.SlotStatus == "occupied")
-                {
-                    panel.BackColor = Color.Red;
-                }
-                else
-                {
-                    panel.BackColor = Color.Green;
-                }
+                panel.BackColor = (slot != null && slot.SlotStatus == "occupied") ? Color.Red : Color.Green;
             }
         }
 
@@ -91,7 +126,7 @@ namespace ParkingManagement.Forms
         {
             var selectedClient = cbName.SelectedItem as Client;
             var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
-            string selectedSlot = cbSlotV.SelectedItem?.ToString() ?? cbSlotM.SelectedItem?.ToString();
+            string selectedSlot = cbSlotV.Enabled ? cbSlotV.SelectedItem?.ToString() : cbSlotM.SelectedItem?.ToString();
 
             if (selectedClient == null || selectedVehicle == null || string.IsNullOrEmpty(selectedSlot))
             {
@@ -101,49 +136,35 @@ namespace ParkingManagement.Forms
 
             using (var db = new ParkingDbContext())
             {
-                // Check if slot is already occupied
-                var slot = db.Parkingslots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
-                if (slot != null && slot.SlotStatus == "occupied")
+                var slot = db.Parkingslot.FirstOrDefault(s => s.SlotNumber == selectedSlot);
+
+                if (slot == null)
+                {
+                    MessageBox.Show("Slot not found.");
+                    return;
+                }
+
+                if (slot.SlotStatus == "occupied")
                 {
                     MessageBox.Show("Slot is already occupied.");
                     return;
                 }
 
-                // If slot doesn't exist, create it
-                if (slot == null)
-                {
-                    slot = new Parkingslot
-                    {
-                        SlotNumber = selectedSlot,
-                        VehicleType = selectedVehicle.VehicleType,
-                        VehicleStatus = "parked",
-                        SlotStatus = "occupied",
-                        VehicleID = selectedVehicle.VehicleID,
-                        ClientID = selectedClient.ClientID
-                    };
-                    db.Parkingslots.Add(slot);
-                }
-                else
-                {
-                    slot.VehicleType = selectedVehicle.VehicleType;
-                    slot.VehicleStatus = "parked";
-                    slot.SlotStatus = "occupied";
-                    slot.VehicleID = selectedVehicle.VehicleID;
-                    slot.ClientID = selectedClient.ClientID;
-                    db.Parkingslots.Update(slot);
-                }
-
-                // Update vehicle status
-                var vehicle = db.Vehicles.FirstOrDefault(v => v.VehicleID == selectedVehicle.VehicleID);
-                if (vehicle != null)
-                {
-                    vehicle.VehicleType = selectedVehicle.VehicleType;
-                }
-
+                // Update slot info
+                slot.VehicleID = selectedVehicle.VehicleID;
+                slot.ClientID = selectedClient.ClientID;
+                slot.VehicleStatus = "parked";
+                slot.SlotStatus = "occupied";
+                db.Parkingslot.Update(slot);
                 db.SaveChanges();
             }
 
-            // Update panel color
+            // Update local slot and panel color
+            var updatedSlot = slots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
+            if (updatedSlot != null)
+            {
+                updatedSlot.SlotStatus = "occupied";
+            }
             var panel = this.Controls.Find("panel" + selectedSlot, true).FirstOrDefault() as Panel;
             if (panel != null)
             {
@@ -154,4 +175,8 @@ namespace ParkingManagement.Forms
         }
     }
 }
+
+
+
+
 
