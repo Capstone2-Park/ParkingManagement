@@ -64,7 +64,20 @@ namespace ParkingManagement.Forms
             cbSlotV.Enabled = false;
             cbSlotM.Enabled = false;
 
+            UpdateSlotPanelColors();
+        }
 
+        private void UpdateSlotPanelColors()
+        {
+            foreach (var slot in slots)
+            {
+                // Panel names are assumed to be "pnl" + SlotNumber (e.g., pnlV1, pnlM1)
+                var panel = this.Controls.Find("pnl" + slot.SlotNumber, true).FirstOrDefault() as Panel;
+                if (panel != null)
+                {
+                    panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                }
+            }
         }
 
         private void cbName_SelectedIndexChanged(object sender, EventArgs e)
@@ -199,6 +212,7 @@ namespace ParkingManagement.Forms
             }
 
             MessageBox.Show("Vehicle parked successfully.");
+            UpdateSlotPanelColors();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -210,8 +224,7 @@ namespace ParkingManagement.Forms
                 return;
             }
 
-
-                var vehicleType = selectedVehicle.VehicleType?.Trim();
+            var vehicleType = selectedVehicle.VehicleType?.Trim();
 
             if (vehicleType == "2-Wheels")
             {
@@ -245,5 +258,7 @@ namespace ParkingManagement.Forms
                 cbSlotM.DataSource = null;
             }
         }
+
+       
     }
 }

@@ -192,6 +192,7 @@
             // 
             // flpPakingSlot
             // 
+            flpPakingSlot.AutoScroll = true;
             flpPakingSlot.Controls.Add(pnlV1);
             flpPakingSlot.Controls.Add(pnlV2);
             flpPakingSlot.Controls.Add(pnlV3);
@@ -703,6 +704,7 @@
             // 
             // flowLayoutPanel1
             // 
+            flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.Controls.Add(pnlM1);
             flowLayoutPanel1.Controls.Add(pnlM2);
             flowLayoutPanel1.Controls.Add(pnlM3);
