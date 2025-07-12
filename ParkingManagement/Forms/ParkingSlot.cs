@@ -24,6 +24,7 @@ namespace ParkingManagement.Forms
             cbSlotV.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
             cbSlotM.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
             btnAdd.Click += btnPark_Click;
+            btnSelect.Click += btnSelect_Click;
         }
 
         private void ParkingSlot_Load(object sender, EventArgs e)
@@ -209,9 +210,10 @@ namespace ParkingManagement.Forms
                 return;
             }
 
-            var vehicleType = selectedVehicle.VehicleType;
 
-            if (vehicleType == "2-wheels")
+                var vehicleType = selectedVehicle.VehicleType?.Trim();
+
+            if (vehicleType == "2-Wheels")
             {
                 var availableSlots = slots
                     .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
@@ -223,7 +225,7 @@ namespace ParkingManagement.Forms
                 cbSlotV.Enabled = false;
                 cbSlotV.DataSource = null;
             }
-            else if (vehicleType == "4-wheels")
+            else if (vehicleType == "4-Wheels")
             {
                 var availableSlots = slots
                     .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
