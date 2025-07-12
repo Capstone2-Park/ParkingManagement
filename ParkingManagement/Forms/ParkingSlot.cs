@@ -33,6 +33,26 @@ namespace ParkingManagement.Forms
                 // Load clients and vehicles
                 clients = db.Clients.Include(c => c.VehicleList).ToList();
                 vehicles = db.Vehicles.ToList();
+
+                // Seed missing slots
+                var allSlotNumbers = Enumerable.Range(1, 24).Select(i => "V" + i)
+                    .Concat(Enumerable.Range(1, 18).Select(i => "M" + i)).ToList();
+
+                foreach (var slotNumber in allSlotNumbers)
+                {
+                    if (!db.Parkingslot.Any(s => s.SlotNumber == slotNumber))
+                    {
+                        db.Parkingslot.Add(new Parkingslot
+                        {
+                            SlotNumber = slotNumber,
+                            SlotStatus = "available",
+                            VehicleStatus = "NotParked"
+                        });
+                    }
+                }
+                db.SaveChanges();
+
+                // **Reload slots after seeding**
                 slots = db.Parkingslot.ToList();
             }
 
@@ -43,7 +63,7 @@ namespace ParkingManagement.Forms
             cbSlotV.Enabled = false;
             cbSlotM.Enabled = false;
 
-          
+
         }
 
         private void cbName_SelectedIndexChanged(object sender, EventArgs e)
@@ -56,11 +76,13 @@ namespace ParkingManagement.Forms
                 cbVehicle.ValueMember = "VehicleID";
                 cbVehicle.Enabled = true;
 
-                // Select first vehicle if available and trigger event
+                // Always trigger the vehicle selection logic
                 if (cbVehicle.Items.Count > 0)
                 {
                     cbVehicle.SelectedIndex = 0;
-                    cbVehicle_SelectedIndexChanged(cbVehicle, EventArgs.Empty);
+                    // This will automatically trigger cbVehicle_SelectedIndexChanged
+                    // If you want to ensure it triggers, you can call it explicitly:
+                    // cbVehicle_SelectedIndexChanged(cbVehicle, EventArgs.Empty);
                 }
                 else
                 {
@@ -79,34 +101,38 @@ namespace ParkingManagement.Forms
 
         private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
-            if (selectedVehicle == null) return;
+            //var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+            //if (selectedVehicle == null) return;
 
-            var vehicleType = selectedVehicle.VehicleType;
+            //var vehicleType = selectedVehicle.VehicleType;
 
-            if (vehicleType == "2-wheels")
-            {
-                cbSlotM.DataSource = slots
-                    .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
-                    .Select(s => s.SlotNumber)
-                    .ToList();
-                cbSlotM.Enabled = true;
-                cbSlotV.Enabled = false;
-            }
-            else if (vehicleType == "4-wheels")
-            {
-                cbSlotV.DataSource = slots
-                    .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
-                    .Select(s => s.SlotNumber)
-                    .ToList();
-                cbSlotV.Enabled = true;
-                cbSlotM.Enabled = false;
-            }
-            else
-            {
-                cbSlotV.Enabled = false;
-                cbSlotM.Enabled = false;
-            }
+            //if (vehicleType == "2-wheels")
+            //{
+            //    var availableSlots = slots
+            //        .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
+            //        .Select(s => s.SlotNumber)
+            //        .ToList();
+
+            //    cbSlotM.DataSource = availableSlots;
+            //    cbSlotM.Enabled = availableSlots.Count > 0;
+            //    cbSlotV.Enabled = false;
+            //}
+            //else if (vehicleType == "4-wheels")
+            //{
+            //    var availableSlots = slots
+            //        .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
+            //        .Select(s => s.SlotNumber)
+            //        .ToList();
+
+            //    cbSlotV.DataSource = availableSlots;
+            //    cbSlotV.Enabled = availableSlots.Count > 0;
+            //    cbSlotM.Enabled = false;
+            //}
+            //else
+            //{
+            //    cbSlotV.Enabled = false;
+            //    cbSlotM.Enabled = false;
+            //}
         }
 
         private void cbSlot_SelectedIndexChanged(object sender, EventArgs e)
@@ -173,10 +199,49 @@ namespace ParkingManagement.Forms
 
             MessageBox.Show("Vehicle parked successfully.");
         }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+            if (selectedVehicle == null)
+            {
+                MessageBox.Show("Please select a vehicle first.");
+                return;
+            }
+
+            var vehicleType = selectedVehicle.VehicleType;
+
+            if (vehicleType == "2-wheels")
+            {
+                var availableSlots = slots
+                    .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
+                    .Select(s => s.SlotNumber)
+                    .ToList();
+
+                cbSlotM.DataSource = availableSlots;
+                cbSlotM.Enabled = availableSlots.Count > 0;
+                cbSlotV.Enabled = false;
+                cbSlotV.DataSource = null;
+            }
+            else if (vehicleType == "4-wheels")
+            {
+                var availableSlots = slots
+                    .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
+                    .Select(s => s.SlotNumber)
+                    .ToList();
+
+                cbSlotV.DataSource = availableSlots;
+                cbSlotV.Enabled = availableSlots.Count > 0;
+                cbSlotM.Enabled = false;
+                cbSlotM.DataSource = null;
+            }
+            else
+            {
+                cbSlotV.Enabled = false;
+                cbSlotM.Enabled = false;
+                cbSlotV.DataSource = null;
+                cbSlotM.DataSource = null;
+            }
+        }
     }
 }
-
-
-
-
-

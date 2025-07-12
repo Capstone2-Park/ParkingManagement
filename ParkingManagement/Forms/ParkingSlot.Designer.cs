@@ -137,6 +137,7 @@
             label50 = new Label();
             cbSlotM = new ComboBox();
             label51 = new Label();
+            btnSelect = new Button();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -1249,11 +1250,11 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(852, 332);
+            btnAdd.Location = new Point(852, 438);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(134, 36);
             btnAdd.TabIndex = 1;
-            btnAdd.Text = "Add Vehicle";
+            btnAdd.Text = "Park Vehicle";
             btnAdd.UseVisualStyleBackColor = true;
             // 
             // cbVehicle
@@ -1276,7 +1277,7 @@
             // 
             cbSlotV.FormattingEnabled = true;
             cbSlotV.Items.AddRange(new object[] { "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20", "V21", "V22", "V23", "V24" });
-            cbSlotV.Location = new Point(853, 225);
+            cbSlotV.Location = new Point(853, 331);
             cbSlotV.Name = "cbSlotV";
             cbSlotV.Size = new Size(133, 23);
             cbSlotV.TabIndex = 11;
@@ -1284,7 +1285,7 @@
             // label50
             // 
             label50.AutoSize = true;
-            label50.Location = new Point(855, 207);
+            label50.Location = new Point(855, 313);
             label50.Name = "label50";
             label50.Size = new Size(109, 15);
             label50.TabIndex = 10;
@@ -1294,7 +1295,7 @@
             // 
             cbSlotM.FormattingEnabled = true;
             cbSlotM.Items.AddRange(new object[] { "M1  ", "M2  ", "M3  ", "M4  ", "M5  ", "M6  ", "M7  ", "M8  ", "M9  ", "M10  ", "M11  ", "M12  ", "M13  ", "M14  ", "M15  ", "M16  ", "M17  ", "M18  ", "M19  ", "M20  ", "M21  ", "M22  ", "M23  ", "M24  " });
-            cbSlotM.Location = new Point(852, 286);
+            cbSlotM.Location = new Point(852, 392);
             cbSlotM.Name = "cbSlotM";
             cbSlotM.Size = new Size(133, 23);
             cbSlotM.TabIndex = 13;
@@ -1302,17 +1303,28 @@
             // label51
             // 
             label51.AutoSize = true;
-            label51.Location = new Point(854, 268);
+            label51.Location = new Point(854, 374);
             label51.Name = "label51";
             label51.Size = new Size(134, 15);
             label51.TabIndex = 12;
             label51.Text = "Select Slot (MotorCycle)";
+            // 
+            // btnSelect
+            // 
+            btnSelect.Location = new Point(851, 214);
+            btnSelect.Name = "btnSelect";
+            btnSelect.Size = new Size(134, 36);
+            btnSelect.TabIndex = 14;
+            btnSelect.Text = "Select Vehicle";
+            btnSelect.UseVisualStyleBackColor = true;
+            btnSelect.Click += btnSelect_Click;
             // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
+            Controls.Add(btnSelect);
             Controls.Add(cbSlotM);
             Controls.Add(label51);
             Controls.Add(cbSlotV);
@@ -1542,5 +1554,6 @@
         private Label label50;
         private ComboBox cbSlotM;
         private Label label51;
+        private Button btnSelect;
     }
 }
