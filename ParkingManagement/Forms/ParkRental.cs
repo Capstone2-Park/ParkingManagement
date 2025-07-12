@@ -278,6 +278,13 @@ namespace ParkingManagement.Forms
                 TotalAmount = _calculatedTotalAmount  // Use the calculated value
             };
 
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var ParkingSlotForm = new ParkingSlot();
+                homePage.ShowFormInPanel(ParkingSlotForm);
+            }
+
             try
             {
                 _context.VehicleSessions.Add(newSession);
