@@ -205,9 +205,9 @@ namespace ParkingManagement
         {
             try
             {
-                // Assuming 'vehicles' is intended to refer to a collection of Vehicle objects in the database
-                var vehicleTypes = await _context.Vehicles
-                                                 .Select(v => v.VehicleType)
+                // Load vehicle types from the Fee table (master list)
+                var vehicleTypes = await _context.Fees
+                                                 .Select(f => f.VehicleType)
                                                  .Distinct()
                                                  .ToListAsync();
 
