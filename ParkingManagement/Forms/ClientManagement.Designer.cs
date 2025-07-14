@@ -204,6 +204,7 @@
             // cmbVehicleType
             // 
             cmbVehicleType.FormattingEnabled = true;
+            cmbVehicleType.Items.AddRange(new object[] { "2-Wheels", "4-Wheels" });
             cmbVehicleType.Location = new Point(769, 460);
             cmbVehicleType.Name = "cmbVehicleType";
             cmbVehicleType.Size = new Size(191, 23);
@@ -251,7 +252,7 @@
             label9.AutoSize = true;
             label9.Location = new Point(667, 468);
             label9.Name = "label9";
-            label9.Size = new Size(71, 15);
+            label9.Size = new Size(72, 15);
             label9.TabIndex = 22;
             label9.Text = "Vehicle Type";
             // 
