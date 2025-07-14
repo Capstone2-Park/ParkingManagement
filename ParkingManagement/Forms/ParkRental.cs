@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,6 +25,8 @@ namespace ParkingManagement.Forms
 
         // ADD THIS LINE:
         private CancellationTokenSource _searchCancellationTokenSource;
+
+        private List<(Client client, Vehicle vehicle, string durationType, DateTime startDate, DateTime endDateTime, decimal totalAmount)> _scheduledVehicles = new();
 
         public ParkRental()
         {
@@ -158,22 +161,30 @@ namespace ParkingManagement.Forms
             {
                 await Task.Delay(300, cancellationToken);
 
+                // Get all vehicle IDs that have an active session
+                var activeVehicleIds = await _context.VehicleSessions
+                    .Where(s => !string.IsNullOrEmpty(s.DurationType) && s.TotalAmount > 0)
+                    .Select(s => s.VehicleID)
+                    .ToListAsync(cancellationToken);
+
                 var results = await _context.Clients
                     .Include(c => c.VehicleList)
                     .Where(c => c.Name.Contains(searchTerm) || c.ClientID.Contains(searchTerm))
-                    .SelectMany(c => c.VehicleList.Select(v => new
-                    {
-                        c.ClientID,
-                        ClientName = c.Name,
-                        ClientContact = c.CpNumber,
-                        v.VehicleID,
-                        v.PlateNumber,
-                        v.Brand,
-                        v.Color,
-                        v.VehicleType,
-                        ClientObject = c,
-                        VehicleObject = v
-                    }))
+                    .SelectMany(c => c.VehicleList
+                        .Where(v => !activeVehicleIds.Contains(v.VehicleID)) // Exclude vehicles with active session
+                        .Select(v => new
+                        {
+                            c.ClientID,
+                            ClientName = c.Name,
+                            ClientContact = c.CpNumber,
+                            v.VehicleID,
+                            v.PlateNumber,
+                            v.Brand,
+                            v.Color,
+                            v.VehicleType,
+                            ClientObject = c,
+                            VehicleObject = v
+                        }))
                     .ToListAsync(cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -230,77 +241,46 @@ namespace ParkingManagement.Forms
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            if (_selectedClient == null || _selectedVehicle == null)
+            if (_scheduledVehicles.Count == 0)
             {
-                MessageBox.Show("Please select a client and their vehicle first from the list.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No vehicles scheduled. Please add at least one.", "Nothing to Save", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Ensure we have valid inputs for calculation
-            if (cmbDurationType.SelectedItem == null)
+            foreach (var sched in _scheduledVehicles)
             {
-                MessageBox.Show("Please select a Duration Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Perform the calculation just before saving
-            bool calculationSuccess = await CalculateAndSetRentalDetailsForSave();
-            if (!calculationSuccess)
-            {
-                // Message box will be shown by CalculateAndSetRentalDetailsForSave if something went wrong
-                return;
-            }
-
-            // Now, _calculatedEndDateTime and _calculatedTotalAmount are set
-            DateTime startDate = dtpDateStart.Value.Date;
-            string durationType = cmbDurationType.SelectedItem.ToString();
-
-            // Final validation before saving
-            if (_calculatedEndDateTime == DateTime.MinValue || _calculatedTotalAmount <= 0)
-            {
-                MessageBox.Show("Rental calculation failed. Please check inputs.", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Validate that the end date is not in the past relative to the current time,
-            // or if it makes sense for a pre-booked future rental, validate against start time.
-            if (_calculatedEndDateTime < startDate)
-            {
-                MessageBox.Show("The calculated end date/time is in the past. Please adjust start date or duration.", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            VehicleSession newSession = new VehicleSession
-            {
-                VehicleID = _selectedVehicle.VehicleID,
-                DurationType = durationType,
-                StartDate = startDate,
-                EndDateTime = _calculatedEndDateTime, // Use the calculated value
-                TotalAmount = _calculatedTotalAmount  // Use the calculated value
-            };
-
-            var homePage = this.ParentForm as HomePage;
-            if (homePage != null)
-            {
-                var ParkingSlotForm = new ParkingSlot();
-                homePage.ShowFormInPanel(ParkingSlotForm);
+                var newSession = new VehicleSession
+                {
+                    VehicleID = sched.vehicle.VehicleID,
+                    DurationType = sched.durationType,
+                    StartDate = sched.startDate,
+                    EndDateTime = sched.endDateTime,
+                    TotalAmount = sched.totalAmount
+                };
+                _context.VehicleSessions.Add(newSession);
             }
 
             try
             {
-                _context.VehicleSessions.Add(newSession);
                 await _context.SaveChangesAsync();
-                MessageBox.Show("Rental session saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("All scheduled vehicles saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                ClearFormForNewEntry(); // Reset the form for the next entry
-            }
-            catch (DbUpdateException dbEx)
-            {
-                MessageBox.Show($"Error saving rental session: {dbEx.InnerException?.Message ?? dbEx.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Clear the list and UI
+                _scheduledVehicles.Clear();
+                RefreshScheduledListView();
+                ClearFormForNewEntry();
+
+                // Navigate to ParkingSlot
+                var homePage = this.ParentForm as HomePage;
+                if (homePage != null)
+                {
+                    var ParkingSlotForm = new ParkingSlot();
+                    homePage.ShowFormInPanel(ParkingSlotForm);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error saving rental sessions: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -374,6 +354,84 @@ namespace ParkingManagement.Forms
             _searchCancellationTokenSource?.Cancel(); // Cancel any pending search operation
             _searchCancellationTokenSource?.Dispose(); // Dispose the token source
             _context?.Dispose(); // Dispose the DbContext
+        }
+
+        private async Task<List<Vehicle>> GetAvailableVehiclesForClientAsync(string clientId)
+        {
+            // Get all vehicles for the client
+            var vehicles = await _context.Vehicles
+                .Where(v => v.ClientID == clientId)
+                .ToListAsync();
+
+            // Get all vehicle IDs that have an active session
+            var activeVehicleIds = await _context.VehicleSessions
+                .Where(s => !string.IsNullOrEmpty(s.DurationType) && s.TotalAmount > 0)
+                .Select(s => s.VehicleID)
+                .ToListAsync();
+
+            // Filter out vehicles with active sessions
+            return vehicles.Where(v => !activeVehicleIds.Contains(v.VehicleID)).ToList();
+        }
+
+        private async void btnSetSched_Click(object sender, EventArgs e)
+        {
+            if (_selectedClient == null || _selectedVehicle == null)
+            {
+                MessageBox.Show("Please select a client and their vehicle first from the list.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (cmbDurationType.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a Duration Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Calculate rental details for this vehicle
+            bool calculationSuccess = await CalculateAndSetRentalDetailsForSave();
+            if (!calculationSuccess)
+                return;
+
+            // Prevent duplicate scheduling
+            if (_scheduledVehicles.Any(x => x.vehicle.VehicleID == _selectedVehicle.VehicleID))
+            {
+                MessageBox.Show("This vehicle is already scheduled.", "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Add to the scheduled list
+            _scheduledVehicles.Add((
+                _selectedClient,
+                _selectedVehicle,
+                cmbDurationType.SelectedItem.ToString(),
+                dtpDateStart.Value.Date,
+                _calculatedEndDateTime,
+                _calculatedTotalAmount
+            ));
+
+            // Optionally, show the scheduled list in a DataGridView or ListBox for user feedback
+            RefreshScheduledListView();
+
+            // Optionally, clear selection for next entry
+            dgvVehicles.ClearSelection();
+            _selectedClient = null;
+            _selectedVehicle = null;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            _scheduledVehicles.Clear();
+            RefreshScheduledListView();
+            ClearFormForNewEntry();
+        }
+
+        private void RefreshScheduledListView()
+        {
+            // Example for a ListBox named lstScheduled
+            lstScheduled.Items.Clear();
+            foreach (var sched in _scheduledVehicles)
+            {
+                lstScheduled.Items.Add($"{sched.vehicle.PlateNumber} - {sched.durationType} - ₱{sched.totalAmount:N2}");
+            }
         }
     }
 }

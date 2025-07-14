@@ -197,18 +197,18 @@ namespace ParkingManagement
             txtVehicleIDNo.Text = await GenerateNextVehicleID();
         }
 
-        // --- Populate Vehicle Types ComboBox ---
+        // Fix for CS0103: The name 'vehicles' does not exist in the current context
         private async Task PopulateVehicleTypesComboBox()
         {
             try
             {
-                var vehicleTypes = await _context.Fees.Select(f => f.VehicleType).ToListAsync();
+                // Assuming 'vehicles' is intended to refer to a collection of Vehicle objects in the database
+                var vehicleTypes = await _context.Vehicles
+                                                 .Select(v => v.VehicleType)
+                                                 .Distinct()
+                                                 .ToListAsync();
 
-                cmbVehicleType.Items.Clear();
-                foreach (var type in vehicleTypes)
-                {
-                    cmbVehicleType.Items.Add(type);
-                }
+                cmbVehicleType.DataSource = vehicleTypes;
 
                 if (cmbVehicleType.Items.Count > 0)
                 {
