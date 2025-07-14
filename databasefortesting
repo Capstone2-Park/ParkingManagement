@@ -1,4 +1,8 @@
-USE test2;
+
+CREATE DATABASE ParkingSystem
+
+use ParkingSystem
+
 
 -- Client Table
 CREATE TABLE Client (
@@ -38,16 +42,21 @@ CREATE TABLE Fee (
     ClientID NVARCHAR(10) NULL,
     SessionID INT NULL,
     VehicleType NVARCHAR(50),
-    FeePerHour DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
 );
 
 -- Insert initial data into Fee table
-INSERT INTO Fee (VehicleType, FeePerHour)
+INSERT INTO Fee (VehicleType, FixedPrice, DurationType)
 VALUES
-('2-Wheels', 25.00),
-('4-Wheels', 50.00);
+('2-Wheels', 20.00, 'Daily'),
+('2-Wheels', 100.00, 'Weekly'),
+('2-Wheels', 500.00, 'Monthly'),
+('2-Wheels', 5000.00, 'Yearly'),
+('4-Wheels', 40.00, 'Daily'),
+('4-Wheels', 300.00, 'Weekly'),
+('4-Wheels', 1000.00, 'Motherly'),
+('4-Wheels', 10000.00, 'Yearly'),
 
 -- VehicleSessions Table
 CREATE TABLE VehicleSessions (
@@ -58,6 +67,57 @@ CREATE TABLE VehicleSessions (
     EndDateTime DATETIME NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL
 );
+
+INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber)
+VALUES
+('NotParked', 'available', 'V1'),
+('NotParked', 'available', 'V2'),
+('NotParked', 'available', 'V3'),
+('NotParked', 'available', 'V4'),
+('NotParked', 'available', 'V5'),
+('NotParked', 'available', 'V6'),
+('NotParked', 'available', 'V7'),
+('NotParked', 'available', 'V8'),
+('NotParked', 'available', 'V9'),
+('NotParked', 'available', 'V10'),
+('NotParked', 'available', 'V11'),
+('NotParked', 'available', 'V12'),
+('NotParked', 'available', 'V13'),
+('NotParked', 'available', 'V14'),
+('NotParked', 'available', 'V15'),
+('NotParked', 'available', 'V16'),
+('NotParked', 'available', 'V17'),
+('NotParked', 'available', 'V18'),
+('NotParked', 'available', 'V19'),
+('NotParked', 'available', 'V20'),
+('NotParked', 'available', 'V21'),
+('NotParked', 'available', 'V22'),
+('NotParked', 'available', 'V23'),
+('NotParked', 'available', 'V24'),
+('NotParked', 'available', 'M1'),
+('NotParked', 'available', 'M2'),
+('NotParked', 'available', 'M3'),
+('NotParked', 'available', 'M4'),
+('NotParked', 'available', 'M5'),
+('NotParked', 'available', 'M6'),
+('NotParked', 'available', 'M7'),
+('NotParked', 'available', 'M8'),
+('NotParked', 'available', 'M9'),
+('NotParked', 'available', 'M10'),
+('NotParked', 'available', 'M11'),
+('NotParked', 'available', 'M12'),
+('NotParked', 'available', 'M13'),
+('NotParked', 'available', 'M14'),
+('NotParked', 'available', 'M15'),
+('NotParked', 'available', 'M16'),
+('NotParked', 'available', 'M17'),
+('NotParked', 'available', 'M18'),
+('NotParked', 'available', 'M19'),
+('NotParked', 'available', 'M20'),
+('NotParked', 'available', 'M21'),
+('NotParked', 'available', 'M22'),
+('NotParked', 'available', 'M23'),
+('NotParked', 'available', 'M24');
 
 -- vehicleSlot Table
 CREATE TABLE vehicleSlot (
@@ -71,3 +131,4 @@ CREATE TABLE vehicleSlot (
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
 );
+
