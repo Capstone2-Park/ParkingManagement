@@ -60,7 +60,7 @@ namespace ParkingManagement
 
         private void btnParkSlot_Click(object sender, EventArgs e)
         {
-            ShowFormInPanel(new ParkRental());
+            ShowFormInPanel(new TotalPayment());
         }
     }
 }

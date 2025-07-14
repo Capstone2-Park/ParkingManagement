@@ -259,6 +259,14 @@ namespace ParkingManagement.Forms
             }
         }
 
-       
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var TotalForm = new TotalPayment();
+                homePage.ShowFormInPanel(TotalForm);
+            }
+        }
     }
 }
