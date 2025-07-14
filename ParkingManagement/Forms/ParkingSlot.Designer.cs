@@ -138,6 +138,10 @@
             cbSlotM = new ComboBox();
             label51 = new Label();
             btnSelect = new Button();
+            label52 = new Label();
+            label53 = new Label();
+            pictureBox1 = new PictureBox();
+            pictureBox2 = new PictureBox();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -188,6 +192,8 @@
             pnlM22.SuspendLayout();
             pnlM23.SuspendLayout();
             pnlM24.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // flpPakingSlot
@@ -1235,7 +1241,7 @@
             // label48
             // 
             label48.AutoSize = true;
-            label48.Location = new Point(855, 89);
+            label48.Location = new Point(859, 249);
             label48.Name = "label48";
             label48.Size = new Size(72, 15);
             label48.TabIndex = 6;
@@ -1244,7 +1250,7 @@
             // label49
             // 
             label49.AutoSize = true;
-            label49.Location = new Point(855, 151);
+            label49.Location = new Point(859, 311);
             label49.Name = "label49";
             label49.Size = new Size(78, 15);
             label49.TabIndex = 7;
@@ -1252,7 +1258,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(852, 438);
+            btnAdd.Location = new Point(856, 598);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(134, 36);
             btnAdd.TabIndex = 1;
@@ -1262,7 +1268,7 @@
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(853, 169);
+            cbVehicle.Location = new Point(857, 329);
             cbVehicle.Name = "cbVehicle";
             cbVehicle.Size = new Size(133, 23);
             cbVehicle.TabIndex = 8;
@@ -1270,7 +1276,7 @@
             // cbName
             // 
             cbName.FormattingEnabled = true;
-            cbName.Location = new Point(853, 110);
+            cbName.Location = new Point(857, 270);
             cbName.Name = "cbName";
             cbName.Size = new Size(133, 23);
             cbName.TabIndex = 9;
@@ -1279,7 +1285,7 @@
             // 
             cbSlotV.FormattingEnabled = true;
             cbSlotV.Items.AddRange(new object[] { "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20", "V21", "V22", "V23", "V24" });
-            cbSlotV.Location = new Point(853, 331);
+            cbSlotV.Location = new Point(857, 491);
             cbSlotV.Name = "cbSlotV";
             cbSlotV.Size = new Size(133, 23);
             cbSlotV.TabIndex = 11;
@@ -1287,7 +1293,7 @@
             // label50
             // 
             label50.AutoSize = true;
-            label50.Location = new Point(855, 313);
+            label50.Location = new Point(859, 473);
             label50.Name = "label50";
             label50.Size = new Size(109, 15);
             label50.TabIndex = 10;
@@ -1297,7 +1303,7 @@
             // 
             cbSlotM.FormattingEnabled = true;
             cbSlotM.Items.AddRange(new object[] { "M1  ", "M2  ", "M3  ", "M4  ", "M5  ", "M6  ", "M7  ", "M8  ", "M9  ", "M10  ", "M11  ", "M12  ", "M13  ", "M14  ", "M15  ", "M16  ", "M17  ", "M18  ", "M19  ", "M20  ", "M21  ", "M22  ", "M23  ", "M24  " });
-            cbSlotM.Location = new Point(852, 392);
+            cbSlotM.Location = new Point(856, 552);
             cbSlotM.Name = "cbSlotM";
             cbSlotM.Size = new Size(133, 23);
             cbSlotM.TabIndex = 13;
@@ -1305,7 +1311,7 @@
             // label51
             // 
             label51.AutoSize = true;
-            label51.Location = new Point(854, 374);
+            label51.Location = new Point(858, 534);
             label51.Name = "label51";
             label51.Size = new Size(134, 15);
             label51.TabIndex = 12;
@@ -1313,7 +1319,7 @@
             // 
             // btnSelect
             // 
-            btnSelect.Location = new Point(851, 214);
+            btnSelect.Location = new Point(855, 374);
             btnSelect.Name = "btnSelect";
             btnSelect.Size = new Size(134, 36);
             btnSelect.TabIndex = 14;
@@ -1321,11 +1327,53 @@
             btnSelect.UseVisualStyleBackColor = true;
             btnSelect.Click += btnSelect_Click;
             // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label52.Location = new Point(885, 148);
+            label52.Name = "label52";
+            label52.Size = new Size(65, 17);
+            label52.TabIndex = 15;
+            label52.Text = "Occupied";
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label53.Location = new Point(885, 110);
+            label53.Name = "label53";
+            label53.Size = new Size(49, 17);
+            label53.TabIndex = 16;
+            label53.Text = "Vacant";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BackColor = Color.Green;
+            pictureBox1.Location = new Point(854, 107);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(25, 25);
+            pictureBox1.TabIndex = 17;
+            pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackColor = Color.Red;
+            pictureBox2.Location = new Point(854, 145);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(25, 25);
+            pictureBox2.TabIndex = 18;
+            pictureBox2.TabStop = false;
+            // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
+            Controls.Add(pictureBox2);
+            Controls.Add(pictureBox1);
+            Controls.Add(label53);
+            Controls.Add(label52);
             Controls.Add(btnSelect);
             Controls.Add(cbSlotM);
             Controls.Add(label51);
@@ -1441,6 +1489,8 @@
             pnlM23.PerformLayout();
             pnlM24.ResumeLayout(false);
             pnlM24.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1557,5 +1607,9 @@
         private ComboBox cbSlotM;
         private Label label51;
         private Button btnSelect;
+        private Label label52;
+        private Label label53;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
     }
 }
