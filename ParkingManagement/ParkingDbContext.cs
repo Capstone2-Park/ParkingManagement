@@ -43,7 +43,7 @@ namespace ParkingManagement
             modelBuilder.Entity<Fee>().ToTable("Fee");
             modelBuilder.Entity<Fee>().HasKey(f => f.FeeID);
             modelBuilder.Entity<Fee>().Property(f => f.VehicleType).HasMaxLength(50);
-            modelBuilder.Entity<Fee>().Property(f => f.FeePerHour).HasColumnType("DECIMAL(10,2)");
+            modelBuilder.Entity<Fee>().Property(f => f.FixedPrice).HasColumnType("DECIMAL(10,2)");
 
             // Configure VehicleSession entity to match the new table structure
             modelBuilder.Entity<VehicleSession>().ToTable("VehicleSessions");

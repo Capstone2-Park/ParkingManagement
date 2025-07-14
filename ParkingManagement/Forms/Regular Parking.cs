@@ -460,7 +460,7 @@ namespace ParkingManagement.Forms
 
                         // Get the fee from the Fee table based on VehicleType
                         var fee = await _context.Fees.FirstOrDefaultAsync(f => f.VehicleType == session.VehicleType);
-                        decimal hourlyRate = fee?.FeePerHour ?? 0m;
+                        decimal hourlyRate = fee?.FixedPrice ?? 0m;
 
                         session.TotalAmount = (decimal)Math.Ceiling(duration.TotalHours) * hourlyRate;
 

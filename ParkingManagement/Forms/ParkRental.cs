@@ -129,10 +129,11 @@ namespace ParkingManagement.Forms
         private void SetupDurationTypeComboBox()
         {
             cmbDurationType.Items.Clear();
+            cmbDurationType.Items.Add("Daily");
             cmbDurationType.Items.Add("Weekly");
             cmbDurationType.Items.Add("Monthly");
             cmbDurationType.Items.Add("Yearly");
-            cmbDurationType.SelectedIndex = 0; // Default to Weekly
+            cmbDurationType.SelectedIndex = 0; // Default to Daily
         }
 
         private async void txtSearch_TextChanged(object sender, EventArgs e)
@@ -310,54 +311,39 @@ namespace ParkingManagement.Forms
             {
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
-                // No message box here, let btnSaveRental handle it if inputs are missing
                 return false;
             }
 
             DateTime startDate = dtpDateStart.Value.Date;
             string durationType = cmbDurationType.SelectedItem.ToString();
+            string vehicleType = _selectedVehicle.VehicleType?.Trim();
 
-            decimal feePerHour = 0;
+            // Query the Fee table for the fixed price
+            var fee = await _context.Fees
+                .FirstOrDefaultAsync(f => f.VehicleType == vehicleType && f.DurationType == durationType);
 
-            try
+            if (fee == null)
             {
-                feePerHour = await _context.Fees
-                                        .Where(f => f.VehicleType == _selectedVehicle.VehicleType)
-                                        .Select(f => f.FeePerHour)
-                                        .FirstOrDefaultAsync();
-
-                if (feePerHour == 0)
-                {
-                    MessageBox.Show($"Fee not found for vehicle type: {_selectedVehicle.VehicleType}. Please configure fees.", "Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    _calculatedEndDateTime = DateTime.MinValue;
-                    _calculatedTotalAmount = 0;
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error retrieving fee: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"No fixed price found for {vehicleType} - {durationType}.", "Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
                 return false;
             }
 
-            // Calculate EndDateTime and TotalAmount based on duration type
+            // Calculate EndDateTime based on duration type
             switch (durationType)
             {
+                case "Daily":
+                    _calculatedEndDateTime = startDate.AddDays(1);
+                    break;
                 case "Weekly":
                     _calculatedEndDateTime = startDate.AddDays(7);
-                    _calculatedTotalAmount = feePerHour * 24 * 7;
                     break;
                 case "Monthly":
                     _calculatedEndDateTime = startDate.AddMonths(1);
-                    // For monthly, you might have a fixed monthly fee or use an average (e.g., 30 days)
-                    _calculatedTotalAmount = feePerHour * 24 * 30; // Using 30 days for calculation
                     break;
                 case "Yearly":
                     _calculatedEndDateTime = startDate.AddYears(1);
-                    // For yearly, use 365 days or 366 for leap years if precision matters
-                    _calculatedTotalAmount = feePerHour * 24 * 365; // Using 365 days for calculation
                     break;
                 default:
                     MessageBox.Show("Invalid duration type selected.", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -365,7 +351,9 @@ namespace ParkingManagement.Forms
                     _calculatedTotalAmount = 0;
                     return false;
             }
-            return true; // Calculation was successful
+
+            _calculatedTotalAmount = fee.FixedPrice;
+            return true;
         }
 
         private void ClearFormForNewEntry()
