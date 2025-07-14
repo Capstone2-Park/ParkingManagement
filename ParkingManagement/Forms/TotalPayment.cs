@@ -46,29 +46,37 @@ namespace ParkingManagement.Forms
 
             using var db = new ParkingDbContext();
 
-            // Load client info
+            // Show client info
             lstClientInfo.Items.Add($"Client Name: {selectedClient.Name}");
             lstClientInfo.Items.Add($"Contact No.: {selectedClient.CpNumber}");
             lstClientInfo.Items.Add($"Address: {selectedClient.Address}");
 
-            // Load vehicles
+            // Get all vehicles for the client, ensuring uniqueness by VehicleID
             var vehicles = await db.Vehicles
                 .Where(v => v.ClientID == selectedClient.ClientID)
+                .GroupBy(v => v.VehicleID)
+                .Select(g => g.FirstOrDefault())
                 .ToListAsync();
 
             lstClientInfo.Items.Add($"Total Vehicles: {vehicles.Count}");
 
             decimal totalFee = 0;
+            var displayedVehicleIds = new HashSet<string>();
+
             foreach (var vehicle in vehicles)
             {
-                lstClientInfo.Items.Add($"- Plate: {vehicle.PlateNumber}, Type: {vehicle.VehicleType}, Brand: {vehicle.Brand}, Color: {vehicle.Color}");
+                if (vehicle == null || displayedVehicleIds.Contains(vehicle.VehicleID))
+                    continue;
 
-                // Get total amount for this vehicle
-                var sessionTotal = await db.VehicleSessions
+                lstClientInfo.Items.Add($"- Plate: {vehicle.PlateNumber}, Type: {vehicle.VehicleType}, Brand: {vehicle.Brand}, Color: {vehicle.Color}");
+                displayedVehicleIds.Add(vehicle.VehicleID);
+
+                // Sum all TotalAmount for this vehicle's sessions
+                var vehicleTotal = await db.VehicleSessions
                     .Where(s => s.VehicleID == vehicle.VehicleID)
                     .SumAsync(s => (decimal?)s.TotalAmount) ?? 0;
 
-                totalFee += sessionTotal;
+                totalFee += vehicleTotal;
             }
 
             rtbTotal.Text = $"₱ {totalFee:N2}";
