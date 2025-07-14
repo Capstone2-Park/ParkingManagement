@@ -18,8 +18,6 @@ namespace ParkingManagement.Model
         public string IDPicture { get; set; } // Stores the file path
 
         public ICollection<Vehicle> VehicleList { get; set; } = new List<Vehicle>();
-
-   
      
     }
 }

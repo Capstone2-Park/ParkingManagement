@@ -19,6 +19,7 @@ namespace ParkingManagement.Forms
         private ParkingDbContext _context;
         private Client _selectedClient;
         private Vehicle _selectedVehicle;
+        private Client _currentClient;
 
         private DateTime _calculatedEndDateTime;
         private decimal _calculatedTotalAmount;
@@ -30,18 +31,45 @@ namespace ParkingManagement.Forms
         public ParkRental()
         {
             InitializeComponent();
-            InitializeDbContext();
+            _context = new ParkingDbContext();
             InitializeDataGridView();
             SetupDurationTypeComboBox();
 
-            // Initialize the CancellationTokenSource here
-            _searchCancellationTokenSource = new CancellationTokenSource();
+            // Wire up the selection changed event
+            dgvVehicles.SelectionChanged += dgvVehicles_SelectionChanged;
+
+            // Get the latest client (assuming highest ClientID is the latest)
+            _currentClient = _context.Clients
+                .OrderByDescending(c => c.ClientID)
+                .FirstOrDefault();
+
+            if (_currentClient != null)
+            {
+                lblClientName.Text = _currentClient.Name;
+                LoadClientVehicles();
+            }
+            else
+            {
+                lblClientName.Text = "No client found";
+                dgvVehicles.DataSource = null;
+            }
         }
 
-        private void InitializeDbContext()
+        public ParkRental(Client currentClient)
         {
+            InitializeComponent();
             _context = new ParkingDbContext();
+            _currentClient = currentClient;
+
+            // Set client name label
+            lblClientName.Text = _currentClient.Name;
+
+            // Load vehicles for this client
+            LoadClientVehicles();
+            SetupDurationTypeComboBox();
         }
+
+      
 
         // Initialize the DataTable structure for fees display
         private void InitializeDataGridView()
@@ -138,85 +166,47 @@ namespace ParkingManagement.Forms
             cmbDurationType.SelectedIndex = 0; // Default to Daily
         }
 
-        private async void txtSearch_TextChanged(object sender, EventArgs e)
+        private void LoadClientVehicles()
         {
-            string searchTerm = txtSearch.Text.Trim();
-
-            _searchCancellationTokenSource?.Cancel();
-            _searchCancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _searchCancellationTokenSource.Token;
-
-            if (string.IsNullOrWhiteSpace(searchTerm))
+            if (_currentClient == null)
             {
                 dgvVehicles.DataSource = null;
-                _selectedClient = null;
-                _selectedVehicle = null;
-                _calculatedEndDateTime = DateTime.MinValue;
-                _calculatedTotalAmount = 0;
                 return;
             }
 
-            try
+            var vehicles = _context.Vehicles
+                .Where(v => v.ClientID == _currentClient.ClientID)
+                .ToList();
+
+            var dt = new DataTable();
+            dt.Columns.Add("ClientID");
+            dt.Columns.Add("ClientName");
+            dt.Columns.Add("ClientContact");
+            dt.Columns.Add("VehicleID");
+            dt.Columns.Add("PlateNumber");
+            dt.Columns.Add("Brand");
+            dt.Columns.Add("Color");
+            dt.Columns.Add("VehicleType");
+            dt.Columns.Add("ClientObject", typeof(Client));    // Add this
+            dt.Columns.Add("VehicleObject", typeof(Vehicle));  // Add this
+
+            foreach (var v in vehicles)
             {
-                await Task.Delay(300, cancellationToken);
-
-                // Get all vehicle IDs that have an active session
-                var activeVehicleIds = await _context.VehicleSessions
-                    .Where(s => !string.IsNullOrEmpty(s.DurationType) && s.TotalAmount > 0)
-                    .Select(s => s.VehicleID)
-                    .ToListAsync(cancellationToken);
-
-                var results = await _context.Clients
-                    .Include(c => c.VehicleList)
-                    .Where(c => c.Name.Contains(searchTerm) || c.ClientID.Contains(searchTerm))
-                    .SelectMany(c => c.VehicleList
-                        .Where(v => !activeVehicleIds.Contains(v.VehicleID)) // Exclude vehicles with active session
-                        .Select(v => new
-                        {
-                            c.ClientID,
-                            ClientName = c.Name,
-                            ClientContact = c.CpNumber,
-                            v.VehicleID,
-                            v.PlateNumber,
-                            v.Brand,
-                            v.Color,
-                            v.VehicleType,
-                            ClientObject = c,
-                            VehicleObject = v
-                        }))
-                    .ToListAsync(cancellationToken);
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                DataTable dt = new DataTable();
-                dt.Columns.Add("ClientID");
-                dt.Columns.Add("ClientName");
-                dt.Columns.Add("ClientContact");
-                dt.Columns.Add("VehicleID");
-                dt.Columns.Add("PlateNumber");
-                dt.Columns.Add("Brand");
-                dt.Columns.Add("Color");
-                dt.Columns.Add("VehicleType");
-                dt.Columns.Add("ClientObject", typeof(Client));
-                dt.Columns.Add("VehicleObject", typeof(Vehicle));
-
-                foreach (var item in results)
-                {
-                    dt.Rows.Add(item.ClientID, item.ClientName, item.ClientContact,
-                                item.VehicleID, item.PlateNumber, item.Brand,
-                                item.Color, item.VehicleType, item.ClientObject, item.VehicleObject);
-                }
-
-                dgvVehicles.DataSource = dt;
+                dt.Rows.Add(
+                    _currentClient.ClientID,
+                    _currentClient.Name,
+                    _currentClient.CpNumber,
+                    v.VehicleID,
+                    v.PlateNumber,
+                    v.Brand,
+                    v.Color,
+                    v.VehicleType,
+                    _currentClient, // Set the actual Client object
+                    v               // Set the actual Vehicle object
+                );
             }
-            catch (OperationCanceledException)
-            {
-                // Do nothing: this is expected when cancelling previous searches
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error searching clients: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+            dgvVehicles.DataSource = dt;
         }
 
         private void dgvVehicles_SelectionChanged(object sender, EventArgs e)
@@ -341,7 +331,6 @@ namespace ParkingManagement.Forms
 
         private void ClearFormForNewEntry()
         {
-            txtSearch.Clear();
             dgvVehicles.DataSource = null; // Clear DGV results
             _selectedClient = null;
             _selectedVehicle = null;
@@ -359,22 +348,7 @@ namespace ParkingManagement.Forms
             _context?.Dispose(); // Dispose the DbContext
         }
 
-        private async Task<List<Vehicle>> GetAvailableVehiclesForClientAsync(string clientId)
-        {
-            // Get all vehicles for the client
-            var vehicles = await _context.Vehicles
-                .Where(v => v.ClientID == clientId)
-                .ToListAsync();
 
-            // Get all vehicle IDs that have an active session
-            var activeVehicleIds = await _context.VehicleSessions
-                .Where(s => !string.IsNullOrEmpty(s.DurationType) && s.TotalAmount > 0)
-                .Select(s => s.VehicleID)
-                .ToListAsync();
-
-            // Filter out vehicles with active sessions
-            return vehicles.Where(v => !activeVehicleIds.Contains(v.VehicleID)).ToList();
-        }
 
         private async void btnSetSched_Click(object sender, EventArgs e)
         {
@@ -435,6 +409,12 @@ namespace ParkingManagement.Forms
             {
                 lstScheduled.Items.Add($"{sched.vehicle.PlateNumber} - {sched.durationType} - ₱{sched.totalAmount:N2}");
             }
+        }
+
+        public static void ShowParkRentalForm(Client currentClient)
+        {
+            var parkRentalForm = new ParkRental(currentClient);
+            parkRentalForm.Show();
         }
     }
 }

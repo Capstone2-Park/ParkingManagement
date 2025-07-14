@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             dgvVehicles = new DataGridView();
-            txtSearch = new TextBox();
             dtpDateStart = new DateTimePicker();
             label2 = new Label();
             cmbDurationType = new ComboBox();
@@ -38,29 +37,22 @@
             btnSetSched = new Button();
             btnCancel = new Button();
             lstScheduled = new ListBox();
+            lblClientName = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             SuspendLayout();
             // 
             // dgvVehicles
             // 
             dgvVehicles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvVehicles.Location = new Point(200, 466);
+            dgvVehicles.Location = new Point(198, 402);
             dgvVehicles.Name = "dgvVehicles";
             dgvVehicles.Size = new Size(810, 150);
             dgvVehicles.TabIndex = 0;
             dgvVehicles.SelectionChanged += dgvVehicles_SelectionChanged;
             // 
-            // txtSearch
-            // 
-            txtSearch.Location = new Point(200, 425);
-            txtSearch.Name = "txtSearch";
-            txtSearch.Size = new Size(302, 23);
-            txtSearch.TabIndex = 1;
-            txtSearch.TextChanged += txtSearch_TextChanged;
-            // 
             // dtpDateStart
             // 
-            dtpDateStart.Location = new Point(295, 178);
+            dtpDateStart.Location = new Point(293, 225);
             dtpDateStart.Name = "dtpDateStart";
             dtpDateStart.Size = new Size(200, 23);
             dtpDateStart.TabIndex = 3;
@@ -68,7 +60,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(200, 184);
+            label2.Location = new Point(198, 231);
             label2.Name = "label2";
             label2.Size = new Size(58, 15);
             label2.TabIndex = 5;
@@ -77,7 +69,7 @@
             // cmbDurationType
             // 
             cmbDurationType.FormattingEnabled = true;
-            cmbDurationType.Location = new Point(295, 249);
+            cmbDurationType.Location = new Point(293, 296);
             cmbDurationType.Name = "cmbDurationType";
             cmbDurationType.Size = new Size(121, 23);
             cmbDurationType.TabIndex = 6;
@@ -85,15 +77,15 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(197, 257);
+            label3.Location = new Point(195, 304);
             label3.Name = "label3";
-            label3.Size = new Size(80, 15);
+            label3.Size = new Size(81, 15);
             label3.TabIndex = 7;
             label3.Text = "Duration Type";
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(836, 644);
+            btnSave.Location = new Point(834, 580);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 8;
@@ -103,7 +95,7 @@
             // 
             // btnSetSched
             // 
-            btnSetSched.Location = new Point(819, 226);
+            btnSetSched.Location = new Point(817, 162);
             btnSetSched.Name = "btnSetSched";
             btnSetSched.Size = new Size(92, 23);
             btnSetSched.TabIndex = 9;
@@ -113,7 +105,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(935, 644);
+            btnCancel.Location = new Point(933, 580);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 10;
@@ -125,16 +117,27 @@
             // 
             lstScheduled.FormattingEnabled = true;
             lstScheduled.ItemHeight = 15;
-            lstScheduled.Location = new Point(585, 226);
+            lstScheduled.Location = new Point(583, 162);
             lstScheduled.Name = "lstScheduled";
             lstScheduled.Size = new Size(221, 199);
             lstScheduled.TabIndex = 11;
+            // 
+            // lblClientName
+            // 
+            lblClientName.AutoSize = true;
+            lblClientName.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblClientName.Location = new Point(198, 158);
+            lblClientName.Name = "lblClientName";
+            lblClientName.Size = new Size(144, 25);
+            lblClientName.TabIndex = 12;
+            lblClientName.Text = "Name of Client";
             // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
+            Controls.Add(lblClientName);
             Controls.Add(lstScheduled);
             Controls.Add(btnCancel);
             Controls.Add(btnSetSched);
@@ -143,7 +146,6 @@
             Controls.Add(cmbDurationType);
             Controls.Add(label2);
             Controls.Add(dtpDateStart);
-            Controls.Add(txtSearch);
             Controls.Add(dgvVehicles);
             Name = "ParkRental";
             Text = "Fee";
@@ -156,7 +158,6 @@
         #endregion
 
         private DataGridView dgvVehicles;
-        private TextBox txtSearch;
         private DateTimePicker dtpDateStart;
         private Label label2;
         private ComboBox cmbDurationType;
@@ -165,5 +166,6 @@
         private Button btnSetSched;
         private Button btnCancel;
         private ListBox lstScheduled;
+        private Label lblClientName;
     }
 }
