@@ -16,7 +16,7 @@ namespace ParkingManagement
         public DbSet<Fee> Fees { get; set; }
         public DbSet<VehicleSession> VehicleSessions { get; set; }
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
-        public DbSet<Parkingslot> Parkingslot { get; set; } 
+        public DbSet<Parkingslot> Parkingslot { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,7 +70,7 @@ namespace ParkingManagement
 
             modelBuilder.Entity<Parkingslot>().ToTable("Parkingslot");
             modelBuilder.Entity<Parkingslot>().HasKey(ps => ps.SlotID);
-            
+
             modelBuilder.Entity<Parkingslot>().Property(ps => ps.VehicleStatus).HasMaxLength(50).IsRequired();
             modelBuilder.Entity<Parkingslot>().Property(ps => ps.VehicleID).HasMaxLength(10).IsRequired(false);
             modelBuilder.Entity<Parkingslot>().Property(ps => ps.ClientID).HasMaxLength(10).IsRequired(false);

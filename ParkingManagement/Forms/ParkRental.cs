@@ -23,7 +23,6 @@ namespace ParkingManagement.Forms
         private DateTime _calculatedEndDateTime;
         private decimal _calculatedTotalAmount;
 
-        // ADD THIS LINE:
         private CancellationTokenSource _searchCancellationTokenSource;
 
         private List<(Client client, Vehicle vehicle, string durationType, DateTime startDate, DateTime endDateTime, decimal totalAmount)> _scheduledVehicles = new();
@@ -277,6 +276,10 @@ namespace ParkingManagement.Forms
                     var ParkingSlotForm = new ParkingSlot();
                     homePage.ShowFormInPanel(ParkingSlotForm);
                 }
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show("Error saving rental sessions: " + (ex.InnerException?.Message ?? ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {

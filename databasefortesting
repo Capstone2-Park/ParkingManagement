@@ -1,8 +1,10 @@
 
-CREATE DATABASE ParkingSystem
+-- Create the database
+CREATE DATABASE ParkingSystem;
+GO
 
-use ParkingSystem
-
+USE ParkingSystem;
+GO
 
 -- Client Table
 CREATE TABLE Client (
@@ -36,12 +38,14 @@ CREATE TABLE RegularParkingSessions (
     QRCodeData NVARCHAR(MAX) NULL
 );
 
--- Now create the Fee table
+-- Fee Table
 CREATE TABLE Fee (
     FeeID INT PRIMARY KEY IDENTITY(1,1),
     ClientID NVARCHAR(10) NULL,
     SessionID INT NULL,
     VehicleType NVARCHAR(50),
+    DurationType NVARCHAR(50),
+    FixedPrice DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
 );
@@ -55,19 +59,34 @@ VALUES
 ('2-Wheels', 5000.00, 'Yearly'),
 ('4-Wheels', 40.00, 'Daily'),
 ('4-Wheels', 300.00, 'Weekly'),
-('4-Wheels', 1000.00, 'Motherly'),
-('4-Wheels', 10000.00, 'Yearly'),
+('4-Wheels', 1000.00, 'Monthly'),
+('4-Wheels', 10000.00, 'Yearly');
 
--- VehicleSessions Table
+-- VehicleSessions Table (now includes 'Daily' in the CHECK constraint)
 CREATE TABLE VehicleSessions (
     SessionID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     VehicleID VARCHAR(50) NOT NULL,
-    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Weekly', 'Monthly', 'Yearly')),
+    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Daily', 'Weekly', 'Monthly', 'Yearly')),
     StartDate DATE NOT NULL,
     EndDateTime DATETIME NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL
 );
 
+-- Parkingslot Table
+CREATE TABLE Parkingslot (
+    SlotID INT IDENTITY(1,1) PRIMARY KEY,
+    VehicleID NVARCHAR(10) NULL,
+    ClientID NVARCHAR(10) NULL,
+    SessionID INT NULL,
+    VehicleStatus VARCHAR(50),
+    SlotStatus VARCHAR(50) NOT NULL,
+    SlotNumber VARCHAR(50) NOT NULL,
+    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
+);
+
+-- Sample data for Parkingslot
 INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber)
 VALUES
 ('NotParked', 'available', 'V1'),
@@ -118,17 +137,3 @@ VALUES
 ('NotParked', 'available', 'M22'),
 ('NotParked', 'available', 'M23'),
 ('NotParked', 'available', 'M24');
-
--- vehicleSlot Table
-CREATE TABLE vehicleSlot (
-    SlotID INT IDENTITY(1,1) PRIMARY KEY,
-    VehicleID NVARCHAR(10) NULL,
-    ClientID NVARCHAR(10) NULL,
-    SessionID INT NULL,
-    VehicleType NVARCHAR(50) NOT NULL,
-    VehicleStatus VARCHAR(50) NOT NULL,
-    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
-    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
-    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
-);
-
