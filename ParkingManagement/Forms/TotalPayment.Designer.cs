@@ -28,26 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lstClientInfo = new ListBox();
             btnSelect = new Button();
             label1 = new Label();
             cbClient = new ComboBox();
-            rtbTotal = new RichTextBox();
-            label2 = new Label();
+            rtbReceipt = new RichTextBox();
             SuspendLayout();
-            // 
-            // lstClientInfo
-            // 
-            lstClientInfo.FormattingEnabled = true;
-            lstClientInfo.ItemHeight = 15;
-            lstClientInfo.Location = new Point(162, 151);
-            lstClientInfo.Name = "lstClientInfo";
-            lstClientInfo.Size = new Size(365, 259);
-            lstClientInfo.TabIndex = 0;
             // 
             // btnSelect
             // 
-            btnSelect.Location = new Point(162, 70);
+            btnSelect.Location = new Point(162, 58);
             btnSelect.Name = "btnSelect";
             btnSelect.Size = new Size(98, 35);
             btnSelect.TabIndex = 1;
@@ -58,7 +47,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(162, 124);
+            label1.Location = new Point(162, 112);
             label1.Name = "label1";
             label1.Size = new Size(62, 15);
             label1.TabIndex = 2;
@@ -68,40 +57,29 @@
             // cbClient
             // 
             cbClient.FormattingEnabled = true;
-            cbClient.Location = new Point(162, 41);
+            cbClient.Location = new Point(162, 29);
             cbClient.Name = "cbClient";
             cbClient.Size = new Size(130, 23);
             cbClient.TabIndex = 3;
             // 
-            // rtbTotal
+            // rtbReceipt
             // 
-            rtbTotal.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rtbTotal.Location = new Point(554, 151);
-            rtbTotal.Name = "rtbTotal";
-            rtbTotal.Size = new Size(186, 134);
-            rtbTotal.TabIndex = 4;
-            rtbTotal.Text = "";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(554, 124);
-            label2.Name = "label2";
-            label2.Size = new Size(82, 15);
-            label2.TabIndex = 5;
-            label2.Text = "Total Payment";
+            rtbReceipt.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            rtbReceipt.Location = new Point(162, 142);
+            rtbReceipt.Name = "rtbReceipt";
+            rtbReceipt.Size = new Size(351, 541);
+            rtbReceipt.TabIndex = 4;
+            rtbReceipt.Text = "";
             // 
             // TotalPayment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(828, 437);
-            Controls.Add(label2);
-            Controls.Add(rtbTotal);
+            ClientSize = new Size(828, 726);
+            Controls.Add(rtbReceipt);
             Controls.Add(cbClient);
             Controls.Add(label1);
             Controls.Add(btnSelect);
-            Controls.Add(lstClientInfo);
             Name = "TotalPayment";
             Text = "TotalPayment";
             ResumeLayout(false);
@@ -114,7 +92,7 @@
         private Button btnSelect;
         private Label label1;
         private ComboBox cbClient;
-        private RichTextBox rtbTotal;
+        private RichTextBox rtbReceipt;
         private Label label2;
     }
 }

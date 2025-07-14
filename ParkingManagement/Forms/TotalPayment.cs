@@ -25,6 +25,9 @@ namespace ParkingManagement.Forms
             this.TopLevel = false;
             this.FormBorderStyle = FormBorderStyle.None;
             this.Dock = DockStyle.Fill;
+
+            // Set smaller font for rtbReceipt
+            rtbReceipt.Font = new Font(rtbReceipt.Font.FontFamily, 8.0f);
         }
 
         private async void TotalPayment_Load(object sender, EventArgs e)
@@ -47,8 +50,7 @@ namespace ParkingManagement.Forms
         {
             try
             {
-                lstClientInfo.Items.Clear();
-                rtbTotal.Clear();
+                rtbReceipt.Clear();
 
                 if (cbClient.SelectedItem is not Client selectedClient)
                 {
@@ -63,28 +65,51 @@ namespace ParkingManagement.Forms
                     .Where(v => v.ClientID == selectedClient.ClientID)
                     .ToListAsync();
 
-                // Display client information only once at the top
-                lstClientInfo.Items.Add($"Client Name: {selectedClient.Name}");
-                lstClientInfo.Items.Add($"Contact Number: {selectedClient.CpNumber}");
-                lstClientInfo.Items.Add($"Address: {selectedClient.Address}");
-                lstClientInfo.Items.Add($"Number of Vehicles: {vehicles.Count}");
-                lstClientInfo.Items.Add("");
-                lstClientInfo.Items.Add("List of Vehicles:");
+                StringBuilder receipt = new StringBuilder();
+                receipt.AppendLine("Carbon Market Parking Receipt");
+                receipt.AppendLine("=================");
+                receipt.AppendLine($"Client Name: {selectedClient.Name}");
+                receipt.AppendLine($"Contact Number: {selectedClient.CpNumber}");
+                receipt.AppendLine($"Address: {selectedClient.Address}");
+                receipt.AppendLine($"No. of Vehicles: {vehicles.Count}");
+                receipt.AppendLine();
+                receipt.AppendLine("LIST OF VEHICLES");
+                receipt.AppendLine("===============");
 
                 decimal totalFee = 0;
                 foreach (var vehicle in vehicles)
                 {
-                    // Format each vehicle on a single line with consistent spacing
-                    lstClientInfo.Items.Add($"- Plate: {vehicle.PlateNumber}, Type: {vehicle.VehicleType}, Brand: {vehicle.Brand}, Color: {vehicle.Color}");
+                    receipt.AppendLine($"Vehicle Details:");
+                    receipt.AppendLine($"- Brand: {vehicle.Brand}");
+                    receipt.AppendLine($"- Color: {vehicle.Color}");
+                    receipt.AppendLine($"- Plate No.: {vehicle.PlateNumber}");
+                    receipt.AppendLine($"- Type: {vehicle.VehicleType}");
 
-                    var sessionTotal = await db.VehicleSessions
+                    // Get all sessions for this vehicle
+                    var sessions = await db.VehicleSessions
                         .Where(s => s.VehicleID == vehicle.VehicleID)
-                        .SumAsync(s => (decimal?)s.TotalAmount) ?? 0;
+                        .ToListAsync();
 
-                    totalFee += sessionTotal;
+                    foreach (var session in sessions)
+                    {
+                        receipt.AppendLine($"  Time In : {session.StartDate:yyyy-MM-dd HH:mm}");
+                        receipt.AppendLine($"  Time Out: {session.EndDateTime:yyyy-MM-dd HH:mm}");
+                        receipt.AppendLine($"  Session Amount: ₱ {session.TotalAmount:N2}");
+                        totalFee += session.TotalAmount;
+                    }
+
+                    if (sessions.Count == 0)
+                    {
+                        receipt.AppendLine("  No sessions found.");
+                    }
+
+                    receipt.AppendLine();
                 }
 
-                rtbTotal.Text = $"₱ {totalFee:N2}";
+                receipt.AppendLine("=================");
+                receipt.AppendLine($"Total Payment: ₱ {totalFee:N2}");
+
+                rtbReceipt.Text = receipt.ToString();
             }
             catch (Exception ex)
             {
