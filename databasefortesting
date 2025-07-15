@@ -68,6 +68,19 @@ CREATE TABLE VehicleSessions (
     TotalAmount DECIMAL(10, 2) NOT NULL
 );
 
+
+-- vehicleSlot Table
+CREATE TABLE Parkingslot (
+    SlotID INT IDENTITY(1,1) PRIMARY KEY,
+    VehicleID NVARCHAR(10) NULL,
+    ClientID NVARCHAR(10) NULL,
+    SessionID INT NULL,
+    VehicleType NVARCHAR(50) NOT NULL,
+    VehicleStatus VARCHAR(50) NOT NULL,
+    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
+);
 INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber)
 VALUES
 ('NotParked', 'available', 'V1'),
@@ -119,16 +132,4 @@ VALUES
 ('NotParked', 'available', 'M23'),
 ('NotParked', 'available', 'M24');
 
--- vehicleSlot Table
-CREATE TABLE vehicleSlot (
-    SlotID INT IDENTITY(1,1) PRIMARY KEY,
-    VehicleID NVARCHAR(10) NULL,
-    ClientID NVARCHAR(10) NULL,
-    SessionID INT NULL,
-    VehicleType NVARCHAR(50) NOT NULL,
-    VehicleStatus VARCHAR(50) NOT NULL,
-    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
-    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
-    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
-);
 
