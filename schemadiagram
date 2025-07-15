@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# Define tables and their relationships
+tables = {
+    "Client": ["ClientID (PK)", "Name", "Address", "CpNumber", "IDPicture"],
+    "Vehicle": ["VehicleID (PK)", "Brand", "Color", "PlateNumber", "ClientID (FK)", "VehicleType"],
+    "RegularParkingSessions": ["SessionID (PK)", "RegularVehicleID", "PlateNumber", "VehicleType", "TimeIn", "TimeOut", "TotalAmount", "QRCodeData"],
+    "Fee": ["FeeID (PK)", "ClientID (FK)", "SessionID (FK)", "VehicleType"],
+    "VehicleSessions": ["SessionID (PK)", "VehicleID", "DurationType", "StartDate", "EndDateTime", "TotalAmount"],
+    "ParkingSlot": ["SlotID (PK)", "VehicleID (FK)", "ClientID (FK)", "VehicleStatus", "SlotStatus", "SlotNumber"],
+}
+
+# Define relationships between tables
+relationships = [
+    ("Client", "Vehicle"),
+    ("Client", "Fee"),
+    ("Client", "ParkingSlot"),
+    ("Vehicle", "ParkingSlot"),
+    ("RegularParkingSessions", "Fee"),
+]
+
+# Create directed graph
+G = nx.DiGraph()
+
+# Add nodes
+for table, columns in tables.items():
+    label = f"{table}\n" + "\n".join(columns)
+    G.add_node(table, label=label)
+
+# Add edges for relationships
+G.add_edges_from(relationships)
+
+# Draw the graph
+pos = nx.spring_layout(G, k=2)
+plt.figure(figsize=(16, 12))
+nx.draw(G, pos, with_labels=True, node_size=5000, node_color='lightblue', font_size=10, font_weight='bold', arrows=True)
+labels = nx.get_node_attributes(G, 'label')
+nx.draw_networkx_labels(G, pos, labels, font_size=8)
+
+plt.title("Parking System Schema Diagram")
+plt.axis('off')
+plt.show()
