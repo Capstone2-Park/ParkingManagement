@@ -16,6 +16,7 @@ namespace ParkingManagement
         public DbSet<Fee> Fees { get; set; }
         public DbSet<VehicleSession> VehicleSessions { get; set; }
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
+        public DbSet<Parkingslot> Parkingslot { get; set; } 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -42,7 +43,7 @@ namespace ParkingManagement
             modelBuilder.Entity<Fee>().ToTable("Fee");
             modelBuilder.Entity<Fee>().HasKey(f => f.FeeID);
             modelBuilder.Entity<Fee>().Property(f => f.VehicleType).HasMaxLength(50);
-            modelBuilder.Entity<Fee>().Property(f => f.FeePerHour).HasColumnType("DECIMAL(10,2)");
+            modelBuilder.Entity<Fee>().Property(f => f.FixedPrice).HasColumnType("DECIMAL(10,2)");
 
             // Configure VehicleSession entity to match the new table structure
             modelBuilder.Entity<VehicleSession>().ToTable("VehicleSessions");
@@ -66,6 +67,27 @@ namespace ParkingManagement
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeOut).IsRequired(false);
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TotalAmount).HasColumnType("DECIMAL(10,2)").IsRequired(false);
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.QRCodeData).HasColumnType("NVARCHAR(MAX)").IsRequired(false);
+
+            modelBuilder.Entity<Parkingslot>().ToTable("Parkingslot");
+            modelBuilder.Entity<Parkingslot>().HasKey(ps => ps.SlotID);
+            
+            modelBuilder.Entity<Parkingslot>().Property(ps => ps.VehicleStatus).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Parkingslot>().Property(ps => ps.VehicleID).HasMaxLength(10).IsRequired(false);
+            modelBuilder.Entity<Parkingslot>().Property(ps => ps.ClientID).HasMaxLength(10).IsRequired(false);
+            modelBuilder.Entity<Parkingslot>().Property(ps => ps.SlotNumber).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Parkingslot>().Property(ps => ps.SlotStatus).HasMaxLength(50).IsRequired();
+
+            modelBuilder.Entity<Parkingslot>()
+                .HasOne(ps => ps.Vehicle)
+                .WithMany()
+                .HasForeignKey(ps => ps.VehicleID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Parkingslot>()
+                .HasOne(ps => ps.Client)
+                .WithMany()
+                .HasForeignKey(ps => ps.ClientID)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

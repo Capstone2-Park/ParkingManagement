@@ -18,7 +18,7 @@ namespace ParkingManagement
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.Dpi;
-            this.MinimumSize = new Size(800, 600); 
+            this.MinimumSize = new Size(800, 600);
         }
 
         public void ShowFormInPanel(Form childForm)
@@ -57,5 +57,17 @@ namespace ParkingManagement
         {
             ShowFormInPanel(new Regular_Parking());
         }
+
+        private void btnParkSlot_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new ParkRental());
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new ParkRental());
+        }
+
+        
     }
 }
