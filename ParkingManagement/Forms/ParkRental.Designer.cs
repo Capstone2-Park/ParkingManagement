@@ -43,6 +43,7 @@
             // 
             // dgvVehicles
             // 
+            dgvVehicles.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             dgvVehicles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVehicles.Location = new Point(198, 402);
             dgvVehicles.Name = "dgvVehicles";
@@ -85,6 +86,7 @@
             // 
             // btnSave
             // 
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnSave.Location = new Point(834, 580);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
@@ -95,6 +97,7 @@
             // 
             // btnSetSched
             // 
+            btnSetSched.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSetSched.Location = new Point(817, 162);
             btnSetSched.Name = "btnSetSched";
             btnSetSched.Size = new Size(92, 23);
@@ -105,6 +108,7 @@
             // 
             // btnCancel
             // 
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCancel.Location = new Point(933, 580);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
@@ -115,6 +119,7 @@
             // 
             // lstScheduled
             // 
+            lstScheduled.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lstScheduled.FormattingEnabled = true;
             lstScheduled.ItemHeight = 15;
             lstScheduled.Location = new Point(583, 162);
