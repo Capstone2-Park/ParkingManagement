@@ -33,26 +33,19 @@ namespace ParkingManagement
 
         private void btnRental_Click(object sender, EventArgs e)
         {
-            btnClientM.Visible = true;
-        }
-
-        private void btnClientM_Click_1(object sender, EventArgs e)
-        {
             ShowFormInPanel(new ClientManagement());
         }
+
+       
 
         private void btnFeeM_Click(object sender, EventArgs e)
         {
             FeeManagement FeeList = new FeeManagement();
             FeeList.Show();
-            btnClientM.Visible = false;
+           
         }
 
-        private void HomePage_Load(object sender, EventArgs e)
-        {
-            btnClientM.Visible = false;
-        }
-
+  
         private void btnRegularParking_Click(object sender, EventArgs e)
         {
             ShowFormInPanel(new Regular_Parking());

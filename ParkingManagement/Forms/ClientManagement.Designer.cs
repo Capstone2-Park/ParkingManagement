@@ -56,42 +56,41 @@
             dgvInformation = new DataGridView();
             btnSave = new Button();
             btnCancel = new Button();
-            flowLayoutPanel1 = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
-            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // txtClientID
             // 
             txtClientID.Location = new Point(176, 74);
             txtClientID.Name = "txtClientID";
-            txtClientID.Size = new Size(191, 23);
+            txtClientID.Size = new Size(238, 23);
             txtClientID.TabIndex = 0;
             // 
             // txtName
             // 
             txtName.Location = new Point(176, 141);
             txtName.Name = "txtName";
-            txtName.Size = new Size(191, 23);
+            txtName.Size = new Size(238, 23);
             txtName.TabIndex = 1;
             // 
             // txtAddress
             // 
             txtAddress.Location = new Point(176, 209);
             txtAddress.Name = "txtAddress";
-            txtAddress.Size = new Size(191, 23);
+            txtAddress.Size = new Size(238, 23);
             txtAddress.TabIndex = 2;
             // 
             // txtContactNo
             // 
             txtContactNo.Location = new Point(176, 279);
             txtContactNo.Name = "txtContactNo";
-            txtContactNo.Size = new Size(191, 23);
+            txtContactNo.Size = new Size(238, 23);
             txtContactNo.TabIndex = 3;
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Location = new Point(78, 82);
             label1.Name = "label1";
@@ -101,6 +100,7 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label2.AutoSize = true;
             label2.Location = new Point(102, 149);
             label2.Name = "label2";
@@ -110,6 +110,7 @@
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label3.AutoSize = true;
             label3.Location = new Point(92, 217);
             label3.Name = "label3";
@@ -119,6 +120,7 @@
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label4.AutoSize = true;
             label4.Location = new Point(70, 287);
             label4.Name = "label4";
@@ -128,6 +130,7 @@
             // 
             // pcbIDPic
             // 
+            pcbIDPic.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             pcbIDPic.BackColor = SystemColors.ActiveCaption;
             pcbIDPic.Location = new Point(701, 82);
             pcbIDPic.Name = "pcbIDPic";
@@ -137,6 +140,7 @@
             // 
             // btnStartCamera
             // 
+            btnStartCamera.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnStartCamera.Location = new Point(1072, 95);
             btnStartCamera.Name = "btnStartCamera";
             btnStartCamera.Size = new Size(100, 23);
@@ -147,6 +151,7 @@
             // 
             // btnCaptureImage
             // 
+            btnCaptureImage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCaptureImage.Location = new Point(1072, 149);
             btnCaptureImage.Name = "btnCaptureImage";
             btnCaptureImage.Size = new Size(100, 23);
@@ -157,6 +162,7 @@
             // 
             // btnRetakeImage
             // 
+            btnRetakeImage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnRetakeImage.Location = new Point(1072, 188);
             btnRetakeImage.Name = "btnRetakeImage";
             btnRetakeImage.Size = new Size(100, 23);
@@ -167,6 +173,7 @@
             // 
             // panel1
             // 
+            panel1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             panel1.BackColor = Color.FromArgb(128, 64, 64);
             panel1.Location = new Point(0, 342);
             panel1.Name = "panel1";
@@ -175,6 +182,7 @@
             // 
             // txtVehicleIDNo
             // 
+            txtVehicleIDNo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txtVehicleIDNo.Location = new Point(248, 403);
             txtVehicleIDNo.Name = "txtVehicleIDNo";
             txtVehicleIDNo.Size = new Size(191, 23);
@@ -182,6 +190,7 @@
             // 
             // txtBrand
             // 
+            txtBrand.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txtBrand.Location = new Point(248, 460);
             txtBrand.Name = "txtBrand";
             txtBrand.Size = new Size(191, 23);
@@ -189,6 +198,7 @@
             // 
             // txtColor
             // 
+            txtColor.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             txtColor.Location = new Point(248, 527);
             txtColor.Name = "txtColor";
             txtColor.Size = new Size(191, 23);
@@ -196,6 +206,7 @@
             // 
             // txtPlateNo
             // 
+            txtPlateNo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             txtPlateNo.Location = new Point(769, 403);
             txtPlateNo.Name = "txtPlateNo";
             txtPlateNo.Size = new Size(191, 23);
@@ -203,6 +214,7 @@
             // 
             // cmbVehicleType
             // 
+            cmbVehicleType.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             cmbVehicleType.FormattingEnabled = true;
             cmbVehicleType.Items.AddRange(new object[] { "2-Wheels", "4-Wheels" });
             cmbVehicleType.Location = new Point(769, 460);
@@ -213,6 +225,7 @@
             // 
             // label5
             // 
+            label5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label5.AutoSize = true;
             label5.Location = new Point(142, 411);
             label5.Name = "label5";
@@ -222,6 +235,7 @@
             // 
             // label6
             // 
+            label6.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label6.AutoSize = true;
             label6.Location = new Point(183, 468);
             label6.Name = "label6";
@@ -231,6 +245,7 @@
             // 
             // label7
             // 
+            label7.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label7.AutoSize = true;
             label7.Location = new Point(183, 535);
             label7.Name = "label7";
@@ -240,6 +255,7 @@
             // 
             // label8
             // 
+            label8.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label8.AutoSize = true;
             label8.Location = new Point(684, 411);
             label8.Name = "label8";
@@ -249,6 +265,7 @@
             // 
             // label9
             // 
+            label9.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label9.AutoSize = true;
             label9.Location = new Point(667, 468);
             label9.Name = "label9";
@@ -258,6 +275,7 @@
             // 
             // btnAddVehicle
             // 
+            btnAddVehicle.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnAddVehicle.Location = new Point(1034, 407);
             btnAddVehicle.Name = "btnAddVehicle";
             btnAddVehicle.Size = new Size(89, 23);
@@ -268,6 +286,7 @@
             // 
             // btnRemoveVehicle
             // 
+            btnRemoveVehicle.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnRemoveVehicle.Location = new Point(1034, 461);
             btnRemoveVehicle.Name = "btnRemoveVehicle";
             btnRemoveVehicle.Size = new Size(89, 23);
@@ -278,17 +297,17 @@
             // 
             // dgvInformation
             // 
-            dgvInformation.Anchor = AnchorStyles.None;
+            dgvInformation.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvInformation.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvInformation.Location = new Point(3, 3);
+            dgvInformation.Location = new Point(359, 591);
             dgvInformation.Name = "dgvInformation";
-            dgvInformation.Size = new Size(770, 184);
+            dgvInformation.Size = new Size(632, 184);
             dgvInformation.TabIndex = 25;
             // 
             // btnSave
             // 
-            btnSave.Anchor = AnchorStyles.None;
-            btnSave.Location = new Point(3, 193);
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSave.Location = new Point(797, 797);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 36);
             btnSave.TabIndex = 26;
@@ -298,8 +317,8 @@
             // 
             // btnCancel
             // 
-            btnCancel.Anchor = AnchorStyles.None;
-            btnCancel.Location = new Point(84, 193);
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCancel.Location = new Point(895, 797);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 36);
             btnCancel.TabIndex = 27;
@@ -307,23 +326,15 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(dgvInformation);
-            flowLayoutPanel1.Controls.Add(btnSave);
-            flowLayoutPanel1.Controls.Add(btnCancel);
-            flowLayoutPanel1.Location = new Point(324, 594);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(773, 291);
-            flowLayoutPanel1.TabIndex = 28;
-            // 
             // ClientManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(1266, 749);
-            Controls.Add(flowLayoutPanel1);
+            ClientSize = new Size(1266, 903);
+            Controls.Add(dgvInformation);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSave);
             Controls.Add(btnRemoveVehicle);
             Controls.Add(btnAddVehicle);
             Controls.Add(label9);
@@ -355,7 +366,6 @@
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).EndInit();
-            flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -390,6 +400,5 @@
         private DataGridView dgvInformation;
         private Button btnSave;
         private Button btnCancel;
-        private FlowLayoutPanel flowLayoutPanel1;
     }
 }
