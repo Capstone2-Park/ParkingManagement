@@ -65,6 +65,7 @@ namespace ParkingManagement.Forms
             cbSlotM.Enabled = false;
 
             UpdateSlotPanelColors();
+            UpdateSlotStatusLabels();
         }
 
         private void UpdateSlotPanelColors()
@@ -76,6 +77,19 @@ namespace ParkingManagement.Forms
                 if (panel != null)
                 {
                     panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                }
+            }
+        }
+
+        private void UpdateSlotStatusLabels()
+        {
+            foreach (var slot in slots)
+            {
+                // Label names are assumed to be "lblStat" + SlotNumber (e.g., lblStatV1, lblStatM1)
+                var label = this.Controls.Find("lblStat" + slot.SlotNumber, true).FirstOrDefault() as Label;
+                if (label != null)
+                {
+                    label.Text = slot.SlotStatus == "occupied" ? "Rented" : "Available";
                 }
             }
         }
@@ -213,6 +227,7 @@ namespace ParkingManagement.Forms
 
             MessageBox.Show("Vehicle parked successfully.");
             UpdateSlotPanelColors();
+            UpdateSlotStatusLabels();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -267,6 +282,16 @@ namespace ParkingManagement.Forms
                 var TotalForm = new TotalPayment();
                 homePage.ShowFormInPanel(TotalForm);
             }
+        }
+
+        private void label67_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label85_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

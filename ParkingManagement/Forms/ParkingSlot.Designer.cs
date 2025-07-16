@@ -143,6 +143,54 @@
             pictureBox1 = new PictureBox();
             pictureBox2 = new PictureBox();
             btnNext = new Button();
+            lblStatV7 = new Label();
+            lblStatV8 = new Label();
+            lblStatV1 = new Label();
+            lblStatV2 = new Label();
+            lblStatV3 = new Label();
+            lblStatV4 = new Label();
+            lblStatV5 = new Label();
+            lblStatV6 = new Label();
+            lblStatV9 = new Label();
+            lblStatV10 = new Label();
+            lblStatV11 = new Label();
+            lblStatV12 = new Label();
+            lblStatV13 = new Label();
+            lblStatV14 = new Label();
+            lblStatV15 = new Label();
+            lblStatV16 = new Label();
+            lblStatV17 = new Label();
+            lblStatV18 = new Label();
+            lblStatV19 = new Label();
+            lblStatV20 = new Label();
+            lblStatV21 = new Label();
+            lblStatV22 = new Label();
+            lblStatV23 = new Label();
+            lblStatV24 = new Label();
+            lblStatM1 = new Label();
+            lblStatM2 = new Label();
+            lblStatM3 = new Label();
+            lblStatM4 = new Label();
+            lblStatM5 = new Label();
+            lblStatM6 = new Label();
+            lblStatM7 = new Label();
+            lblStatM8 = new Label();
+            lblStatM9 = new Label();
+            lblStatM10 = new Label();
+            lblStatM11 = new Label();
+            lblStatM12 = new Label();
+            lblStatM13 = new Label();
+            lblStatM14 = new Label();
+            lblStatM15 = new Label();
+            lblStatM16 = new Label();
+            lblStatM17 = new Label();
+            lblStatM18 = new Label();
+            lblStatM19 = new Label();
+            lblStatM20 = new Label();
+            lblStatM21 = new Label();
+            lblStatM22 = new Label();
+            lblStatM23 = new Label();
+            lblStatM24 = new Label();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -232,6 +280,7 @@
             // pnlV1
             // 
             pnlV1.BackColor = Color.Green;
+            pnlV1.Controls.Add(lblStatV1);
             pnlV1.Controls.Add(lblV1);
             pnlV1.Location = new Point(3, 3);
             pnlV1.Name = "pnlV1";
@@ -252,6 +301,7 @@
             // pnlV2
             // 
             pnlV2.BackColor = Color.Green;
+            pnlV2.Controls.Add(lblStatV2);
             pnlV2.Controls.Add(lblV2);
             pnlV2.Location = new Point(124, 3);
             pnlV2.Name = "pnlV2";
@@ -272,6 +322,7 @@
             // pnlV3
             // 
             pnlV3.BackColor = Color.Green;
+            pnlV3.Controls.Add(lblStatV3);
             pnlV3.Controls.Add(lblV3);
             pnlV3.Location = new Point(245, 3);
             pnlV3.Name = "pnlV3";
@@ -292,6 +343,7 @@
             // pnlV4
             // 
             pnlV4.BackColor = Color.Green;
+            pnlV4.Controls.Add(lblStatV4);
             pnlV4.Controls.Add(label1);
             pnlV4.Location = new Point(366, 3);
             pnlV4.Name = "pnlV4";
@@ -312,6 +364,7 @@
             // pnlV5
             // 
             pnlV5.BackColor = Color.Green;
+            pnlV5.Controls.Add(lblStatV5);
             pnlV5.Controls.Add(label5);
             pnlV5.Location = new Point(487, 3);
             pnlV5.Name = "pnlV5";
@@ -332,6 +385,7 @@
             // pnlV6
             // 
             pnlV6.BackColor = Color.Green;
+            pnlV6.Controls.Add(lblStatV6);
             pnlV6.Controls.Add(label7);
             pnlV6.Location = new Point(608, 3);
             pnlV6.Name = "pnlV6";
@@ -352,6 +406,7 @@
             // pnlV7
             // 
             pnlV7.BackColor = Color.Green;
+            pnlV7.Controls.Add(lblStatV7);
             pnlV7.Controls.Add(label6);
             pnlV7.Location = new Point(3, 91);
             pnlV7.Name = "pnlV7";
@@ -372,6 +427,7 @@
             // pnlV8
             // 
             pnlV8.BackColor = Color.Green;
+            pnlV8.Controls.Add(lblStatV8);
             pnlV8.Controls.Add(label4);
             pnlV8.Location = new Point(124, 91);
             pnlV8.Name = "pnlV8";
@@ -392,6 +448,7 @@
             // pnlV9
             // 
             pnlV9.BackColor = Color.Green;
+            pnlV9.Controls.Add(lblStatV9);
             pnlV9.Controls.Add(label2);
             pnlV9.Location = new Point(245, 91);
             pnlV9.Name = "pnlV9";
@@ -412,6 +469,7 @@
             // pnlV10
             // 
             pnlV10.BackColor = Color.Green;
+            pnlV10.Controls.Add(lblStatV10);
             pnlV10.Controls.Add(label3);
             pnlV10.Location = new Point(366, 91);
             pnlV10.Name = "pnlV10";
@@ -432,6 +490,7 @@
             // pnlV11
             // 
             pnlV11.BackColor = Color.Green;
+            pnlV11.Controls.Add(lblStatV11);
             pnlV11.Controls.Add(label9);
             pnlV11.Location = new Point(487, 91);
             pnlV11.Name = "pnlV11";
@@ -452,6 +511,7 @@
             // pnlV12
             // 
             pnlV12.BackColor = Color.Green;
+            pnlV12.Controls.Add(lblStatV12);
             pnlV12.Controls.Add(label10);
             pnlV12.Location = new Point(608, 91);
             pnlV12.Name = "pnlV12";
@@ -472,6 +532,7 @@
             // pnlV13
             // 
             pnlV13.BackColor = Color.Green;
+            pnlV13.Controls.Add(lblStatV13);
             pnlV13.Controls.Add(label11);
             pnlV13.Location = new Point(3, 179);
             pnlV13.Name = "pnlV13";
@@ -492,6 +553,7 @@
             // pnlV14
             // 
             pnlV14.BackColor = Color.Green;
+            pnlV14.Controls.Add(lblStatV14);
             pnlV14.Controls.Add(label12);
             pnlV14.Location = new Point(124, 179);
             pnlV14.Name = "pnlV14";
@@ -512,6 +574,7 @@
             // pnlV15
             // 
             pnlV15.BackColor = Color.Green;
+            pnlV15.Controls.Add(lblStatV15);
             pnlV15.Controls.Add(label13);
             pnlV15.Location = new Point(245, 179);
             pnlV15.Name = "pnlV15";
@@ -532,6 +595,7 @@
             // pnlV16
             // 
             pnlV16.BackColor = Color.Green;
+            pnlV16.Controls.Add(lblStatV16);
             pnlV16.Controls.Add(label14);
             pnlV16.Location = new Point(366, 179);
             pnlV16.Name = "pnlV16";
@@ -552,6 +616,7 @@
             // pnlV17
             // 
             pnlV17.BackColor = Color.Green;
+            pnlV17.Controls.Add(lblStatV17);
             pnlV17.Controls.Add(label15);
             pnlV17.Location = new Point(487, 179);
             pnlV17.Name = "pnlV17";
@@ -572,6 +637,7 @@
             // pnlV18
             // 
             pnlV18.BackColor = Color.Green;
+            pnlV18.Controls.Add(lblStatV18);
             pnlV18.Controls.Add(label16);
             pnlV18.Location = new Point(608, 179);
             pnlV18.Name = "pnlV18";
@@ -592,6 +658,7 @@
             // pnlV19
             // 
             pnlV19.BackColor = Color.Green;
+            pnlV19.Controls.Add(lblStatV19);
             pnlV19.Controls.Add(label17);
             pnlV19.Location = new Point(3, 267);
             pnlV19.Name = "pnlV19";
@@ -612,6 +679,7 @@
             // pnlV20
             // 
             pnlV20.BackColor = Color.Green;
+            pnlV20.Controls.Add(lblStatV20);
             pnlV20.Controls.Add(label18);
             pnlV20.Location = new Point(124, 267);
             pnlV20.Name = "pnlV20";
@@ -632,6 +700,7 @@
             // pnlV21
             // 
             pnlV21.BackColor = Color.Green;
+            pnlV21.Controls.Add(lblStatV21);
             pnlV21.Controls.Add(label19);
             pnlV21.Location = new Point(245, 267);
             pnlV21.Name = "pnlV21";
@@ -652,6 +721,7 @@
             // pnlV22
             // 
             pnlV22.BackColor = Color.Green;
+            pnlV22.Controls.Add(lblStatV22);
             pnlV22.Controls.Add(label20);
             pnlV22.Location = new Point(366, 267);
             pnlV22.Name = "pnlV22";
@@ -672,6 +742,7 @@
             // pnlV23
             // 
             pnlV23.BackColor = Color.Green;
+            pnlV23.Controls.Add(lblStatV23);
             pnlV23.Controls.Add(label21);
             pnlV23.Location = new Point(487, 267);
             pnlV23.Name = "pnlV23";
@@ -692,6 +763,7 @@
             // pnlV24
             // 
             pnlV24.BackColor = Color.Green;
+            pnlV24.Controls.Add(lblStatV24);
             pnlV24.Controls.Add(label8);
             pnlV24.Location = new Point(608, 267);
             pnlV24.Name = "pnlV24";
@@ -744,6 +816,7 @@
             // pnlM1
             // 
             pnlM1.BackColor = Color.Green;
+            pnlM1.Controls.Add(lblStatM1);
             pnlM1.Controls.Add(label22);
             pnlM1.Location = new Point(3, 3);
             pnlM1.Name = "pnlM1";
@@ -764,6 +837,7 @@
             // pnlM2
             // 
             pnlM2.BackColor = Color.Green;
+            pnlM2.Controls.Add(lblStatM2);
             pnlM2.Controls.Add(label23);
             pnlM2.Location = new Point(124, 3);
             pnlM2.Name = "pnlM2";
@@ -784,6 +858,7 @@
             // pnlM3
             // 
             pnlM3.BackColor = Color.Green;
+            pnlM3.Controls.Add(lblStatM3);
             pnlM3.Controls.Add(label24);
             pnlM3.Location = new Point(245, 3);
             pnlM3.Name = "pnlM3";
@@ -804,6 +879,7 @@
             // pnlM4
             // 
             pnlM4.BackColor = Color.Green;
+            pnlM4.Controls.Add(lblStatM4);
             pnlM4.Controls.Add(label25);
             pnlM4.Location = new Point(366, 3);
             pnlM4.Name = "pnlM4";
@@ -824,6 +900,7 @@
             // pnlM5
             // 
             pnlM5.BackColor = Color.Green;
+            pnlM5.Controls.Add(lblStatM5);
             pnlM5.Controls.Add(label26);
             pnlM5.Location = new Point(487, 3);
             pnlM5.Name = "pnlM5";
@@ -844,6 +921,7 @@
             // pnlM6
             // 
             pnlM6.BackColor = Color.Green;
+            pnlM6.Controls.Add(lblStatM6);
             pnlM6.Controls.Add(label27);
             pnlM6.Location = new Point(608, 3);
             pnlM6.Name = "pnlM6";
@@ -864,6 +942,7 @@
             // pnlM7
             // 
             pnlM7.BackColor = Color.Green;
+            pnlM7.Controls.Add(lblStatM7);
             pnlM7.Controls.Add(label28);
             pnlM7.Location = new Point(3, 91);
             pnlM7.Name = "pnlM7";
@@ -884,6 +963,7 @@
             // pnlM8
             // 
             pnlM8.BackColor = Color.Green;
+            pnlM8.Controls.Add(lblStatM8);
             pnlM8.Controls.Add(label29);
             pnlM8.Location = new Point(124, 91);
             pnlM8.Name = "pnlM8";
@@ -904,6 +984,7 @@
             // pnlM9
             // 
             pnlM9.BackColor = Color.Green;
+            pnlM9.Controls.Add(lblStatM9);
             pnlM9.Controls.Add(label30);
             pnlM9.Location = new Point(245, 91);
             pnlM9.Name = "pnlM9";
@@ -924,6 +1005,7 @@
             // pnlM10
             // 
             pnlM10.BackColor = Color.Green;
+            pnlM10.Controls.Add(lblStatM10);
             pnlM10.Controls.Add(label31);
             pnlM10.Location = new Point(366, 91);
             pnlM10.Name = "pnlM10";
@@ -935,7 +1017,7 @@
             label31.AutoSize = true;
             label31.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label31.ForeColor = Color.White;
-            label31.Location = new Point(39, 27);
+            label31.Location = new Point(34, 27);
             label31.Name = "label31";
             label31.Size = new Size(52, 25);
             label31.TabIndex = 0;
@@ -944,6 +1026,7 @@
             // pnlM11
             // 
             pnlM11.BackColor = Color.Green;
+            pnlM11.Controls.Add(lblStatM11);
             pnlM11.Controls.Add(label33);
             pnlM11.Location = new Point(487, 91);
             pnlM11.Name = "pnlM11";
@@ -955,7 +1038,7 @@
             label33.AutoSize = true;
             label33.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label33.ForeColor = Color.White;
-            label33.Location = new Point(39, 27);
+            label33.Location = new Point(34, 27);
             label33.Name = "label33";
             label33.Size = new Size(52, 25);
             label33.TabIndex = 0;
@@ -964,6 +1047,7 @@
             // pnlM12
             // 
             pnlM12.BackColor = Color.Green;
+            pnlM12.Controls.Add(lblStatM12);
             pnlM12.Controls.Add(label34);
             pnlM12.Location = new Point(608, 91);
             pnlM12.Name = "pnlM12";
@@ -975,7 +1059,7 @@
             label34.AutoSize = true;
             label34.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label34.ForeColor = Color.White;
-            label34.Location = new Point(39, 27);
+            label34.Location = new Point(34, 27);
             label34.Name = "label34";
             label34.Size = new Size(52, 25);
             label34.TabIndex = 0;
@@ -984,6 +1068,7 @@
             // pnlM13
             // 
             pnlM13.BackColor = Color.Green;
+            pnlM13.Controls.Add(lblStatM13);
             pnlM13.Controls.Add(label35);
             pnlM13.Location = new Point(3, 179);
             pnlM13.Name = "pnlM13";
@@ -1004,6 +1089,7 @@
             // pnlM14
             // 
             pnlM14.BackColor = Color.Green;
+            pnlM14.Controls.Add(lblStatM14);
             pnlM14.Controls.Add(label36);
             pnlM14.Location = new Point(124, 179);
             pnlM14.Name = "pnlM14";
@@ -1015,7 +1101,7 @@
             label36.AutoSize = true;
             label36.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label36.ForeColor = Color.White;
-            label36.Location = new Point(39, 27);
+            label36.Location = new Point(30, 28);
             label36.Name = "label36";
             label36.Size = new Size(52, 25);
             label36.TabIndex = 0;
@@ -1024,6 +1110,7 @@
             // pnlM15
             // 
             pnlM15.BackColor = Color.Green;
+            pnlM15.Controls.Add(lblStatM15);
             pnlM15.Controls.Add(label37);
             pnlM15.Location = new Point(245, 179);
             pnlM15.Name = "pnlM15";
@@ -1035,7 +1122,7 @@
             label37.AutoSize = true;
             label37.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label37.ForeColor = Color.White;
-            label37.Location = new Point(39, 27);
+            label37.Location = new Point(34, 31);
             label37.Name = "label37";
             label37.Size = new Size(52, 25);
             label37.TabIndex = 0;
@@ -1044,6 +1131,7 @@
             // pnlM16
             // 
             pnlM16.BackColor = Color.Green;
+            pnlM16.Controls.Add(lblStatM16);
             pnlM16.Controls.Add(label38);
             pnlM16.Location = new Point(366, 179);
             pnlM16.Name = "pnlM16";
@@ -1064,6 +1152,7 @@
             // pnlM17
             // 
             pnlM17.BackColor = Color.Green;
+            pnlM17.Controls.Add(lblStatM17);
             pnlM17.Controls.Add(label39);
             pnlM17.Location = new Point(487, 179);
             pnlM17.Name = "pnlM17";
@@ -1084,6 +1173,7 @@
             // pnlM18
             // 
             pnlM18.BackColor = Color.Green;
+            pnlM18.Controls.Add(lblStatM18);
             pnlM18.Controls.Add(label40);
             pnlM18.Location = new Point(608, 179);
             pnlM18.Name = "pnlM18";
@@ -1104,6 +1194,7 @@
             // pnlM19
             // 
             pnlM19.BackColor = Color.Green;
+            pnlM19.Controls.Add(lblStatM19);
             pnlM19.Controls.Add(label41);
             pnlM19.Location = new Point(3, 267);
             pnlM19.Name = "pnlM19";
@@ -1124,6 +1215,7 @@
             // pnlM20
             // 
             pnlM20.BackColor = Color.Green;
+            pnlM20.Controls.Add(lblStatM20);
             pnlM20.Controls.Add(label42);
             pnlM20.Location = new Point(124, 267);
             pnlM20.Name = "pnlM20";
@@ -1135,7 +1227,7 @@
             label42.AutoSize = true;
             label42.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label42.ForeColor = Color.White;
-            label42.Location = new Point(39, 27);
+            label42.Location = new Point(30, 27);
             label42.Name = "label42";
             label42.Size = new Size(52, 25);
             label42.TabIndex = 0;
@@ -1144,6 +1236,7 @@
             // pnlM21
             // 
             pnlM21.BackColor = Color.Green;
+            pnlM21.Controls.Add(lblStatM21);
             pnlM21.Controls.Add(label43);
             pnlM21.Location = new Point(245, 267);
             pnlM21.Name = "pnlM21";
@@ -1155,7 +1248,7 @@
             label43.AutoSize = true;
             label43.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label43.ForeColor = Color.White;
-            label43.Location = new Point(39, 27);
+            label43.Location = new Point(34, 27);
             label43.Name = "label43";
             label43.Size = new Size(52, 25);
             label43.TabIndex = 0;
@@ -1164,6 +1257,7 @@
             // pnlM22
             // 
             pnlM22.BackColor = Color.Green;
+            pnlM22.Controls.Add(lblStatM22);
             pnlM22.Controls.Add(label44);
             pnlM22.Location = new Point(366, 267);
             pnlM22.Name = "pnlM22";
@@ -1184,6 +1278,7 @@
             // pnlM23
             // 
             pnlM23.BackColor = Color.Green;
+            pnlM23.Controls.Add(lblStatM23);
             pnlM23.Controls.Add(label45);
             pnlM23.Location = new Point(487, 267);
             pnlM23.Name = "pnlM23";
@@ -1199,11 +1294,12 @@
             label45.Name = "label45";
             label45.Size = new Size(52, 25);
             label45.TabIndex = 0;
-            label45.Text = "M33";
+            label45.Text = "M23";
             // 
             // pnlM24
             // 
             pnlM24.BackColor = Color.Green;
+            pnlM24.Controls.Add(lblStatM24);
             pnlM24.Controls.Add(label32);
             pnlM24.Location = new Point(608, 267);
             pnlM24.Name = "pnlM24";
@@ -1219,7 +1315,7 @@
             label32.Name = "label32";
             label32.Size = new Size(52, 25);
             label32.TabIndex = 0;
-            label32.Text = "M34";
+            label32.Text = "M24";
             // 
             // label46
             // 
@@ -1375,6 +1471,536 @@
             btnNext.Text = "Next";
             btnNext.UseVisualStyleBackColor = true;
             btnNext.Click += btnNext_Click;
+            // 
+            // lblStatV7
+            // 
+            lblStatV7.AutoSize = true;
+            lblStatV7.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV7.ForeColor = Color.White;
+            lblStatV7.Location = new Point(27, 59);
+            lblStatV7.Name = "lblStatV7";
+            lblStatV7.Size = new Size(61, 17);
+            lblStatV7.TabIndex = 1;
+            lblStatV7.Text = "Availabe";
+            // 
+            // lblStatV8
+            // 
+            lblStatV8.AutoSize = true;
+            lblStatV8.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV8.ForeColor = Color.White;
+            lblStatV8.Location = new Point(25, 59);
+            lblStatV8.Name = "lblStatV8";
+            lblStatV8.Size = new Size(61, 17);
+            lblStatV8.TabIndex = 2;
+            lblStatV8.Text = "Availabe";
+            // 
+            // lblStatV1
+            // 
+            lblStatV1.AutoSize = true;
+            lblStatV1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV1.ForeColor = Color.White;
+            lblStatV1.Location = new Point(27, 58);
+            lblStatV1.Name = "lblStatV1";
+            lblStatV1.Size = new Size(61, 17);
+            lblStatV1.TabIndex = 2;
+            lblStatV1.Text = "Availabe";
+            // 
+            // lblStatV2
+            // 
+            lblStatV2.AutoSize = true;
+            lblStatV2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV2.ForeColor = Color.White;
+            lblStatV2.Location = new Point(25, 58);
+            lblStatV2.Name = "lblStatV2";
+            lblStatV2.Size = new Size(61, 17);
+            lblStatV2.TabIndex = 3;
+            lblStatV2.Text = "Availabe";
+            // 
+            // lblStatV3
+            // 
+            lblStatV3.AutoSize = true;
+            lblStatV3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV3.ForeColor = Color.White;
+            lblStatV3.Location = new Point(25, 58);
+            lblStatV3.Name = "lblStatV3";
+            lblStatV3.Size = new Size(61, 17);
+            lblStatV3.TabIndex = 4;
+            lblStatV3.Text = "Availabe";
+            // 
+            // lblStatV4
+            // 
+            lblStatV4.AutoSize = true;
+            lblStatV4.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV4.ForeColor = Color.White;
+            lblStatV4.Location = new Point(30, 58);
+            lblStatV4.Name = "lblStatV4";
+            lblStatV4.Size = new Size(61, 17);
+            lblStatV4.TabIndex = 4;
+            lblStatV4.Text = "Availabe";
+            // 
+            // lblStatV5
+            // 
+            lblStatV5.AutoSize = true;
+            lblStatV5.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV5.ForeColor = Color.White;
+            lblStatV5.Location = new Point(25, 58);
+            lblStatV5.Name = "lblStatV5";
+            lblStatV5.Size = new Size(61, 17);
+            lblStatV5.TabIndex = 4;
+            lblStatV5.Text = "Availabe";
+            // 
+            // lblStatV6
+            // 
+            lblStatV6.AutoSize = true;
+            lblStatV6.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV6.ForeColor = Color.White;
+            lblStatV6.Location = new Point(25, 58);
+            lblStatV6.Name = "lblStatV6";
+            lblStatV6.Size = new Size(61, 17);
+            lblStatV6.TabIndex = 4;
+            lblStatV6.Text = "Availabe";
+            // 
+            // lblStatV9
+            // 
+            lblStatV9.AutoSize = true;
+            lblStatV9.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV9.ForeColor = Color.White;
+            lblStatV9.Location = new Point(25, 59);
+            lblStatV9.Name = "lblStatV9";
+            lblStatV9.Size = new Size(61, 17);
+            lblStatV9.TabIndex = 3;
+            lblStatV9.Text = "Availabe";
+            // 
+            // lblStatV10
+            // 
+            lblStatV10.AutoSize = true;
+            lblStatV10.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV10.ForeColor = Color.White;
+            lblStatV10.Location = new Point(30, 59);
+            lblStatV10.Name = "lblStatV10";
+            lblStatV10.Size = new Size(61, 17);
+            lblStatV10.TabIndex = 3;
+            lblStatV10.Text = "Availabe";
+            // 
+            // lblStatV11
+            // 
+            lblStatV11.AutoSize = true;
+            lblStatV11.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV11.ForeColor = Color.White;
+            lblStatV11.Location = new Point(30, 59);
+            lblStatV11.Name = "lblStatV11";
+            lblStatV11.Size = new Size(61, 17);
+            lblStatV11.TabIndex = 3;
+            lblStatV11.Text = "Availabe";
+            // 
+            // lblStatV12
+            // 
+            lblStatV12.AutoSize = true;
+            lblStatV12.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV12.ForeColor = Color.White;
+            lblStatV12.Location = new Point(30, 59);
+            lblStatV12.Name = "lblStatV12";
+            lblStatV12.Size = new Size(61, 17);
+            lblStatV12.TabIndex = 3;
+            lblStatV12.Text = "Availabe";
+            // 
+            // lblStatV13
+            // 
+            lblStatV13.AutoSize = true;
+            lblStatV13.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV13.ForeColor = Color.White;
+            lblStatV13.Location = new Point(30, 58);
+            lblStatV13.Name = "lblStatV13";
+            lblStatV13.Size = new Size(61, 17);
+            lblStatV13.TabIndex = 3;
+            lblStatV13.Text = "Availabe";
+            // 
+            // lblStatV14
+            // 
+            lblStatV14.AutoSize = true;
+            lblStatV14.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV14.ForeColor = Color.White;
+            lblStatV14.Location = new Point(30, 58);
+            lblStatV14.Name = "lblStatV14";
+            lblStatV14.Size = new Size(61, 17);
+            lblStatV14.TabIndex = 3;
+            lblStatV14.Text = "Availabe";
+            // 
+            // lblStatV15
+            // 
+            lblStatV15.AutoSize = true;
+            lblStatV15.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV15.ForeColor = Color.White;
+            lblStatV15.Location = new Point(30, 58);
+            lblStatV15.Name = "lblStatV15";
+            lblStatV15.Size = new Size(61, 17);
+            lblStatV15.TabIndex = 3;
+            lblStatV15.Text = "Availabe";
+            lblStatV15.Click += label67_Click;
+            // 
+            // lblStatV16
+            // 
+            lblStatV16.AutoSize = true;
+            lblStatV16.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV16.ForeColor = Color.White;
+            lblStatV16.Location = new Point(30, 58);
+            lblStatV16.Name = "lblStatV16";
+            lblStatV16.Size = new Size(61, 17);
+            lblStatV16.TabIndex = 3;
+            lblStatV16.Text = "Availabe";
+            // 
+            // lblStatV17
+            // 
+            lblStatV17.AutoSize = true;
+            lblStatV17.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV17.ForeColor = Color.White;
+            lblStatV17.Location = new Point(30, 58);
+            lblStatV17.Name = "lblStatV17";
+            lblStatV17.Size = new Size(61, 17);
+            lblStatV17.TabIndex = 3;
+            lblStatV17.Text = "Availabe";
+            // 
+            // lblStatV18
+            // 
+            lblStatV18.AutoSize = true;
+            lblStatV18.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV18.ForeColor = Color.White;
+            lblStatV18.Location = new Point(30, 58);
+            lblStatV18.Name = "lblStatV18";
+            lblStatV18.Size = new Size(61, 17);
+            lblStatV18.TabIndex = 3;
+            lblStatV18.Text = "Availabe";
+            // 
+            // lblStatV19
+            // 
+            lblStatV19.AutoSize = true;
+            lblStatV19.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV19.ForeColor = Color.White;
+            lblStatV19.Location = new Point(30, 57);
+            lblStatV19.Name = "lblStatV19";
+            lblStatV19.Size = new Size(61, 17);
+            lblStatV19.TabIndex = 3;
+            lblStatV19.Text = "Availabe";
+            // 
+            // lblStatV20
+            // 
+            lblStatV20.AutoSize = true;
+            lblStatV20.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV20.ForeColor = Color.White;
+            lblStatV20.Location = new Point(30, 57);
+            lblStatV20.Name = "lblStatV20";
+            lblStatV20.Size = new Size(61, 17);
+            lblStatV20.TabIndex = 3;
+            lblStatV20.Text = "Availabe";
+            // 
+            // lblStatV21
+            // 
+            lblStatV21.AutoSize = true;
+            lblStatV21.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV21.ForeColor = Color.White;
+            lblStatV21.Location = new Point(30, 57);
+            lblStatV21.Name = "lblStatV21";
+            lblStatV21.Size = new Size(61, 17);
+            lblStatV21.TabIndex = 3;
+            lblStatV21.Text = "Availabe";
+            // 
+            // lblStatV22
+            // 
+            lblStatV22.AutoSize = true;
+            lblStatV22.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV22.ForeColor = Color.White;
+            lblStatV22.Location = new Point(30, 57);
+            lblStatV22.Name = "lblStatV22";
+            lblStatV22.Size = new Size(61, 17);
+            lblStatV22.TabIndex = 3;
+            lblStatV22.Text = "Availabe";
+            // 
+            // lblStatV23
+            // 
+            lblStatV23.AutoSize = true;
+            lblStatV23.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV23.ForeColor = Color.White;
+            lblStatV23.Location = new Point(30, 57);
+            lblStatV23.Name = "lblStatV23";
+            lblStatV23.Size = new Size(61, 17);
+            lblStatV23.TabIndex = 3;
+            lblStatV23.Text = "Availabe";
+            // 
+            // lblStatV24
+            // 
+            lblStatV24.AutoSize = true;
+            lblStatV24.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatV24.ForeColor = Color.White;
+            lblStatV24.Location = new Point(30, 57);
+            lblStatV24.Name = "lblStatV24";
+            lblStatV24.Size = new Size(61, 17);
+            lblStatV24.TabIndex = 3;
+            lblStatV24.Text = "Availabe";
+            // 
+            // lblStatM1
+            // 
+            lblStatM1.AutoSize = true;
+            lblStatM1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM1.ForeColor = Color.White;
+            lblStatM1.Location = new Point(27, 59);
+            lblStatM1.Name = "lblStatM1";
+            lblStatM1.Size = new Size(61, 17);
+            lblStatM1.TabIndex = 3;
+            lblStatM1.Text = "Availabe";
+            // 
+            // lblStatM2
+            // 
+            lblStatM2.AutoSize = true;
+            lblStatM2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM2.ForeColor = Color.White;
+            lblStatM2.Location = new Point(25, 59);
+            lblStatM2.Name = "lblStatM2";
+            lblStatM2.Size = new Size(61, 17);
+            lblStatM2.TabIndex = 3;
+            lblStatM2.Text = "Availabe";
+            // 
+            // lblStatM3
+            // 
+            lblStatM3.AutoSize = true;
+            lblStatM3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM3.ForeColor = Color.White;
+            lblStatM3.Location = new Point(25, 59);
+            lblStatM3.Name = "lblStatM3";
+            lblStatM3.Size = new Size(61, 17);
+            lblStatM3.TabIndex = 3;
+            lblStatM3.Text = "Availabe";
+            // 
+            // lblStatM4
+            // 
+            lblStatM4.AutoSize = true;
+            lblStatM4.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM4.ForeColor = Color.White;
+            lblStatM4.Location = new Point(30, 59);
+            lblStatM4.Name = "lblStatM4";
+            lblStatM4.Size = new Size(61, 17);
+            lblStatM4.TabIndex = 3;
+            lblStatM4.Text = "Availabe";
+            // 
+            // lblStatM5
+            // 
+            lblStatM5.AutoSize = true;
+            lblStatM5.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM5.ForeColor = Color.White;
+            lblStatM5.Location = new Point(30, 59);
+            lblStatM5.Name = "lblStatM5";
+            lblStatM5.Size = new Size(61, 17);
+            lblStatM5.TabIndex = 3;
+            lblStatM5.Text = "Availabe";
+            // 
+            // lblStatM6
+            // 
+            lblStatM6.AutoSize = true;
+            lblStatM6.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM6.ForeColor = Color.White;
+            lblStatM6.Location = new Point(25, 59);
+            lblStatM6.Name = "lblStatM6";
+            lblStatM6.Size = new Size(61, 17);
+            lblStatM6.TabIndex = 3;
+            lblStatM6.Text = "Availabe";
+            // 
+            // lblStatM7
+            // 
+            lblStatM7.AutoSize = true;
+            lblStatM7.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM7.ForeColor = Color.White;
+            lblStatM7.Location = new Point(27, 60);
+            lblStatM7.Name = "lblStatM7";
+            lblStatM7.Size = new Size(61, 17);
+            lblStatM7.TabIndex = 3;
+            lblStatM7.Text = "Availabe";
+            // 
+            // lblStatM8
+            // 
+            lblStatM8.AutoSize = true;
+            lblStatM8.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM8.ForeColor = Color.White;
+            lblStatM8.Location = new Point(25, 60);
+            lblStatM8.Name = "lblStatM8";
+            lblStatM8.Size = new Size(61, 17);
+            lblStatM8.TabIndex = 4;
+            lblStatM8.Text = "Availabe";
+            // 
+            // lblStatM9
+            // 
+            lblStatM9.AutoSize = true;
+            lblStatM9.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM9.ForeColor = Color.White;
+            lblStatM9.Location = new Point(25, 60);
+            lblStatM9.Name = "lblStatM9";
+            lblStatM9.Size = new Size(61, 17);
+            lblStatM9.TabIndex = 3;
+            lblStatM9.Text = "Availabe";
+            lblStatM9.Click += label85_Click;
+            // 
+            // lblStatM10
+            // 
+            lblStatM10.AutoSize = true;
+            lblStatM10.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM10.ForeColor = Color.White;
+            lblStatM10.Location = new Point(30, 60);
+            lblStatM10.Name = "lblStatM10";
+            lblStatM10.Size = new Size(61, 17);
+            lblStatM10.TabIndex = 3;
+            lblStatM10.Text = "Availabe";
+            // 
+            // lblStatM11
+            // 
+            lblStatM11.AutoSize = true;
+            lblStatM11.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM11.ForeColor = Color.White;
+            lblStatM11.Location = new Point(30, 60);
+            lblStatM11.Name = "lblStatM11";
+            lblStatM11.Size = new Size(61, 17);
+            lblStatM11.TabIndex = 3;
+            lblStatM11.Text = "Availabe";
+            // 
+            // lblStatM12
+            // 
+            lblStatM12.AutoSize = true;
+            lblStatM12.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM12.ForeColor = Color.White;
+            lblStatM12.Location = new Point(30, 60);
+            lblStatM12.Name = "lblStatM12";
+            lblStatM12.Size = new Size(61, 17);
+            lblStatM12.TabIndex = 3;
+            lblStatM12.Text = "Availabe";
+            // 
+            // lblStatM13
+            // 
+            lblStatM13.AutoSize = true;
+            lblStatM13.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM13.ForeColor = Color.White;
+            lblStatM13.Location = new Point(30, 60);
+            lblStatM13.Name = "lblStatM13";
+            lblStatM13.Size = new Size(61, 17);
+            lblStatM13.TabIndex = 3;
+            lblStatM13.Text = "Availabe";
+            // 
+            // lblStatM14
+            // 
+            lblStatM14.AutoSize = true;
+            lblStatM14.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM14.ForeColor = Color.White;
+            lblStatM14.Location = new Point(25, 60);
+            lblStatM14.Name = "lblStatM14";
+            lblStatM14.Size = new Size(61, 17);
+            lblStatM14.TabIndex = 3;
+            lblStatM14.Text = "Availabe";
+            // 
+            // lblStatM15
+            // 
+            lblStatM15.AutoSize = true;
+            lblStatM15.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM15.ForeColor = Color.White;
+            lblStatM15.Location = new Point(30, 60);
+            lblStatM15.Name = "lblStatM15";
+            lblStatM15.Size = new Size(61, 17);
+            lblStatM15.TabIndex = 3;
+            lblStatM15.Text = "Availabe";
+            // 
+            // lblStatM16
+            // 
+            lblStatM16.AutoSize = true;
+            lblStatM16.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM16.ForeColor = Color.White;
+            lblStatM16.Location = new Point(30, 60);
+            lblStatM16.Name = "lblStatM16";
+            lblStatM16.Size = new Size(61, 17);
+            lblStatM16.TabIndex = 3;
+            lblStatM16.Text = "Availabe";
+            // 
+            // lblStatM17
+            // 
+            lblStatM17.AutoSize = true;
+            lblStatM17.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM17.ForeColor = Color.White;
+            lblStatM17.Location = new Point(30, 60);
+            lblStatM17.Name = "lblStatM17";
+            lblStatM17.Size = new Size(61, 17);
+            lblStatM17.TabIndex = 3;
+            lblStatM17.Text = "Availabe";
+            // 
+            // lblStatM18
+            // 
+            lblStatM18.AutoSize = true;
+            lblStatM18.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM18.ForeColor = Color.White;
+            lblStatM18.Location = new Point(30, 60);
+            lblStatM18.Name = "lblStatM18";
+            lblStatM18.Size = new Size(61, 17);
+            lblStatM18.TabIndex = 3;
+            lblStatM18.Text = "Availabe";
+            // 
+            // lblStatM19
+            // 
+            lblStatM19.AutoSize = true;
+            lblStatM19.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM19.ForeColor = Color.White;
+            lblStatM19.Location = new Point(30, 60);
+            lblStatM19.Name = "lblStatM19";
+            lblStatM19.Size = new Size(61, 17);
+            lblStatM19.TabIndex = 3;
+            lblStatM19.Text = "Availabe";
+            // 
+            // lblStatM20
+            // 
+            lblStatM20.AutoSize = true;
+            lblStatM20.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM20.ForeColor = Color.White;
+            lblStatM20.Location = new Point(30, 60);
+            lblStatM20.Name = "lblStatM20";
+            lblStatM20.Size = new Size(61, 17);
+            lblStatM20.TabIndex = 3;
+            lblStatM20.Text = "Availabe";
+            // 
+            // lblStatM21
+            // 
+            lblStatM21.AutoSize = true;
+            lblStatM21.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM21.ForeColor = Color.White;
+            lblStatM21.Location = new Point(30, 60);
+            lblStatM21.Name = "lblStatM21";
+            lblStatM21.Size = new Size(61, 17);
+            lblStatM21.TabIndex = 3;
+            lblStatM21.Text = "Availabe";
+            // 
+            // lblStatM22
+            // 
+            lblStatM22.AutoSize = true;
+            lblStatM22.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM22.ForeColor = Color.White;
+            lblStatM22.Location = new Point(30, 60);
+            lblStatM22.Name = "lblStatM22";
+            lblStatM22.Size = new Size(61, 17);
+            lblStatM22.TabIndex = 3;
+            lblStatM22.Text = "Availabe";
+            // 
+            // lblStatM23
+            // 
+            lblStatM23.AutoSize = true;
+            lblStatM23.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM23.ForeColor = Color.White;
+            lblStatM23.Location = new Point(30, 60);
+            lblStatM23.Name = "lblStatM23";
+            lblStatM23.Size = new Size(61, 17);
+            lblStatM23.TabIndex = 3;
+            lblStatM23.Text = "Availabe";
+            // 
+            // lblStatM24
+            // 
+            lblStatM24.AutoSize = true;
+            lblStatM24.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatM24.ForeColor = Color.White;
+            lblStatM24.Location = new Point(30, 60);
+            lblStatM24.Name = "lblStatM24";
+            lblStatM24.Size = new Size(61, 17);
+            lblStatM24.TabIndex = 3;
+            lblStatM24.Text = "Availabe";
             // 
             // ParkingSlot
             // 
@@ -1624,5 +2250,53 @@
         private PictureBox pictureBox1;
         private PictureBox pictureBox2;
         private Button btnNext;
+        private Label lblStatV7;
+        private Label lblStatV1;
+        private Label lblStatV8;
+        private Label lblStatV2;
+        private Label lblStatV3;
+        private Label lblStatV4;
+        private Label lblStatV5;
+        private Label lblStatV6;
+        private Label lblStatV9;
+        private Label lblStatV10;
+        private Label lblStatV11;
+        private Label lblStatV12;
+        private Label lblStatV13;
+        private Label lblStatV14;
+        private Label lblStatV15;
+        private Label lblStatV16;
+        private Label lblStatV17;
+        private Label lblStatV18;
+        private Label lblStatV19;
+        private Label lblStatV20;
+        private Label lblStatV21;
+        private Label lblStatV22;
+        private Label lblStatV23;
+        private Label lblStatV24;
+        private Label lblStatM1;
+        private Label lblStatM2;
+        private Label lblStatM3;
+        private Label lblStatM4;
+        private Label lblStatM5;
+        private Label lblStatM6;
+        private Label lblStatM7;
+        private Label lblStatM8;
+        private Label lblStatM9;
+        private Label lblStatM10;
+        private Label lblStatM11;
+        private Label lblStatM12;
+        private Label lblStatM13;
+        private Label lblStatM14;
+        private Label lblStatM15;
+        private Label lblStatM16;
+        private Label lblStatM17;
+        private Label lblStatM18;
+        private Label lblStatM19;
+        private Label lblStatM20;
+        private Label lblStatM21;
+        private Label lblStatM22;
+        private Label lblStatM23;
+        private Label lblStatM24;
     }
 }
