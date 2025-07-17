@@ -67,6 +67,8 @@ namespace ParkingManagement
             btnAddVehicle.Enabled = true; // Enabled from the start to allow adding vehicles to the list
             btnRemoveVehicle.Enabled = true; // Enabled from the start
             dgvInformation.Enabled = true; // Enabled from the start
+
+            await UpdateNextButtonStateAsync();
         }
 
         // --- Camera Initialization ---
@@ -452,13 +454,7 @@ namespace ParkingManagement
                 // --- CHANGE HERE: Call ClearForm(true) to clear all inputs AND reset DGV to empty for new entry ---
                 await ClearForm(true); // Clear input fields AND reset dgvInformation to empty for new client
 
-                // After successful save:
-                var homePage = this.ParentForm as HomePage;
-                if (homePage != null)
-                {
-                    var parkRentalForm = new ParkRental();
-                    homePage.ShowFormInPanel(parkRentalForm);
-                }
+                await UpdateNextButtonStateAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -481,6 +477,7 @@ namespace ParkingManagement
         private async void btnCancel_Click(object sender, EventArgs e)
         {
             await ClearForm(true); // Clear everything, including dgvInformation's content for new entry
+            await UpdateNextButtonStateAsync();
         }
 
         // Added a parameter 'resetDGV' to control if dgvInformation should reset to empty or stay in "all data" view
@@ -602,6 +599,23 @@ namespace ParkingManagement
         private void cmbVehicleType_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            // After successful save:
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkSlotForm = new ParkingSlot();
+                homePage.ShowFormInPanel(parkSlotForm);
+            }
+        }
+
+        private async Task UpdateNextButtonStateAsync()
+        {
+            int clientCount = await _context.Clients.CountAsync();
+            btnNext.Enabled = clientCount > 0;
         }
     }
 }

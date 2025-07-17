@@ -38,6 +38,8 @@
             btnCancel = new Button();
             lstScheduled = new ListBox();
             lblClientName = new Label();
+            dateTimePicker1 = new DateTimePicker();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             SuspendLayout();
             // 
@@ -69,7 +71,7 @@
             // cmbDurationType
             // 
             cmbDurationType.FormattingEnabled = true;
-            cmbDurationType.Location = new Point(293, 296);
+            cmbDurationType.Location = new Point(293, 311);
             cmbDurationType.Name = "cmbDurationType";
             cmbDurationType.Size = new Size(121, 23);
             cmbDurationType.TabIndex = 6;
@@ -77,9 +79,9 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(195, 304);
+            label3.Location = new Point(195, 319);
             label3.Name = "label3";
-            label3.Size = new Size(81, 15);
+            label3.Size = new Size(80, 15);
             label3.TabIndex = 7;
             label3.Text = "Duration Type";
             // 
@@ -132,11 +134,30 @@
             lblClientName.TabIndex = 12;
             lblClientName.Text = "Name of Client";
             // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Format = DateTimePickerFormat.Time;
+            dateTimePicker1.Location = new Point(293, 267);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(101, 23);
+            dateTimePicker1.TabIndex = 13;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(198, 275);
+            label1.Name = "label1";
+            label1.Size = new Size(52, 15);
+            label1.TabIndex = 14;
+            label1.Text = "Set Time";
+            // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
+            Controls.Add(label1);
+            Controls.Add(dateTimePicker1);
             Controls.Add(lblClientName);
             Controls.Add(lstScheduled);
             Controls.Add(btnCancel);
@@ -167,5 +188,7 @@
         private Button btnCancel;
         private ListBox lstScheduled;
         private Label lblClientName;
+        private DateTimePicker dateTimePicker1;
+        private Label label1;
     }
 }

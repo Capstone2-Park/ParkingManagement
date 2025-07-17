@@ -279,8 +279,8 @@ namespace ParkingManagement.Forms
             var homePage = this.ParentForm as HomePage;
             if (homePage != null)
             {
-                var TotalForm = new TotalPayment();
-                homePage.ShowFormInPanel(TotalForm);
+                var RentForm = new ParkRental();
+                homePage.ShowFormInPanel(RentForm);
             }
         }
 
@@ -292,6 +292,16 @@ namespace ParkingManagement.Forms
         private void label85_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var TotalForm = new TotalPayment();
+                homePage.ShowFormInPanel(TotalForm);
+            }
         }
     }
 }

@@ -57,6 +57,7 @@
             btnSave = new Button();
             btnCancel = new Button();
             flowLayoutPanel1 = new FlowLayoutPanel();
+            btnNext = new Button();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
             flowLayoutPanel1.SuspendLayout();
@@ -252,7 +253,7 @@
             label9.AutoSize = true;
             label9.Location = new Point(667, 468);
             label9.Name = "label9";
-            label9.Size = new Size(72, 15);
+            label9.Size = new Size(71, 15);
             label9.TabIndex = 22;
             label9.Text = "Vehicle Type";
             // 
@@ -312,10 +313,21 @@
             flowLayoutPanel1.Controls.Add(dgvInformation);
             flowLayoutPanel1.Controls.Add(btnSave);
             flowLayoutPanel1.Controls.Add(btnCancel);
-            flowLayoutPanel1.Location = new Point(324, 594);
+            flowLayoutPanel1.Location = new Point(225, 594);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(773, 291);
+            flowLayoutPanel1.Size = new Size(779, 291);
             flowLayoutPanel1.TabIndex = 28;
+            // 
+            // btnNext
+            // 
+            btnNext.Anchor = AnchorStyles.None;
+            btnNext.Location = new Point(1034, 755);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(75, 26);
+            btnNext.TabIndex = 29;
+            btnNext.Text = "Next";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
             // 
             // ClientManagement
             // 
@@ -323,6 +335,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1266, 749);
+            Controls.Add(btnNext);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(btnRemoveVehicle);
             Controls.Add(btnAddVehicle);
@@ -391,5 +404,6 @@
         private Button btnSave;
         private Button btnCancel;
         private FlowLayoutPanel flowLayoutPanel1;
+        private Button btnNext;
     }
 }
