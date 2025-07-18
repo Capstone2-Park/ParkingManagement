@@ -166,6 +166,10 @@ namespace ParkingManagement.Forms
             cmbDurationType.SelectedIndex = 0; // Default to Daily
         }
 
+        private void UpdateNextButtonState()
+        {
+            btnNext.Enabled = _scheduledVehicles.Count > 0;
+        }
         private void LoadClientVehicles()
         {
             if (_currentClient == null)
@@ -275,6 +279,8 @@ namespace ParkingManagement.Forms
             {
                 MessageBox.Show($"Error saving rental sessions: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            UpdateNextButtonState();
         }
 
         // Renamed and modified to store values internally, not display on labels
@@ -408,6 +414,8 @@ namespace ParkingManagement.Forms
             dgvVehicles.ClearSelection();
             _selectedClient = null;
             _selectedVehicle = null;
+
+            UpdateNextButtonState();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -415,6 +423,8 @@ namespace ParkingManagement.Forms
             _scheduledVehicles.Clear();
             RefreshScheduledListView();
             ClearFormForNewEntry();
+
+            UpdateNextButtonState();
         }
 
         private void RefreshScheduledListView()

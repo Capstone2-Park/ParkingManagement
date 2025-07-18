@@ -66,6 +66,7 @@ namespace ParkingManagement.Forms
 
             UpdateSlotPanelColors();
             UpdateSlotStatusLabels();
+            UpdateNextButtonState();
         }
 
         private void UpdateSlotPanelColors()
@@ -228,6 +229,7 @@ namespace ParkingManagement.Forms
             MessageBox.Show("Vehicle parked successfully.");
             UpdateSlotPanelColors();
             UpdateSlotStatusLabels();
+            UpdateNextButtonState();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -294,6 +296,11 @@ namespace ParkingManagement.Forms
 
         }
 
+        private void UpdateNextButtonState()
+        {
+            bool anyOccupied = slots != null && slots.Any(s => s.SlotStatus == "occupied");
+            btnNext.Enabled = anyOccupied;
+        }
         private void btnPrev_Click(object sender, EventArgs e)
         {
             var homePage = this.ParentForm as HomePage;
