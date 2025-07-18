@@ -299,8 +299,8 @@ namespace ParkingManagement.Forms
             var homePage = this.ParentForm as HomePage;
             if (homePage != null)
             {
-                var TotalForm = new TotalPayment();
-                homePage.ShowFormInPanel(TotalForm);
+                var clientManagementForm = new ClientManagement();
+                homePage.ShowFormInPanel(clientManagementForm);
             }
         }
     }

@@ -36,11 +36,17 @@
             btnSave = new Button();
             btnSetSched = new Button();
             btnCancel = new Button();
-            lstScheduled = new ListBox();
             lblClientName = new Label();
-            dateTimePicker1 = new DateTimePicker();
+            dtpStart = new DateTimePicker();
             label1 = new Label();
+            dgvList = new DataGridView();
+            label4 = new Label();
+            dtpEnd = new DateTimePicker();
+            label5 = new Label();
+            btnPrev = new Button();
+            btnNext = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvList).BeginInit();
             SuspendLayout();
             // 
             // dgvVehicles
@@ -97,7 +103,7 @@
             // 
             // btnSetSched
             // 
-            btnSetSched.Location = new Point(817, 162);
+            btnSetSched.Location = new Point(435, 310);
             btnSetSched.Name = "btnSetSched";
             btnSetSched.Size = new Size(92, 23);
             btnSetSched.TabIndex = 9;
@@ -115,15 +121,6 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
-            // lstScheduled
-            // 
-            lstScheduled.FormattingEnabled = true;
-            lstScheduled.ItemHeight = 15;
-            lstScheduled.Location = new Point(583, 162);
-            lstScheduled.Name = "lstScheduled";
-            lstScheduled.Size = new Size(221, 199);
-            lstScheduled.TabIndex = 11;
-            // 
             // lblClientName
             // 
             lblClientName.AutoSize = true;
@@ -134,32 +131,92 @@
             lblClientName.TabIndex = 12;
             lblClientName.Text = "Name of Client";
             // 
-            // dateTimePicker1
+            // dtpStart
             // 
-            dateTimePicker1.Format = DateTimePickerFormat.Time;
-            dateTimePicker1.Location = new Point(293, 267);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(101, 23);
-            dateTimePicker1.TabIndex = 13;
+            dtpStart.Format = DateTimePickerFormat.Time;
+            dtpStart.Location = new Point(293, 267);
+            dtpStart.Name = "dtpStart";
+            dtpStart.Size = new Size(101, 23);
+            dtpStart.TabIndex = 13;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(198, 275);
             label1.Name = "label1";
-            label1.Size = new Size(52, 15);
+            label1.Size = new Size(60, 15);
             label1.TabIndex = 14;
-            label1.Text = "Set Time";
+            label1.Text = "Time Start";
+            // 
+            // dgvList
+            // 
+            dgvList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvList.Location = new Point(756, 183);
+            dgvList.Name = "dgvList";
+            dgvList.Size = new Size(252, 150);
+            dgvList.TabIndex = 15;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(415, 273);
+            label4.Name = "label4";
+            label4.Size = new Size(61, 15);
+            label4.TabIndex = 16;
+            label4.Text = "Time Ends";
+            // 
+            // dtpEnd
+            // 
+            dtpEnd.Format = DateTimePickerFormat.Time;
+            dtpEnd.Location = new Point(482, 267);
+            dtpEnd.Name = "dtpEnd";
+            dtpEnd.Size = new Size(101, 23);
+            dtpEnd.TabIndex = 17;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(756, 155);
+            label5.Name = "label5";
+            label5.Size = new Size(166, 25);
+            label5.TabIndex = 18;
+            label5.Text = "Rented Client List";
+            // 
+            // btnPrev
+            // 
+            btnPrev.Location = new Point(1071, 659);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(96, 37);
+            btnPrev.TabIndex = 19;
+            btnPrev.Text = "Prev";
+            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.Click += btnPrev_Click;
+            // 
+            // btnNext
+            // 
+            btnNext.Location = new Point(98, 659);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(96, 37);
+            btnNext.TabIndex = 20;
+            btnNext.Text = "Next";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
             // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
+            Controls.Add(btnNext);
+            Controls.Add(btnPrev);
+            Controls.Add(label5);
+            Controls.Add(dtpEnd);
+            Controls.Add(label4);
+            Controls.Add(dgvList);
             Controls.Add(label1);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(dtpStart);
             Controls.Add(lblClientName);
-            Controls.Add(lstScheduled);
             Controls.Add(btnCancel);
             Controls.Add(btnSetSched);
             Controls.Add(btnSave);
@@ -172,6 +229,7 @@
             Text = "Fee";
             FormClosing += ParkRental_FormClosing;
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvList).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -186,9 +244,14 @@
         private Button btnSave;
         private Button btnSetSched;
         private Button btnCancel;
-        private ListBox lstScheduled;
         private Label lblClientName;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dtpStart;
         private Label label1;
+        private DataGridView dgvList;
+        private Label label4;
+        private DateTimePicker dtpEnd;
+        private Label label5;
+        private Button btnPrev;
+        private Button btnNext;
     }
 }
