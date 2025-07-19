@@ -102,6 +102,18 @@
             pnlV24 = new Panel();
             lblStatV24 = new Label();
             label8 = new Label();
+            pictureBox2 = new PictureBox();
+            pictureBox1 = new PictureBox();
+            label53 = new Label();
+            label52 = new Label();
+            btnSelect = new Button();
+            cbSlotM = new ComboBox();
+            label51 = new Label();
+            cbSlotV = new ComboBox();
+            label50 = new Label();
+            cbVehicle = new ComboBox();
+            btnAdd = new Button();
+            label49 = new Label();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -127,6 +139,8 @@
             pnlV22.SuspendLayout();
             pnlV23.SuspendLayout();
             pnlV24.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // label46
@@ -172,7 +186,7 @@
             // 
             // pnlV1
             // 
-            pnlV1.BackColor = Color.Green;
+            pnlV1.BackColor = Color.Gold;
             pnlV1.Controls.Add(lblStatV1);
             pnlV1.Controls.Add(lblV1);
             pnlV1.Location = new Point(3, 3);
@@ -204,7 +218,7 @@
             // 
             // pnlV2
             // 
-            pnlV2.BackColor = Color.Green;
+            pnlV2.BackColor = Color.Gold;
             pnlV2.Controls.Add(lblStatV2);
             pnlV2.Controls.Add(lblV2);
             pnlV2.Location = new Point(124, 3);
@@ -236,7 +250,7 @@
             // 
             // pnlV3
             // 
-            pnlV3.BackColor = Color.Green;
+            pnlV3.BackColor = Color.Gold;
             pnlV3.Controls.Add(lblStatV3);
             pnlV3.Controls.Add(lblV3);
             pnlV3.Location = new Point(245, 3);
@@ -268,7 +282,7 @@
             // 
             // pnlV4
             // 
-            pnlV4.BackColor = Color.Green;
+            pnlV4.BackColor = Color.Gold;
             pnlV4.Controls.Add(lblStatV4);
             pnlV4.Controls.Add(label1);
             pnlV4.Location = new Point(366, 3);
@@ -300,7 +314,7 @@
             // 
             // pnlV5
             // 
-            pnlV5.BackColor = Color.Green;
+            pnlV5.BackColor = Color.Gold;
             pnlV5.Controls.Add(lblStatV5);
             pnlV5.Controls.Add(label5);
             pnlV5.Location = new Point(487, 3);
@@ -332,10 +346,10 @@
             // 
             // pnlV6
             // 
-            pnlV6.BackColor = Color.Green;
+            pnlV6.BackColor = Color.Gold;
             pnlV6.Controls.Add(lblStatV6);
             pnlV6.Controls.Add(label7);
-            pnlV6.Location = new Point(3, 91);
+            pnlV6.Location = new Point(608, 3);
             pnlV6.Name = "pnlV6";
             pnlV6.Size = new Size(115, 82);
             pnlV6.TabIndex = 7;
@@ -364,10 +378,10 @@
             // 
             // pnlV7
             // 
-            pnlV7.BackColor = Color.Green;
+            pnlV7.BackColor = Color.Gold;
             pnlV7.Controls.Add(lblStatV7);
             pnlV7.Controls.Add(label6);
-            pnlV7.Location = new Point(124, 91);
+            pnlV7.Location = new Point(3, 91);
             pnlV7.Name = "pnlV7";
             pnlV7.Size = new Size(115, 82);
             pnlV7.TabIndex = 5;
@@ -396,10 +410,10 @@
             // 
             // pnlV8
             // 
-            pnlV8.BackColor = Color.Green;
+            pnlV8.BackColor = Color.Gold;
             pnlV8.Controls.Add(lblStatV8);
             pnlV8.Controls.Add(label4);
-            pnlV8.Location = new Point(245, 91);
+            pnlV8.Location = new Point(124, 91);
             pnlV8.Name = "pnlV8";
             pnlV8.Size = new Size(115, 82);
             pnlV8.TabIndex = 4;
@@ -428,10 +442,10 @@
             // 
             // pnlV9
             // 
-            pnlV9.BackColor = Color.Green;
+            pnlV9.BackColor = Color.Gold;
             pnlV9.Controls.Add(lblStatV9);
             pnlV9.Controls.Add(label2);
-            pnlV9.Location = new Point(366, 91);
+            pnlV9.Location = new Point(245, 91);
             pnlV9.Name = "pnlV9";
             pnlV9.Size = new Size(115, 82);
             pnlV9.TabIndex = 8;
@@ -460,10 +474,10 @@
             // 
             // pnlV10
             // 
-            pnlV10.BackColor = Color.Green;
+            pnlV10.BackColor = Color.Gold;
             pnlV10.Controls.Add(lblStatV10);
             pnlV10.Controls.Add(label3);
-            pnlV10.Location = new Point(487, 91);
+            pnlV10.Location = new Point(366, 91);
             pnlV10.Name = "pnlV10";
             pnlV10.Size = new Size(115, 82);
             pnlV10.TabIndex = 9;
@@ -492,10 +506,10 @@
             // 
             // pnlV11
             // 
-            pnlV11.BackColor = Color.Green;
+            pnlV11.BackColor = Color.Gold;
             pnlV11.Controls.Add(lblStatV11);
             pnlV11.Controls.Add(label9);
-            pnlV11.Location = new Point(3, 179);
+            pnlV11.Location = new Point(487, 91);
             pnlV11.Name = "pnlV11";
             pnlV11.Size = new Size(115, 82);
             pnlV11.TabIndex = 11;
@@ -524,10 +538,10 @@
             // 
             // pnlV12
             // 
-            pnlV12.BackColor = Color.Green;
+            pnlV12.BackColor = Color.Gold;
             pnlV12.Controls.Add(lblStatV12);
             pnlV12.Controls.Add(label10);
-            pnlV12.Location = new Point(124, 179);
+            pnlV12.Location = new Point(608, 91);
             pnlV12.Name = "pnlV12";
             pnlV12.Size = new Size(115, 82);
             pnlV12.TabIndex = 12;
@@ -556,10 +570,10 @@
             // 
             // pnlV13
             // 
-            pnlV13.BackColor = Color.Green;
+            pnlV13.BackColor = Color.Gold;
             pnlV13.Controls.Add(lblStatV13);
             pnlV13.Controls.Add(label11);
-            pnlV13.Location = new Point(245, 179);
+            pnlV13.Location = new Point(3, 179);
             pnlV13.Name = "pnlV13";
             pnlV13.Size = new Size(115, 82);
             pnlV13.TabIndex = 14;
@@ -588,10 +602,10 @@
             // 
             // pnlV14
             // 
-            pnlV14.BackColor = Color.Green;
+            pnlV14.BackColor = Color.Gold;
             pnlV14.Controls.Add(lblStatV14);
             pnlV14.Controls.Add(label12);
-            pnlV14.Location = new Point(366, 179);
+            pnlV14.Location = new Point(124, 179);
             pnlV14.Name = "pnlV14";
             pnlV14.Size = new Size(115, 82);
             pnlV14.TabIndex = 13;
@@ -620,10 +634,10 @@
             // 
             // pnlV15
             // 
-            pnlV15.BackColor = Color.Green;
+            pnlV15.BackColor = Color.Gold;
             pnlV15.Controls.Add(lblStatV15);
             pnlV15.Controls.Add(label13);
-            pnlV15.Location = new Point(487, 179);
+            pnlV15.Location = new Point(245, 179);
             pnlV15.Name = "pnlV15";
             pnlV15.Size = new Size(115, 82);
             pnlV15.TabIndex = 15;
@@ -652,10 +666,10 @@
             // 
             // pnlV16
             // 
-            pnlV16.BackColor = Color.Green;
+            pnlV16.BackColor = Color.Gold;
             pnlV16.Controls.Add(lblStatV16);
             pnlV16.Controls.Add(label14);
-            pnlV16.Location = new Point(3, 267);
+            pnlV16.Location = new Point(366, 179);
             pnlV16.Name = "pnlV16";
             pnlV16.Size = new Size(115, 82);
             pnlV16.TabIndex = 18;
@@ -684,10 +698,10 @@
             // 
             // pnlV17
             // 
-            pnlV17.BackColor = Color.Green;
+            pnlV17.BackColor = Color.Gold;
             pnlV17.Controls.Add(lblStatV17);
             pnlV17.Controls.Add(label15);
-            pnlV17.Location = new Point(124, 267);
+            pnlV17.Location = new Point(487, 179);
             pnlV17.Name = "pnlV17";
             pnlV17.Size = new Size(115, 82);
             pnlV17.TabIndex = 19;
@@ -716,10 +730,10 @@
             // 
             // pnlV18
             // 
-            pnlV18.BackColor = Color.Green;
+            pnlV18.BackColor = Color.Gold;
             pnlV18.Controls.Add(lblStatV18);
             pnlV18.Controls.Add(label16);
-            pnlV18.Location = new Point(245, 267);
+            pnlV18.Location = new Point(608, 179);
             pnlV18.Name = "pnlV18";
             pnlV18.Size = new Size(115, 82);
             pnlV18.TabIndex = 17;
@@ -748,10 +762,10 @@
             // 
             // pnlV19
             // 
-            pnlV19.BackColor = Color.Green;
+            pnlV19.BackColor = Color.Gold;
             pnlV19.Controls.Add(lblStatV19);
             pnlV19.Controls.Add(label17);
-            pnlV19.Location = new Point(366, 267);
+            pnlV19.Location = new Point(3, 267);
             pnlV19.Name = "pnlV19";
             pnlV19.Size = new Size(115, 82);
             pnlV19.TabIndex = 16;
@@ -780,10 +794,10 @@
             // 
             // pnlV20
             // 
-            pnlV20.BackColor = Color.Green;
+            pnlV20.BackColor = Color.Gold;
             pnlV20.Controls.Add(lblStatV20);
             pnlV20.Controls.Add(label18);
-            pnlV20.Location = new Point(487, 267);
+            pnlV20.Location = new Point(124, 267);
             pnlV20.Name = "pnlV20";
             pnlV20.Size = new Size(115, 82);
             pnlV20.TabIndex = 20;
@@ -812,10 +826,10 @@
             // 
             // pnlV21
             // 
-            pnlV21.BackColor = Color.Green;
+            pnlV21.BackColor = Color.Gold;
             pnlV21.Controls.Add(lblStatV21);
             pnlV21.Controls.Add(label19);
-            pnlV21.Location = new Point(3, 355);
+            pnlV21.Location = new Point(245, 267);
             pnlV21.Name = "pnlV21";
             pnlV21.Size = new Size(115, 82);
             pnlV21.TabIndex = 21;
@@ -844,10 +858,10 @@
             // 
             // pnlV22
             // 
-            pnlV22.BackColor = Color.Green;
+            pnlV22.BackColor = Color.Gold;
             pnlV22.Controls.Add(lblStatV22);
             pnlV22.Controls.Add(label20);
-            pnlV22.Location = new Point(124, 355);
+            pnlV22.Location = new Point(366, 267);
             pnlV22.Name = "pnlV22";
             pnlV22.Size = new Size(115, 82);
             pnlV22.TabIndex = 22;
@@ -876,10 +890,10 @@
             // 
             // pnlV23
             // 
-            pnlV23.BackColor = Color.Green;
+            pnlV23.BackColor = Color.Gold;
             pnlV23.Controls.Add(lblStatV23);
             pnlV23.Controls.Add(label21);
-            pnlV23.Location = new Point(245, 355);
+            pnlV23.Location = new Point(487, 267);
             pnlV23.Name = "pnlV23";
             pnlV23.Size = new Size(115, 82);
             pnlV23.TabIndex = 23;
@@ -908,10 +922,10 @@
             // 
             // pnlV24
             // 
-            pnlV24.BackColor = Color.Green;
+            pnlV24.BackColor = Color.Gold;
             pnlV24.Controls.Add(lblStatV24);
             pnlV24.Controls.Add(label8);
-            pnlV24.Location = new Point(366, 355);
+            pnlV24.Location = new Point(608, 267);
             pnlV24.Name = "pnlV24";
             pnlV24.Size = new Size(115, 82);
             pnlV24.TabIndex = 24;
@@ -938,11 +952,132 @@
             label8.TabIndex = 0;
             label8.Text = "V24";
             // 
+            // pictureBox2
+            // 
+            pictureBox2.BackColor = Color.Blue;
+            pictureBox2.Location = new Point(796, 106);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(25, 25);
+            pictureBox2.TabIndex = 22;
+            pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BackColor = Color.Gold;
+            pictureBox1.Location = new Point(796, 68);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(25, 25);
+            pictureBox1.TabIndex = 21;
+            pictureBox1.TabStop = false;
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label53.Location = new Point(827, 71);
+            label53.Name = "label53";
+            label53.Size = new Size(49, 17);
+            label53.TabIndex = 20;
+            label53.Text = "Vacant";
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label52.Location = new Point(827, 109);
+            label52.Name = "label52";
+            label52.Size = new Size(65, 17);
+            label52.TabIndex = 19;
+            label52.Text = "Occupied";
+            // 
+            // btnSelect
+            // 
+            btnSelect.Location = new Point(805, 213);
+            btnSelect.Name = "btnSelect";
+            btnSelect.Size = new Size(134, 36);
+            btnSelect.TabIndex = 30;
+            btnSelect.Text = "Select Vehicle";
+            btnSelect.UseVisualStyleBackColor = true;
+            // 
+            // cbSlotM
+            // 
+            cbSlotM.FormattingEnabled = true;
+            cbSlotM.Items.AddRange(new object[] { "M1  ", "M2  ", "M3  ", "M4  ", "M5  ", "M6  ", "M7  ", "M8  ", "M9  ", "M10  ", "M11  ", "M12  ", "M13  ", "M14  ", "M15  ", "M16  ", "M17  ", "M18  ", "M19  ", "M20  ", "M21  ", "M22  ", "M23  ", "M24  " });
+            cbSlotM.Location = new Point(806, 391);
+            cbSlotM.Name = "cbSlotM";
+            cbSlotM.Size = new Size(133, 23);
+            cbSlotM.TabIndex = 29;
+            // 
+            // label51
+            // 
+            label51.AutoSize = true;
+            label51.Location = new Point(808, 373);
+            label51.Name = "label51";
+            label51.Size = new Size(134, 15);
+            label51.TabIndex = 28;
+            label51.Text = "Select Slot (MotorCycle)";
+            // 
+            // cbSlotV
+            // 
+            cbSlotV.FormattingEnabled = true;
+            cbSlotV.Items.AddRange(new object[] { "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20", "V21", "V22", "V23", "V24" });
+            cbSlotV.Location = new Point(807, 330);
+            cbSlotV.Name = "cbSlotV";
+            cbSlotV.Size = new Size(133, 23);
+            cbSlotV.TabIndex = 27;
+            // 
+            // label50
+            // 
+            label50.AutoSize = true;
+            label50.Location = new Point(809, 312);
+            label50.Name = "label50";
+            label50.Size = new Size(109, 15);
+            label50.TabIndex = 26;
+            label50.Text = "Select Slot (Vehicle)";
+            // 
+            // cbVehicle
+            // 
+            cbVehicle.FormattingEnabled = true;
+            cbVehicle.Location = new Point(807, 168);
+            cbVehicle.Name = "cbVehicle";
+            cbVehicle.Size = new Size(133, 23);
+            cbVehicle.TabIndex = 25;
+            // 
+            // btnAdd
+            // 
+            btnAdd.Location = new Point(806, 437);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(134, 36);
+            btnAdd.TabIndex = 23;
+            btnAdd.Text = "Park Vehicle";
+            btnAdd.UseVisualStyleBackColor = true;
+            // 
+            // label49
+            // 
+            label49.AutoSize = true;
+            label49.Location = new Point(809, 150);
+            label49.Name = "label49";
+            label49.Size = new Size(78, 15);
+            label49.TabIndex = 24;
+            label49.Text = "Select Vehicle";
+            // 
             // RegularParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(852, 473);
+            ClientSize = new Size(1060, 661);
+            Controls.Add(btnSelect);
+            Controls.Add(cbSlotM);
+            Controls.Add(label51);
+            Controls.Add(cbSlotV);
+            Controls.Add(label50);
+            Controls.Add(cbVehicle);
+            Controls.Add(btnAdd);
+            Controls.Add(label49);
+            Controls.Add(pictureBox2);
+            Controls.Add(pictureBox1);
+            Controls.Add(label53);
+            Controls.Add(label52);
             Controls.Add(label46);
             Controls.Add(flpPakingSlot);
             Name = "RegularParkingSlot";
@@ -996,6 +1131,8 @@
             pnlV23.PerformLayout();
             pnlV24.ResumeLayout(false);
             pnlV24.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1076,5 +1213,17 @@
         private Panel pnlV24;
         private Label lblStatV24;
         private Label label8;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox1;
+        private Label label53;
+        private Label label52;
+        private Button btnSelect;
+        private ComboBox cbSlotM;
+        private Label label51;
+        private ComboBox cbSlotV;
+        private Label label50;
+        private ComboBox cbVehicle;
+        private Button btnAdd;
+        private Label label49;
     }
 }
