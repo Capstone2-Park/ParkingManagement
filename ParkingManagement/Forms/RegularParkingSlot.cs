@@ -16,5 +16,10 @@ namespace ParkingManagement.Forms
         {
             InitializeComponent();
         }
+
+        private void RegularParkingSlot_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

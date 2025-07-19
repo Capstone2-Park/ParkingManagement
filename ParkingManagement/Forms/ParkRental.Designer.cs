@@ -136,6 +136,7 @@
             dtpStart.Format = DateTimePickerFormat.Time;
             dtpStart.Location = new Point(293, 267);
             dtpStart.Name = "dtpStart";
+            dtpStart.ShowUpDown = true;
             dtpStart.Size = new Size(101, 23);
             dtpStart.TabIndex = 13;
             // 
@@ -170,6 +171,7 @@
             dtpEnd.Format = DateTimePickerFormat.Time;
             dtpEnd.Location = new Point(482, 267);
             dtpEnd.Name = "dtpEnd";
+            dtpEnd.ShowUpDown = true;
             dtpEnd.Size = new Size(101, 23);
             dtpEnd.TabIndex = 17;
             // 

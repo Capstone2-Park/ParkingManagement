@@ -385,6 +385,14 @@ namespace ParkingManagement.Forms
                 return;
             }
 
+            // Restriction: Minimum 1 hour
+            var duration = (dtpEnd.Value - dtpStart.Value).TotalMinutes;
+            if (duration < 60)
+            {
+                MessageBox.Show("The minimum rental duration is 1 hour.", "Invalid Duration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Calculate rental details for this vehicle
             bool calculationSuccess = await CalculateAndSetRentalDetailsForSave();
             if (!calculationSuccess)
@@ -402,15 +410,12 @@ namespace ParkingManagement.Forms
                 _selectedClient,
                 _selectedVehicle,
                 cmbDurationType.SelectedItem.ToString(),
-                dtpDateStart.Value.Date,
-                _calculatedEndDateTime,
+                dtpStart.Value,
+                dtpEnd.Value,
                 _calculatedTotalAmount
             ));
 
-            // Optionally, show the scheduled list in a DataGridView or ListBox for user feedback
             RefreshScheduledListView();
-
-            // Optionally, clear selection for next entry
             dgvVehicles.ClearSelection();
             _selectedClient = null;
             _selectedVehicle = null;
@@ -429,12 +434,13 @@ namespace ParkingManagement.Forms
 
         private void RefreshScheduledListView()
         {
-            // Prepare a DataTable for the scheduled list
             var dt = new DataTable();
             dt.Columns.Add("ClientID");
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("TimeStart");
+            dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
 
             foreach (var sched in _scheduledVehicles)
@@ -444,6 +450,8 @@ namespace ParkingManagement.Forms
                     sched.client.Name,
                     $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
                     sched.durationType,
+                    sched.startDate.ToString("yyyy-MM-dd HH:mm"),
+                    sched.endDateTime.ToString("yyyy-MM-dd HH:mm"),
                     sched.totalAmount
                 );
             }
@@ -475,6 +483,17 @@ namespace ParkingManagement.Forms
                 var SlotForm = new ParkingSlot();
                 homePage.ShowFormInPanel(SlotForm);
             }
+        }
+
+        private void ParkRental_Load(object sender, EventArgs e)
+        {
+            dtpStart.Format = DateTimePickerFormat.Custom;
+            dtpStart.CustomFormat = "yyyy-MM-dd HH:mm";
+            dtpStart.ShowUpDown = true;
+
+            dtpEnd.Format = DateTimePickerFormat.Custom;
+            dtpEnd.CustomFormat = "yyyy-MM-dd HH:mm";
+            dtpEnd.ShowUpDown = true;
         }
     }
 }
