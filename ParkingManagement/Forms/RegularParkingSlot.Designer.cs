@@ -1075,9 +1075,9 @@
             label53.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label53.Location = new Point(827, 71);
             label53.Name = "label53";
-            label53.Size = new Size(49, 17);
+            label53.Size = new Size(65, 17);
             label53.TabIndex = 20;
-            label53.Text = "Vacant";
+            label53.Text = "Available";
             // 
             // label52
             // 
@@ -1097,6 +1097,7 @@
             btnSelect.TabIndex = 30;
             btnSelect.Text = "Select Vehicle";
             btnSelect.UseVisualStyleBackColor = true;
+            btnSelect.Click += btnSelect_Click;
             // 
             // cbSlotM
             // 
@@ -1150,6 +1151,7 @@
             btnAdd.TabIndex = 23;
             btnAdd.Text = "Park Vehicle";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // label49
             // 

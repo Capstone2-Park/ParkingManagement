@@ -197,6 +197,7 @@
             // 
             // btnNext
             // 
+            btnNext.Enabled = false;
             btnNext.Location = new Point(98, 659);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(96, 37);
@@ -230,6 +231,7 @@
             Name = "ParkRental";
             Text = "Fee";
             FormClosing += ParkRental_FormClosing;
+            Load += ParkRental_Load_1;
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvList).EndInit();
             ResumeLayout(false);

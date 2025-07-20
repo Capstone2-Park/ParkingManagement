@@ -38,6 +38,7 @@
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
+            btnNext = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvTimeInTimeOutData).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pcbQRcode).BeginInit();
             SuspendLayout();
@@ -125,15 +126,27 @@
             label3.AutoSize = true;
             label3.Location = new Point(127, 278);
             label3.Name = "label3";
-            label3.Size = new Size(86, 15);
+            label3.Size = new Size(85, 15);
             label3.TabIndex = 9;
             label3.Text = "Type of Vehicle";
+            // 
+            // btnNext
+            // 
+            btnNext.Enabled = false;
+            btnNext.Location = new Point(972, 647);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(97, 39);
+            btnNext.TabIndex = 10;
+            btnNext.Text = "Next";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
             // 
             // Regular_Parking
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1138, 734);
+            Controls.Add(btnNext);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -166,5 +179,6 @@
         private Label label1;
         private Label label2;
         private Label label3;
+        private Button btnNext;
     }
 }
