@@ -1,0 +1,57 @@
+Here are security-focused improvements for your SQL schema, keeping the same functionality:
+
+**1. Use Stronger Data Types for IDs and Sensitive Fields**
+- Use INT or UNIQUEIDENTIFIER (GUID) for IDs instead of NVARCHAR, which is more efficient and less prone to injection.
+- Example: Replace ClientID NVARCHAR(10) with ClientID UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY.
+
+**2. Add NOT NULL Constraints Where Appropriate**
+- For fields like Brand, Color, VehicleType, and PlateNumber, consider making them NOT NULL if they are always required.
+
+**3. Use CHECK Constraints for Validation**
+- Add CHECK constraints for fields like PlateNumber or CpNumber to enforce format or length.
+
+**4. Restrict Permissions**
+- In production, create users/roles with only the necessary permissions (not shown in schema, but implement in your DBMS).
+
+**5. Encrypt Sensitive Data**
+- For fields like IDPicture, consider storing only a reference (such as a file path), or encrypt the data if stored in the DB.
+
+**6. Add Unique Indexes Where Data Should Be Unique**
+- Example: PlateNumber is often unique per Vehicle.
+
+**7. Use Parameterized Queries**
+- When accessing this schema from code, always use parameterized queries to prevent SQL injection (applies to your C# code).
+
+**Example with Improvements:**
+```sql
+-- Example for Client Table
+CREATE TABLE Client (
+    ClientID UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Address NVARCHAR(255),
+    CpNumber NVARCHAR(20) CHECK (CpNumber LIKE '[0-9]%'),
+    IDPicture NVARCHAR(MAX) -- Consider encrypting or storing a file path instead
+);
+
+-- Example for Vehicle Table
+CREATE TABLE Vehicle (
+    VehicleID UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    Brand NVARCHAR(50) NOT NULL,
+    Color NVARCHAR(50) NOT NULL,
+    PlateNumber NVARCHAR(20) NOT NULL UNIQUE,
+    ClientID UNIQUEIDENTIFIER NOT NULL,
+    VehicleType NVARCHAR(50) NOT NULL,
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
+);
+
+-- Add similar improvements to other tables as relevant.
+```
+
+**Summary of Improvements**
+- Use GUIDs for IDs.
+- Add NOT NULL, UNIQUE, and CHECK constraints.
+- Consider encryption for sensitive fields.
+- Enforce least-privilege access at the DB level.
+- Always use parameterized queries in your application code.
+
+Would you like a full improved schema with these changes applied to every table?
