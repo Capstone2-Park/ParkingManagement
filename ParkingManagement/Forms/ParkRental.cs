@@ -69,7 +69,7 @@ namespace ParkingManagement.Forms
             SetupDurationTypeComboBox();
         }
 
-      
+
 
         // Initialize the DataTable structure for fees display
         private void InitializeDataGridView()
@@ -166,6 +166,10 @@ namespace ParkingManagement.Forms
             cmbDurationType.SelectedIndex = 0; // Default to Daily
         }
 
+        private void UpdateNextButtonState()
+        {
+            btnNext.Enabled = _scheduledVehicles.Count > 0;
+        }
         private void LoadClientVehicles()
         {
             if (_currentClient == null)
@@ -275,6 +279,8 @@ namespace ParkingManagement.Forms
             {
                 MessageBox.Show($"Error saving rental sessions: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            UpdateNextButtonState();
         }
 
         // Renamed and modified to store values internally, not display on labels
@@ -287,9 +293,16 @@ namespace ParkingManagement.Forms
                 return false;
             }
 
-            DateTime startDate = dtpDateStart.Value.Date;
+            DateTime startDate = dtpStart.Value;
+            DateTime endDate = dtpEnd.Value;
             string durationType = cmbDurationType.SelectedItem.ToString();
             string vehicleType = _selectedVehicle.VehicleType?.Trim();
+
+            if (endDate <= startDate)
+            {
+                MessageBox.Show("End time must be after start time.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
 
             // Query the Fee table for the fixed price
             var fee = await _context.Fees
@@ -303,20 +316,24 @@ namespace ParkingManagement.Forms
                 return false;
             }
 
-            // Calculate EndDateTime based on duration type
+            double totalDurationHours = 0;
             switch (durationType)
             {
                 case "Daily":
-                    _calculatedEndDateTime = startDate.AddDays(1);
+                    totalDurationHours = 24;
+                    _calculatedEndDateTime = startDate.Date.AddDays(1).Add(endDate.TimeOfDay);
                     break;
                 case "Weekly":
-                    _calculatedEndDateTime = startDate.AddDays(7);
+                    totalDurationHours = 24 * 7;
+                    _calculatedEndDateTime = startDate.Date.AddDays(7).Add(endDate.TimeOfDay);
                     break;
                 case "Monthly":
-                    _calculatedEndDateTime = startDate.AddMonths(1);
+                    totalDurationHours = 24 * DateTime.DaysInMonth(startDate.Year, startDate.Month);
+                    _calculatedEndDateTime = startDate.Date.AddMonths(1).Add(endDate.TimeOfDay);
                     break;
                 case "Yearly":
-                    _calculatedEndDateTime = startDate.AddYears(1);
+                    totalDurationHours = 24 * (DateTime.IsLeapYear(startDate.Year) ? 366 : 365);
+                    _calculatedEndDateTime = startDate.Date.AddYears(1).Add(endDate.TimeOfDay);
                     break;
                 default:
                     MessageBox.Show("Invalid duration type selected.", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -325,7 +342,12 @@ namespace ParkingManagement.Forms
                     return false;
             }
 
-            _calculatedTotalAmount = fee.FixedPrice;
+            double selectedHours = (endDate - startDate).TotalHours;
+            if (selectedHours <= 0) selectedHours = 1; // Minimum 1 hour
+
+            // Calculate proportional fee
+            _calculatedTotalAmount = fee.FixedPrice * (decimal)(selectedHours / totalDurationHours);
+
             return true;
         }
 
@@ -363,6 +385,14 @@ namespace ParkingManagement.Forms
                 return;
             }
 
+            // Restriction: Minimum 1 hour
+            var duration = (dtpEnd.Value - dtpStart.Value).TotalMinutes;
+            if (duration < 60)
+            {
+                MessageBox.Show("The minimum rental duration is 1 hour.", "Invalid Duration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Calculate rental details for this vehicle
             bool calculationSuccess = await CalculateAndSetRentalDetailsForSave();
             if (!calculationSuccess)
@@ -380,18 +410,17 @@ namespace ParkingManagement.Forms
                 _selectedClient,
                 _selectedVehicle,
                 cmbDurationType.SelectedItem.ToString(),
-                dtpDateStart.Value.Date,
-                _calculatedEndDateTime,
+                dtpStart.Value,
+                dtpEnd.Value,
                 _calculatedTotalAmount
             ));
 
-            // Optionally, show the scheduled list in a DataGridView or ListBox for user feedback
             RefreshScheduledListView();
-
-            // Optionally, clear selection for next entry
             dgvVehicles.ClearSelection();
             _selectedClient = null;
             _selectedVehicle = null;
+
+            UpdateNextButtonState();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -399,22 +428,72 @@ namespace ParkingManagement.Forms
             _scheduledVehicles.Clear();
             RefreshScheduledListView();
             ClearFormForNewEntry();
+
+            UpdateNextButtonState();
         }
 
         private void RefreshScheduledListView()
         {
-            // Example for a ListBox named lstScheduled
-            lstScheduled.Items.Clear();
+            var dt = new DataTable();
+            dt.Columns.Add("ClientID");
+            dt.Columns.Add("ClientName");
+            dt.Columns.Add("Vehicle");
+            dt.Columns.Add("DurationType");
+            dt.Columns.Add("TimeStart");
+            dt.Columns.Add("TimeEnd");
+            dt.Columns.Add("TotalAmount", typeof(decimal));
+
             foreach (var sched in _scheduledVehicles)
             {
-                lstScheduled.Items.Add($"{sched.vehicle.PlateNumber} - {sched.durationType} - ₱{sched.totalAmount:N2}");
+                dt.Rows.Add(
+                    sched.client.ClientID,
+                    sched.client.Name,
+                    $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
+                    sched.durationType,
+                    sched.startDate.ToString("yyyy-MM-dd HH:mm"),
+                    sched.endDateTime.ToString("yyyy-MM-dd HH:mm"),
+                    sched.totalAmount
+                );
             }
+
+            dgvList.DataSource = dt;
         }
 
         public static void ShowParkRentalForm(Client currentClient)
         {
             var parkRentalForm = new ParkRental(currentClient);
             parkRentalForm.Show();
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var TotalForm = new TotalPayment();
+                homePage.ShowFormInPanel(TotalForm);
+            }
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var SlotForm = new ParkingSlot();
+                homePage.ShowFormInPanel(SlotForm);
+            }
+        }
+
+        private void ParkRental_Load(object sender, EventArgs e)
+        {
+            dtpStart.Format = DateTimePickerFormat.Custom;
+            dtpStart.CustomFormat = "yyyy-MM-dd HH:mm";
+            dtpStart.ShowUpDown = true;
+
+            dtpEnd.Format = DateTimePickerFormat.Custom;
+            dtpEnd.CustomFormat = "yyyy-MM-dd HH:mm";
+            dtpEnd.ShowUpDown = true;
         }
     }
 }
