@@ -1,4 +1,5 @@
 ﻿using ParkingManagement.Forms;
+using ParkingManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,12 +56,17 @@ namespace ParkingManagement
 
         private void btnRegularParking_Click(object sender, EventArgs e)
         {
-            ShowFormInPanel(new Regular_Parking());
+            btnRegParkSess.Visible = true;
         }
 
         private void btnParkSlot_Click(object sender, EventArgs e)
         {
             ShowFormInPanel(new TotalPayment());
+        }
+
+        private void btnRegParkSess_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new Regular_Parking());
         }
     }
 }

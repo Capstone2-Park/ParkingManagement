@@ -321,7 +321,8 @@
             // btnNext
             // 
             btnNext.Anchor = AnchorStyles.None;
-            btnNext.Location = new Point(1004, 597);
+            btnNext.Enabled = false;
+            btnNext.Location = new Point(1004, 665);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(97, 38);
             btnNext.TabIndex = 29;

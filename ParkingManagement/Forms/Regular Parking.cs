@@ -77,6 +77,8 @@ namespace ParkingManagement.Forms
                 MessageBox.Show($"Error initializing video devices: {ex.Message}", "Camera Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnTimeOut.Enabled = false;
             }
+
+            UpdateNextButtonState();
         }
 
         private void InitializeDbContext()
@@ -496,6 +498,26 @@ namespace ParkingManagement.Forms
             finally
             {
                 StopCamera();
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkSlotForm = new ParkingSlot();
+                homePage.ShowFormInPanel(parkSlotForm);
+            }
+        }
+
+        private void UpdateNextButtonState()
+        {
+            using (var db = new ParkingDbContext())
+            {
+                // Check if there is at least one active session (vehicle parked)
+                bool anyParked = db.Set<RegularParkingSession>().Any(s => s.TimeOut == null);
+                btnNext.Enabled = anyParked;
             }
         }
     }

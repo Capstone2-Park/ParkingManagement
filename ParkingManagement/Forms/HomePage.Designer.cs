@@ -32,6 +32,7 @@
             panelHome = new Panel();
             ptbLogo = new PictureBox();
             panel1 = new Panel();
+            btnRegParkSess = new Button();
             btnRegularParking = new Button();
             btnFeeM = new Button();
             btnClientM = new Button();
@@ -62,6 +63,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnRegParkSess);
             panel1.Controls.Add(btnRegularParking);
             panel1.Controls.Add(btnFeeM);
             panel1.Controls.Add(btnClientM);
@@ -70,6 +72,19 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(161, 711);
             panel1.TabIndex = 0;
+            // 
+            // btnRegParkSess
+            // 
+            btnRegParkSess.BackColor = Color.FromArgb(255, 192, 192);
+            btnRegParkSess.Dock = DockStyle.Top;
+            btnRegParkSess.Location = new Point(0, 180);
+            btnRegParkSess.Name = "btnRegParkSess";
+            btnRegParkSess.Size = new Size(161, 45);
+            btnRegParkSess.TabIndex = 8;
+            btnRegParkSess.Text = "Regular Parking Session";
+            btnRegParkSess.UseVisualStyleBackColor = false;
+            btnRegParkSess.Visible = false;
+            btnRegParkSess.Click += btnRegParkSess_Click;
             // 
             // btnRegularParking
             // 
@@ -146,5 +161,6 @@
         private Button btnClientM;
         private Button btnFeeM;
         private Button btnRegularParking;
+        private Button btnRegParkSess;
     }
 }
