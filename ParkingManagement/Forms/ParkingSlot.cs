@@ -20,7 +20,6 @@ namespace ParkingManagement.Forms
             InitializeComponent();
             Load += ParkingSlot_Load;
             cbName.SelectedIndexChanged += cbName_SelectedIndexChanged;
-            cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
             cbSlotV.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
             cbSlotM.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
             btnAdd.Click += btnPark_Click;
@@ -31,11 +30,27 @@ namespace ParkingManagement.Forms
         {
             using (var db = new ParkingDbContext())
             {
-                // Load clients and vehicles
+                // Load all slots first
+                slots = db.Parkingslot.ToList();
+
+                // Load all clients and their vehicles
                 clients = db.Clients.Include(c => c.VehicleList).ToList();
+
+                // Get all vehicle IDs that are already parked
+                var parkedVehicleIds = slots
+                    .Where(s => s.SlotStatus == "occupied")
+                    .Select(s => s.VehicleID)
+                    .ToHashSet();
+
+                // Filter clients to only those who have at least one unparked vehicle
+                clients = clients
+                    .Where(c => c.VehicleList.Any(v => !parkedVehicleIds.Contains(v.VehicleID)))
+                    .ToList();
+
+                // Load vehicles for other needs (optional)
                 vehicles = db.Vehicles.ToList();
 
-                // Seed missing slots
+                // Seed missing slots (your original logic)
                 var allSlotNumbers = Enumerable.Range(1, 24).Select(i => "V" + i)
                     .Concat(Enumerable.Range(1, 18).Select(i => "M" + i)).ToList();
 
@@ -53,14 +68,16 @@ namespace ParkingManagement.Forms
                 }
                 db.SaveChanges();
 
-                // **Reload slots after seeding**
+                // Reload slots after seeding
                 slots = db.Parkingslot.ToList();
             }
 
+            // Bind filtered client list
             cbName.DataSource = clients;
             cbName.DisplayMember = "Name";
             cbName.ValueMember = "ClientID";
-            cbVehicle.Enabled = false;
+
+         
             cbSlotV.Enabled = false;
             cbSlotM.Enabled = false;
 
@@ -85,23 +102,36 @@ namespace ParkingManagement.Forms
             var selectedClient = cbName.SelectedItem as Client;
             if (selectedClient != null)
             {
-                cbVehicle.DataSource = selectedClient.VehicleList.ToList();
-                cbVehicle.DisplayMember = "PlateNumber";
-                cbVehicle.ValueMember = "VehicleID";
-                cbVehicle.Enabled = true;
+                using (var db = new ParkingDbContext())
+                {
+                    // Get IDs of vehicles that are already parked
+                    var parkedVehicleIds = db.Parkingslot
+                        .Where(p => p.SlotStatus == "occupied")
+                        .Select(p => p.VehicleID)
+                        .ToList();
 
-                // Always trigger the vehicle selection logic
-                if (cbVehicle.Items.Count > 0)
-                {
-                    cbVehicle.SelectedIndex = 0;
-                    // This will automatically trigger cbVehicle_SelectedIndexChanged
-                    // If you want to ensure it triggers, you can call it explicitly:
-                    // cbVehicle_SelectedIndexChanged(cbVehicle, EventArgs.Empty);
-                }
-                else
-                {
-                    cbSlotV.Enabled = false;
-                    cbSlotM.Enabled = false;
+                    // Filter the client's vehicle list to exclude those already parked
+                    var availableVehicles = selectedClient.VehicleList
+                        .Where(v => !parkedVehicleIds.Contains(v.VehicleID))
+                        .ToList();
+
+                    cbVehicle.DataSource = availableVehicles;
+                    cbVehicle.DisplayMember = "PlateNumber";
+                    cbVehicle.ValueMember = "VehicleID";
+                    cbVehicle.Enabled = availableVehicles.Any();
+
+                    if (cbVehicle.Items.Count > 0)
+                    {
+                        cbVehicle.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        cbSlotV.Enabled = false;
+                        cbSlotM.Enabled = false;
+                        cbSlotV.DataSource = null;
+                        cbSlotM.DataSource = null;
+                        MessageBox.Show("All vehicles for this client are already parked.");
+                    }
                 }
             }
             else
@@ -113,42 +143,7 @@ namespace ParkingManagement.Forms
             }
         }
 
-        private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
-            //if (selectedVehicle == null) return;
-
-            //var vehicleType = selectedVehicle.VehicleType;
-
-            //if (vehicleType == "2-wheels")
-            //{
-            //    var availableSlots = slots
-            //        .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
-            //        .Select(s => s.SlotNumber)
-            //        .ToList();
-
-            //    cbSlotM.DataSource = availableSlots;
-            //    cbSlotM.Enabled = availableSlots.Count > 0;
-            //    cbSlotV.Enabled = false;
-            //}
-            //else if (vehicleType == "4-wheels")
-            //{
-            //    var availableSlots = slots
-            //        .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
-            //        .Select(s => s.SlotNumber)
-            //        .ToList();
-
-            //    cbSlotV.DataSource = availableSlots;
-            //    cbSlotV.Enabled = availableSlots.Count > 0;
-            //    cbSlotM.Enabled = false;
-            //}
-            //else
-            //{
-            //    cbSlotV.Enabled = false;
-            //    cbSlotM.Enabled = false;
-            //}
-        }
-
+   
         private void cbSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedSlot = (sender == cbSlotV) ? cbSlotV.SelectedItem?.ToString() : cbSlotM.SelectedItem?.ToString();
