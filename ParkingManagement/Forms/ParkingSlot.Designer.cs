@@ -1082,6 +1082,7 @@
             btnAdd.TabIndex = 1;
             btnAdd.Text = "Park Vehicle";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // cbVehicle
             // 

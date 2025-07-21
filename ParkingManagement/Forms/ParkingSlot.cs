@@ -23,7 +23,7 @@ namespace ParkingManagement.Forms
             cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
             cbSlotV.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
             cbSlotM.SelectedIndexChanged += cbSlot_SelectedIndexChanged;
-            btnAdd.Click += btnPark_Click;
+        
             btnSelect.Click += btnSelect_Click;
         }
 
@@ -66,7 +66,7 @@ namespace ParkingManagement.Forms
 
             UpdateSlotPanelColors();
             UpdateSlotStatusLabels();
-            UpdateNextButtonState();
+            btnNext.Enabled = false; // Only enable after successful add
         }
 
         private void UpdateSlotPanelColors()
@@ -309,6 +309,68 @@ namespace ParkingManagement.Forms
                 var clientManagementForm = new ClientManagement();
                 homePage.ShowFormInPanel(clientManagementForm);
             }
+        }
+
+        private async void btnAdd_Click(object sender, EventArgs e)
+        {
+            // Determine which slot ComboBox is enabled and get the selected slot
+            string selectedSlot = cbSlotV.Enabled ? cbSlotV.SelectedItem?.ToString() : cbSlotM.SelectedItem?.ToString();
+
+            if (string.IsNullOrEmpty(selectedSlot))
+            {
+                MessageBox.Show("Please select a slot.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnNext.Enabled = false;
+                return;
+            }
+
+            using (var db = new ParkingDbContext())
+            {
+                var slot = await db.Parkingslot.FirstOrDefaultAsync(s => s.SlotNumber == selectedSlot);
+
+                if (slot == null)
+                {
+                    MessageBox.Show("Slot not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    btnNext.Enabled = false;
+                    return;
+                }
+
+                if (slot.SlotStatus == "occupied")
+                {
+                    MessageBox.Show("Slot is already occupied.", "Occupied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    btnNext.Enabled = false;
+                    return;
+                }
+
+                // Update slot info
+                slot.SlotStatus = "occupied";
+                slot.VehicleStatus = "parked";
+                db.Parkingslot.Update(slot);
+                await db.SaveChangesAsync();
+            }
+
+            // Update local slot and panel color
+            var updatedSlot = slots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
+            if (updatedSlot != null)
+            {
+                updatedSlot.SlotStatus = "occupied";
+            }
+            var panel = this.Controls.Find("pnl" + selectedSlot, true).FirstOrDefault() as Panel;
+            if (panel != null)
+            {
+                panel.BackColor = Color.Red;
+            }
+
+            MessageBox.Show("Vehicle parked successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Refresh the slot list and UI
+            using (var db = new ParkingDbContext())
+            {
+                slots = db.Parkingslot.ToList();
+            }
+            UpdateSlotPanelColors();
+            UpdateSlotStatusLabels();
+
+            btnNext.Enabled = true; // Enable Next only after successful add
         }
     }
 }
