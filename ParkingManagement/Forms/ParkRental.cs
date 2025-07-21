@@ -558,9 +558,10 @@ namespace ParkingManagement.Forms
             DateTime startDate = today;
             DateTime endDate = today.AddHours(cbTime.SelectedIndex + 1);
 
-            await UpdateNextButtonStateAsync();
+
             await LoadScheduledVehiclesToListViewAsync();
             await RefreshScheduledListView();
+            btnNext.Enabled = false;
         }
 
         private void PopulateTimeComboBox()
