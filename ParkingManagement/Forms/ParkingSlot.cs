@@ -264,8 +264,18 @@ namespace ParkingManagement.Forms
             var homePage = this.ParentForm as HomePage;
             if (homePage != null)
             {
-                var TotalForm = new TotalPayment();
-                homePage.ShowFormInPanel(TotalForm);
+                var parkRental = new ParkRental();
+                homePage.ShowFormInPanel(parkRental);
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var clientM = new ClientManagement();
+                homePage.ShowFormInPanel(clientM);
             }
         }
     }

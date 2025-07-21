@@ -452,13 +452,7 @@ namespace ParkingManagement
                 // --- CHANGE HERE: Call ClearForm(true) to clear all inputs AND reset DGV to empty for new entry ---
                 await ClearForm(true); // Clear input fields AND reset dgvInformation to empty for new client
 
-                // After successful save:
-                var homePage = this.ParentForm as HomePage;
-                if (homePage != null)
-                {
-                    var parkRentalForm = new ParkRental();
-                    homePage.ShowFormInPanel(parkRentalForm);
-                }
+              
             }
             catch (DbUpdateException ex)
             {
@@ -599,9 +593,16 @@ namespace ParkingManagement
             }
         }
 
-        private void cmbVehicleType_SelectedIndexChanged(object sender, EventArgs e)
+     
+        private void btnNext_Click(object sender, EventArgs e)
         {
-
+            // After successful save:
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkingSlot = new ParkingSlot();
+                homePage.ShowFormInPanel(parkingSlot);
+            }
         }
     }
 }

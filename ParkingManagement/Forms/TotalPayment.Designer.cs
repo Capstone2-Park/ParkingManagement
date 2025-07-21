@@ -32,6 +32,7 @@
             label1 = new Label();
             cbClient = new ComboBox();
             rtbReceipt = new RichTextBox();
+            btnBack = new Button();
             SuspendLayout();
             // 
             // btnSelect
@@ -52,7 +53,7 @@
             label1.Size = new Size(62, 15);
             label1.TabIndex = 2;
             label1.Text = "Client Info";
-            label1.Click += label1_Click;
+         
             // 
             // cbClient
             // 
@@ -71,11 +72,22 @@
             rtbReceipt.TabIndex = 4;
             rtbReceipt.Text = "";
             // 
+            // btnBack
+            // 
+            btnBack.Location = new Point(677, 648);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(98, 35);
+            btnBack.TabIndex = 5;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
+            // 
             // TotalPayment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(828, 726);
+            Controls.Add(btnBack);
             Controls.Add(rtbReceipt);
             Controls.Add(cbClient);
             Controls.Add(label1);
@@ -94,5 +106,6 @@
         private ComboBox cbClient;
         private RichTextBox rtbReceipt;
         private Label label2;
+        private Button btnBack;
     }
 }

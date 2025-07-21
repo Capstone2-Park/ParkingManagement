@@ -69,7 +69,7 @@ namespace ParkingManagement.Forms
             SetupDurationTypeComboBox();
         }
 
-      
+
 
         // Initialize the DataTable structure for fees display
         private void InitializeDataGridView()
@@ -263,8 +263,8 @@ namespace ParkingManagement.Forms
                 var homePage = this.ParentForm as HomePage;
                 if (homePage != null)
                 {
-                    var ParkingSlotForm = new ParkingSlot();
-                    homePage.ShowFormInPanel(ParkingSlotForm);
+                    var totalPayment = new TotalPayment();
+                    homePage.ShowFormInPanel(totalPayment);
                 }
             }
             catch (DbUpdateException ex)
@@ -415,6 +415,26 @@ namespace ParkingManagement.Forms
         {
             var parkRentalForm = new ParkRental(currentClient);
             parkRentalForm.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var totalPayment = new TotalPayment();
+                homePage.ShowFormInPanel(totalPayment);
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkingSlot = new ParkingSlot();
+                homePage.ShowFormInPanel(parkingSlot);
+            }
         }
     }
 }

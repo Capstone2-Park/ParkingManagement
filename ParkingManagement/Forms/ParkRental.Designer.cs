@@ -38,6 +38,8 @@
             btnCancel = new Button();
             lstScheduled = new ListBox();
             lblClientName = new Label();
+            button1 = new Button();
+            btnBack = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             SuspendLayout();
             // 
@@ -87,7 +89,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(834, 580);
+            btnSave.Location = new Point(1034, 414);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 8;
@@ -109,7 +111,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(933, 580);
+            btnCancel.Location = new Point(1034, 465);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 10;
@@ -137,11 +139,35 @@
             lblClientName.TabIndex = 12;
             lblClientName.Text = "Name of Client";
             // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button1.Location = new Point(817, 582);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 13;
+            button1.Text = "Next";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // btnBack
+            // 
+            btnBack.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnBack.Location = new Point(933, 582);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(75, 23);
+            btnBack.TabIndex = 14;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
+            // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
+            Controls.Add(btnBack);
+            Controls.Add(button1);
             Controls.Add(lblClientName);
             Controls.Add(lstScheduled);
             Controls.Add(btnCancel);
@@ -172,5 +198,7 @@
         private Button btnCancel;
         private ListBox lstScheduled;
         private Label lblClientName;
+        private Button button1;
+        private Button btnBack;
     }
 }

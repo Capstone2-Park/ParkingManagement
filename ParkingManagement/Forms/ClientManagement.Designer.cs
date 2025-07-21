@@ -56,6 +56,7 @@
             dgvInformation = new DataGridView();
             btnSave = new Button();
             btnCancel = new Button();
+            btnNext = new Button();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
             SuspendLayout();
@@ -221,7 +222,6 @@
             cmbVehicleType.Name = "cmbVehicleType";
             cmbVehicleType.Size = new Size(191, 23);
             cmbVehicleType.TabIndex = 17;
-            cmbVehicleType.SelectedIndexChanged += cmbVehicleType_SelectedIndexChanged;
             // 
             // label5
             // 
@@ -307,7 +307,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(797, 797);
+            btnSave.Location = new Point(1018, 635);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 36);
             btnSave.TabIndex = 26;
@@ -318,7 +318,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(895, 797);
+            btnCancel.Location = new Point(1018, 695);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 36);
             btnCancel.TabIndex = 27;
@@ -326,12 +326,24 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
+            // btnNext
+            // 
+            btnNext.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnNext.Location = new Point(916, 795);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(75, 36);
+            btnNext.TabIndex = 28;
+            btnNext.Text = "Next";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
+            // 
             // ClientManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1266, 903);
+            Controls.Add(btnNext);
             Controls.Add(dgvInformation);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
@@ -400,5 +412,6 @@
         private DataGridView dgvInformation;
         private Button btnSave;
         private Button btnCancel;
+        private Button btnNext;
     }
 }

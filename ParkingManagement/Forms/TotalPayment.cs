@@ -121,5 +121,15 @@ namespace ParkingManagement.Forms
         {
             // Empty event handler
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkRental = new ParkRental();
+                homePage.ShowFormInPanel(parkRental);
+            }
+        }
     }
 }

@@ -143,6 +143,7 @@
             pictureBox1 = new PictureBox();
             pictureBox2 = new PictureBox();
             btnNext = new Button();
+            btnBack = new Button();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -224,7 +225,7 @@
             flpPakingSlot.Controls.Add(pnlV22);
             flpPakingSlot.Controls.Add(pnlV23);
             flpPakingSlot.Controls.Add(pnlV24);
-            flpPakingSlot.Location = new Point(84, 107);
+            flpPakingSlot.Location = new Point(84, 63);
             flpPakingSlot.Name = "flpPakingSlot";
             flpPakingSlot.Size = new Size(726, 225);
             flpPakingSlot.TabIndex = 0;
@@ -736,7 +737,7 @@
             flowLayoutPanel1.Controls.Add(pnlM22);
             flowLayoutPanel1.Controls.Add(pnlM23);
             flowLayoutPanel1.Controls.Add(pnlM24);
-            flowLayoutPanel1.Location = new Point(84, 419);
+            flowLayoutPanel1.Location = new Point(84, 375);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(726, 229);
             flowLayoutPanel1.TabIndex = 1;
@@ -1224,7 +1225,7 @@
             // label46
             // 
             label46.AutoSize = true;
-            label46.Location = new Point(84, 89);
+            label46.Location = new Point(84, 45);
             label46.Name = "label46";
             label46.Size = new Size(44, 15);
             label46.TabIndex = 2;
@@ -1233,7 +1234,7 @@
             // label47
             // 
             label47.AutoSize = true;
-            label47.Location = new Point(87, 401);
+            label47.Location = new Point(87, 357);
             label47.Name = "label47";
             label47.Size = new Size(67, 15);
             label47.TabIndex = 3;
@@ -1242,7 +1243,7 @@
             // label48
             // 
             label48.AutoSize = true;
-            label48.Location = new Point(858, 188);
+            label48.Location = new Point(858, 144);
             label48.Name = "label48";
             label48.Size = new Size(72, 15);
             label48.TabIndex = 6;
@@ -1251,7 +1252,7 @@
             // label49
             // 
             label49.AutoSize = true;
-            label49.Location = new Point(858, 250);
+            label49.Location = new Point(858, 206);
             label49.Name = "label49";
             label49.Size = new Size(78, 15);
             label49.TabIndex = 7;
@@ -1259,7 +1260,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(855, 537);
+            btnAdd.Location = new Point(855, 493);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(134, 36);
             btnAdd.TabIndex = 1;
@@ -1269,7 +1270,7 @@
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(856, 268);
+            cbVehicle.Location = new Point(856, 224);
             cbVehicle.Name = "cbVehicle";
             cbVehicle.Size = new Size(133, 23);
             cbVehicle.TabIndex = 8;
@@ -1277,7 +1278,7 @@
             // cbName
             // 
             cbName.FormattingEnabled = true;
-            cbName.Location = new Point(856, 209);
+            cbName.Location = new Point(856, 165);
             cbName.Name = "cbName";
             cbName.Size = new Size(133, 23);
             cbName.TabIndex = 9;
@@ -1286,7 +1287,7 @@
             // 
             cbSlotV.FormattingEnabled = true;
             cbSlotV.Items.AddRange(new object[] { "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20", "V21", "V22", "V23", "V24" });
-            cbSlotV.Location = new Point(856, 430);
+            cbSlotV.Location = new Point(856, 386);
             cbSlotV.Name = "cbSlotV";
             cbSlotV.Size = new Size(133, 23);
             cbSlotV.TabIndex = 11;
@@ -1294,7 +1295,7 @@
             // label50
             // 
             label50.AutoSize = true;
-            label50.Location = new Point(858, 412);
+            label50.Location = new Point(858, 368);
             label50.Name = "label50";
             label50.Size = new Size(109, 15);
             label50.TabIndex = 10;
@@ -1304,7 +1305,7 @@
             // 
             cbSlotM.FormattingEnabled = true;
             cbSlotM.Items.AddRange(new object[] { "M1  ", "M2  ", "M3  ", "M4  ", "M5  ", "M6  ", "M7  ", "M8  ", "M9  ", "M10  ", "M11  ", "M12  ", "M13  ", "M14  ", "M15  ", "M16  ", "M17  ", "M18  ", "M19  ", "M20  ", "M21  ", "M22  ", "M23  ", "M24  " });
-            cbSlotM.Location = new Point(855, 491);
+            cbSlotM.Location = new Point(855, 447);
             cbSlotM.Name = "cbSlotM";
             cbSlotM.Size = new Size(133, 23);
             cbSlotM.TabIndex = 13;
@@ -1312,7 +1313,7 @@
             // label51
             // 
             label51.AutoSize = true;
-            label51.Location = new Point(857, 473);
+            label51.Location = new Point(857, 429);
             label51.Name = "label51";
             label51.Size = new Size(134, 15);
             label51.TabIndex = 12;
@@ -1320,7 +1321,7 @@
             // 
             // btnSelect
             // 
-            btnSelect.Location = new Point(854, 313);
+            btnSelect.Location = new Point(854, 269);
             btnSelect.Name = "btnSelect";
             btnSelect.Size = new Size(134, 36);
             btnSelect.TabIndex = 14;
@@ -1332,7 +1333,7 @@
             // 
             label52.AutoSize = true;
             label52.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label52.Location = new Point(885, 148);
+            label52.Location = new Point(885, 104);
             label52.Name = "label52";
             label52.Size = new Size(65, 17);
             label52.TabIndex = 15;
@@ -1342,7 +1343,7 @@
             // 
             label53.AutoSize = true;
             label53.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label53.Location = new Point(885, 110);
+            label53.Location = new Point(885, 66);
             label53.Name = "label53";
             label53.Size = new Size(49, 17);
             label53.TabIndex = 16;
@@ -1351,7 +1352,7 @@
             // pictureBox1
             // 
             pictureBox1.BackColor = Color.Green;
-            pictureBox1.Location = new Point(854, 107);
+            pictureBox1.Location = new Point(854, 63);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(25, 25);
             pictureBox1.TabIndex = 17;
@@ -1360,7 +1361,7 @@
             // pictureBox2
             // 
             pictureBox2.BackColor = Color.Red;
-            pictureBox2.Location = new Point(854, 145);
+            pictureBox2.Location = new Point(854, 101);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(25, 25);
             pictureBox2.TabIndex = 18;
@@ -1368,7 +1369,7 @@
             // 
             // btnNext
             // 
-            btnNext.Location = new Point(857, 625);
+            btnNext.Location = new Point(857, 568);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(134, 36);
             btnNext.TabIndex = 19;
@@ -1376,11 +1377,22 @@
             btnNext.UseVisualStyleBackColor = true;
             btnNext.Click += btnNext_Click;
             // 
+            // btnBack
+            // 
+            btnBack.Location = new Point(858, 622);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(134, 36);
+            btnBack.TabIndex = 20;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
+            // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
+            Controls.Add(btnBack);
             Controls.Add(btnNext);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
@@ -1624,5 +1636,6 @@
         private PictureBox pictureBox1;
         private PictureBox pictureBox2;
         private Button btnNext;
+        private Button btnBack;
     }
 }
