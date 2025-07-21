@@ -310,5 +310,10 @@ namespace ParkingManagement.Forms
                 homePage.ShowFormInPanel(clientManagementForm);
             }
         }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

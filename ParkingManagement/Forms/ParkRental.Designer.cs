@@ -37,14 +37,12 @@
             btnSetSched = new Button();
             btnCancel = new Button();
             lblClientName = new Label();
-            dtpStart = new DateTimePicker();
             label1 = new Label();
             dgvList = new DataGridView();
-            label4 = new Label();
-            dtpEnd = new DateTimePicker();
             label5 = new Label();
             btnPrev = new Button();
             btnNext = new Button();
+            cbTime = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvList).BeginInit();
             SuspendLayout();
@@ -131,23 +129,14 @@
             lblClientName.TabIndex = 12;
             lblClientName.Text = "Name of Client";
             // 
-            // dtpStart
-            // 
-            dtpStart.Format = DateTimePickerFormat.Time;
-            dtpStart.Location = new Point(293, 267);
-            dtpStart.Name = "dtpStart";
-            dtpStart.ShowUpDown = true;
-            dtpStart.Size = new Size(101, 23);
-            dtpStart.TabIndex = 13;
-            // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(198, 275);
             label1.Name = "label1";
-            label1.Size = new Size(60, 15);
+            label1.Size = new Size(67, 15);
             label1.TabIndex = 14;
-            label1.Text = "Time Start";
+            label1.Text = "Select Time";
             // 
             // dgvList
             // 
@@ -156,24 +145,6 @@
             dgvList.Name = "dgvList";
             dgvList.Size = new Size(252, 150);
             dgvList.TabIndex = 15;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(415, 273);
-            label4.Name = "label4";
-            label4.Size = new Size(61, 15);
-            label4.TabIndex = 16;
-            label4.Text = "Time Ends";
-            // 
-            // dtpEnd
-            // 
-            dtpEnd.Format = DateTimePickerFormat.Time;
-            dtpEnd.Location = new Point(482, 267);
-            dtpEnd.Name = "dtpEnd";
-            dtpEnd.ShowUpDown = true;
-            dtpEnd.Size = new Size(101, 23);
-            dtpEnd.TabIndex = 17;
             // 
             // label5
             // 
@@ -206,19 +177,25 @@
             btnNext.UseVisualStyleBackColor = true;
             btnNext.Click += btnNext_Click;
             // 
+            // cbTime
+            // 
+            cbTime.FormattingEnabled = true;
+            cbTime.Location = new Point(293, 272);
+            cbTime.Name = "cbTime";
+            cbTime.Size = new Size(129, 23);
+            cbTime.TabIndex = 21;
+            // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
+            Controls.Add(cbTime);
             Controls.Add(btnNext);
             Controls.Add(btnPrev);
             Controls.Add(label5);
-            Controls.Add(dtpEnd);
-            Controls.Add(label4);
             Controls.Add(dgvList);
             Controls.Add(label1);
-            Controls.Add(dtpStart);
             Controls.Add(lblClientName);
             Controls.Add(btnCancel);
             Controls.Add(btnSetSched);
@@ -249,13 +226,11 @@
         private Button btnSetSched;
         private Button btnCancel;
         private Label lblClientName;
-        private DateTimePicker dtpStart;
         private Label label1;
         private DataGridView dgvList;
-        private Label label4;
-        private DateTimePicker dtpEnd;
         private Label label5;
         private Button btnPrev;
         private Button btnNext;
+        private ComboBox cbTime;
     }
 }

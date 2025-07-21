@@ -51,24 +51,20 @@ namespace ParkingManagement
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            await GenerateNewClientID(); // Generate the first ClientID
-            await PopulateVehicleTypesComboBox(); // Load vehicle types
-            await SetNextAvailableVehicleIDDisplay(); // Set the initial Vehicle ID on form load
+            await GenerateNewClientID();
+            await PopulateVehicleTypesComboBox();
+            await SetNextAvailableVehicleIDDisplay();
 
-            // --- Initial UI State ---
-            txtClientID.Enabled = false; // Client ID is always read-only
-            txtVehicleIDNo.Enabled = false; // Vehicle ID is always read-only
+            txtClientID.Enabled = false;
+            txtVehicleIDNo.Enabled = false;
 
-            // Camera buttons
             btnCaptureImage.Enabled = false;
             btnRetakeImage.Enabled = false;
+            btnAddVehicle.Enabled = true;
+            btnRemoveVehicle.Enabled = true;
+            dgvInformation.Enabled = true;
 
-            // Vehicle related buttons (initially enabled to add to in-memory list)
-            btnAddVehicle.Enabled = true; // Enabled from the start to allow adding vehicles to the list
-            btnRemoveVehicle.Enabled = true; // Enabled from the start
-            dgvInformation.Enabled = true; // Enabled from the start
-
-            await UpdateNextButtonStateAsync();
+            btnNext.Enabled = false; // Disable on load
         }
 
         // --- Camera Initialization ---
@@ -451,33 +447,26 @@ namespace ParkingManagement
                 await _context.SaveChangesAsync();
                 MessageBox.Show("Client and all associated vehicle(s) saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // --- CHANGE HERE: Call ClearForm(true) to clear all inputs AND reset DGV to empty for new entry ---
-                await ClearForm(true); // Clear input fields AND reset dgvInformation to empty for new client
+                await ClearForm(true);
 
-                await UpdateNextButtonStateAsync();
+                btnNext.Enabled = true; // Enable only after successful save
             }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show("Error saving data to database: " + ex.InnerException?.Message ?? ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (File.Exists(imagePathToSave))
-                {
-                    try { File.Delete(imagePathToSave); } catch { /* ignore */ }
-                }
+                btnNext.Enabled = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (File.Exists(imagePathToSave))
-                {
-                    try { File.Delete(imagePathToSave); } catch { /* ignore */ }
-                }
+                btnNext.Enabled = false;
             }
         }
 
         private async void btnCancel_Click(object sender, EventArgs e)
         {
-            await ClearForm(true); // Clear everything, including dgvInformation's content for new entry
-            await UpdateNextButtonStateAsync();
+            await ClearForm(true);
+            btnNext.Enabled = false; // Disable after cancel/reset
         }
 
         // Added a parameter 'resetDGV' to control if dgvInformation should reset to empty or stay in "all data" view
