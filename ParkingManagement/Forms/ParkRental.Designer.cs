@@ -57,7 +57,7 @@
             // 
             // dtpDateStart
             // 
-            dtpDateStart.Location = new Point(293, 225);
+            dtpDateStart.Location = new Point(292, 292);
             dtpDateStart.Name = "dtpDateStart";
             dtpDateStart.Size = new Size(200, 23);
             dtpDateStart.TabIndex = 3;
@@ -65,7 +65,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(198, 231);
+            label2.Location = new Point(198, 298);
             label2.Name = "label2";
             label2.Size = new Size(58, 15);
             label2.TabIndex = 5;
@@ -74,7 +74,7 @@
             // cmbDurationType
             // 
             cmbDurationType.FormattingEnabled = true;
-            cmbDurationType.Location = new Point(293, 311);
+            cmbDurationType.Location = new Point(292, 203);
             cmbDurationType.Name = "cmbDurationType";
             cmbDurationType.Size = new Size(121, 23);
             cmbDurationType.TabIndex = 6;
@@ -82,7 +82,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(195, 319);
+            label3.Location = new Point(194, 211);
             label3.Name = "label3";
             label3.Size = new Size(80, 15);
             label3.TabIndex = 7;
@@ -100,7 +100,7 @@
             // 
             // btnSetSched
             // 
-            btnSetSched.Location = new Point(435, 310);
+            btnSetSched.Location = new Point(194, 329);
             btnSetSched.Name = "btnSetSched";
             btnSetSched.Size = new Size(92, 23);
             btnSetSched.TabIndex = 9;
@@ -131,7 +131,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(198, 275);
+            label1.Location = new Point(194, 256);
             label1.Name = "label1";
             label1.Size = new Size(67, 15);
             label1.TabIndex = 14;
@@ -158,7 +158,7 @@
             // cbTime
             // 
             cbTime.FormattingEnabled = true;
-            cbTime.Location = new Point(293, 272);
+            cbTime.Location = new Point(292, 253);
             cbTime.Name = "cbTime";
             cbTime.Size = new Size(129, 23);
             cbTime.TabIndex = 21;

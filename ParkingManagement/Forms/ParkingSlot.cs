@@ -96,7 +96,7 @@ namespace ParkingManagement.Forms
 
             UpdateSlotPanelColors();
             UpdateSlotStatusLabels();
- 
+
         }
 
         // The issue arises because there are duplicate event handler methods with the same name and signature.
@@ -316,9 +316,9 @@ namespace ParkingManagement.Forms
 
 
 
-       
 
- 
+
+
 
         private void label67_Click(object sender, EventArgs e)
         {
@@ -339,6 +339,11 @@ namespace ParkingManagement.Forms
                 var clientManagementForm = new ClientManagement();
                 homePage.ShowFormInPanel(clientManagementForm);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
 
         //private async void btnAdd_Click(object sender, EventArgs e)

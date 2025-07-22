@@ -185,7 +185,6 @@
             label47 = new Label();
             cbVehicle = new ComboBox();
             lblCname = new Label();
-            button1 = new Button();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -1943,21 +1942,11 @@
             lblCname.TabIndex = 21;
             lblCname.Text = "-";
             // 
-            // button1
-            // 
-            button1.Location = new Point(854, 380);
-            button1.Name = "button1";
-            button1.Size = new Size(134, 36);
-            button1.TabIndex = 22;
-            button1.Text = "Select Vehicle";
-            button1.UseVisualStyleBackColor = true;
-            // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
-            Controls.Add(button1);
             Controls.Add(lblCname);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
@@ -2237,6 +2226,5 @@
         private Label label47;
         private ComboBox cbVehicle;
         private Label lblCname;
-        private Button button1;
     }
 }
