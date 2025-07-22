@@ -57,7 +57,6 @@
             btnSave = new Button();
             btnCancel = new Button();
             flowLayoutPanel1 = new FlowLayoutPanel();
-            btnNext = new Button();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
             flowLayoutPanel1.SuspendLayout();
@@ -293,7 +292,7 @@
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 36);
             btnSave.TabIndex = 26;
-            btnSave.Text = "Save";
+            btnSave.Text = "Next";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
@@ -318,25 +317,12 @@
             flowLayoutPanel1.Size = new Size(779, 291);
             flowLayoutPanel1.TabIndex = 28;
             // 
-            // btnNext
-            // 
-            btnNext.Anchor = AnchorStyles.None;
-            btnNext.Enabled = false;
-            btnNext.Location = new Point(1004, 665);
-            btnNext.Name = "btnNext";
-            btnNext.Size = new Size(97, 38);
-            btnNext.TabIndex = 29;
-            btnNext.Text = "Next";
-            btnNext.UseVisualStyleBackColor = true;
-            btnNext.Click += btnNext_Click;
-            // 
             // ClientManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1266, 749);
-            Controls.Add(btnNext);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(btnRemoveVehicle);
             Controls.Add(btnAddVehicle);
@@ -405,6 +391,5 @@
         private Button btnSave;
         private Button btnCancel;
         private FlowLayoutPanel flowLayoutPanel1;
-        private Button btnNext;
     }
 }

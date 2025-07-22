@@ -19,7 +19,6 @@ namespace ParkingManagement.Forms
         {
             InitializeComponent();
             this.Load += TotalPayment_Load;
-            btnSelect.Click += btnSelect_Click;
 
             // Set form properties for panel display
             this.TopLevel = false;
@@ -33,30 +32,25 @@ namespace ParkingManagement.Forms
         private async void TotalPayment_Load(object sender, EventArgs e)
         {
             using var db = new ParkingDbContext();
-            var clients = await db.Clients.ToListAsync();
-            cbClient.DataSource = clients;
-            cbClient.DisplayMember = "Name";
-            cbClient.ValueMember = "ClientID";
-            cbClient.SelectedIndex = -1;
+            var latestClient = await db.Clients
+                .OrderByDescending(c => c.ClientID)
+                .FirstOrDefaultAsync();
 
-            if (!clients.Any())
+            if (latestClient == null)
             {
                 MessageBox.Show("No clients found in the database.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cbClient.Enabled = false;
+                rtbReceipt.Clear();
+                return;
             }
+
+            await DisplayReceiptForClient(latestClient);
         }
 
-        private async void btnSelect_Click(object sender, EventArgs e)
+        private async Task DisplayReceiptForClient(Client selectedClient)
         {
             try
             {
                 rtbReceipt.Clear();
-
-                if (cbClient.SelectedItem is not Client selectedClient)
-                {
-                    MessageBox.Show("Please select a client.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
 
                 using var db = new ParkingDbContext();
 

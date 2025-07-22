@@ -40,9 +40,8 @@
             label1 = new Label();
             dgvList = new DataGridView();
             label5 = new Label();
-            btnPrev = new Button();
-            btnNext = new Button();
             cbTime = new ComboBox();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvList).BeginInit();
             SuspendLayout();
@@ -50,9 +49,9 @@
             // dgvVehicles
             // 
             dgvVehicles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvVehicles.Location = new Point(198, 402);
+            dgvVehicles.Location = new Point(626, 202);
             dgvVehicles.Name = "dgvVehicles";
-            dgvVehicles.Size = new Size(810, 150);
+            dgvVehicles.Size = new Size(403, 150);
             dgvVehicles.TabIndex = 0;
             dgvVehicles.SelectionChanged += dgvVehicles_SelectionChanged;
             // 
@@ -95,7 +94,7 @@
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 8;
-            btnSave.Text = "Save";
+            btnSave.Text = "Next";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
@@ -141,41 +140,20 @@
             // dgvList
             // 
             dgvList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvList.Location = new Point(756, 183);
+            dgvList.Location = new Point(198, 400);
             dgvList.Name = "dgvList";
-            dgvList.Size = new Size(252, 150);
+            dgvList.Size = new Size(831, 150);
             dgvList.TabIndex = 15;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(756, 155);
+            label5.Location = new Point(195, 367);
             label5.Name = "label5";
             label5.Size = new Size(166, 25);
             label5.TabIndex = 18;
             label5.Text = "Rented Client List";
-            // 
-            // btnPrev
-            // 
-            btnPrev.Location = new Point(1071, 659);
-            btnPrev.Name = "btnPrev";
-            btnPrev.Size = new Size(96, 37);
-            btnPrev.TabIndex = 19;
-            btnPrev.Text = "Prev";
-            btnPrev.UseVisualStyleBackColor = true;
-            btnPrev.Click += btnPrev_Click;
-            // 
-            // btnNext
-            // 
-            btnNext.Enabled = false;
-            btnNext.Location = new Point(98, 659);
-            btnNext.Name = "btnNext";
-            btnNext.Size = new Size(96, 37);
-            btnNext.TabIndex = 20;
-            btnNext.Text = "Next";
-            btnNext.UseVisualStyleBackColor = true;
-            btnNext.Click += btnNext_Click;
             // 
             // cbTime
             // 
@@ -185,14 +163,23 @@
             cbTime.Size = new Size(129, 23);
             cbTime.TabIndex = 21;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(626, 158);
+            label4.Name = "label4";
+            label4.Size = new Size(160, 25);
+            label4.TabIndex = 22;
+            label4.Text = "Vehicle Selection";
+            // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
+            Controls.Add(label4);
             Controls.Add(cbTime);
-            Controls.Add(btnNext);
-            Controls.Add(btnPrev);
             Controls.Add(label5);
             Controls.Add(dgvList);
             Controls.Add(label1);
@@ -229,8 +216,7 @@
         private Label label1;
         private DataGridView dgvList;
         private Label label5;
-        private Button btnPrev;
-        private Button btnNext;
         private ComboBox cbTime;
+        private Label label4;
     }
 }

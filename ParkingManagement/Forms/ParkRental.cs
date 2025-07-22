@@ -175,7 +175,6 @@ namespace ParkingManagement.Forms
             // Check for scheduled vehicles in the database
             bool hasScheduledInDb = await _context.VehicleSessions.AnyAsync();
 
-            btnNext.Enabled = hasScheduledInSession || hasScheduledInDb;
         }
 
         private void LoadClientVehicles()
@@ -267,22 +266,27 @@ namespace ParkingManagement.Forms
                 MessageBox.Show("All scheduled vehicles saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 ClearFormForNewEntry();
-                btnNext.Enabled = true; // Enable btnNext only after successful save
             }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show("Error saving rental sessions: " + (ex.InnerException?.Message ?? ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnNext.Enabled = false;
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving rental sessions: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnNext.Enabled = false;
             }
             await RefreshScheduledListView();
             dgvVehicles.ClearSelection();
             _selectedClient = null;
             _selectedVehicle = null;
+            // After successful save:
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var TotalForm = new TotalPayment();
+                homePage.ShowFormInPanel(TotalForm);
+            }
         }
 
         // Renamed and modified to store values internally, not display on labels
@@ -561,7 +565,7 @@ namespace ParkingManagement.Forms
 
             await LoadScheduledVehiclesToListViewAsync();
             await RefreshScheduledListView();
-            btnNext.Enabled = false;
+     
         }
 
         private void PopulateTimeComboBox()
