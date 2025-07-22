@@ -124,12 +124,40 @@ namespace ParkingManagement.Forms
         {
             if (sender is Panel panel)
             {
+                // Check if a vehicle is selected
+                var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+                if (selectedVehicle == null)
+                {
+                    MessageBox.Show("Please select a vehicle first.");
+                    return;
+                }
+
+                // Check if the selected vehicle is already parked
+                using (var db = new ParkingDbContext())
+                {
+                    var isVehicleParked = db.Parkingslot.Any(s => s.VehicleID == selectedVehicle.VehicleID && s.SlotStatus == "occupied");
+                    if (isVehicleParked)
+                    {
+                        MessageBox.Show($"Vehicle {selectedVehicle.PlateNumber} is already parked in a slot.");
+                        return;
+                    }
+                }
+
                 string slotNumber = panel.Name.Replace("pnl", ""); // Extract slot number (e.g., "V1", "M2")
                 var slot = slots.FirstOrDefault(s => s.SlotNumber == slotNumber);
 
                 if (slot == null || slot.SlotStatus == "occupied")
                 {
                     MessageBox.Show($"Slot {slotNumber} is not available for parking.");
+                    return;
+                }
+
+                // Check if the slot is compatible with the vehicle type
+                bool isCompatible = (selectedVehicle.VehicleType?.Trim() == "2-Wheels" && slotNumber.StartsWith("M")) ||
+                                   (selectedVehicle.VehicleType?.Trim() == "4-Wheels" && slotNumber.StartsWith("V"));
+                if (!isCompatible)
+                {
+                    MessageBox.Show($"Slot {slotNumber} is not compatible with the selected vehicle type.");
                     return;
                 }
 
@@ -227,6 +255,17 @@ namespace ParkingManagement.Forms
                 return;
             }
 
+            // Check if the selected vehicle is already parked
+            using (var db = new ParkingDbContext())
+            {
+                var isVehicleParked = db.Parkingslot.Any(s => s.VehicleID == selectedVehicle.VehicleID && s.SlotStatus == "occupied");
+                if (isVehicleParked)
+                {
+                    MessageBox.Show($"Vehicle {selectedVehicle.PlateNumber} is already parked in a slot.");
+                    return; // Do not modify slot colors
+                }
+            }
+
             var vehicleType = selectedVehicle.VehicleType?.Trim();
 
             // Enable only the relevant panels based on vehicle type
@@ -244,7 +283,7 @@ namespace ParkingManagement.Forms
                     }
                     else
                     {
-                        panel.BackColor = slotNumber.StartsWith("V") || slotNumber.StartsWith("M") ? Color.Gray : panel.BackColor; // Gray out irrelevant slots
+                        panel.BackColor = slots.Any(s => s.SlotNumber == slotNumber && s.SlotStatus == "occupied") ? Color.Red : Color.Green; // Retain red for occupied, green for others
                     }
                 }
             }
