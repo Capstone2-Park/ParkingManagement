@@ -54,7 +54,6 @@
             btnAddVehicle = new Button();
             btnRemoveVehicle = new Button();
             dgvInformation = new DataGridView();
-            btnSave = new Button();
             btnCancel = new Button();
             btnNext = new Button();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
@@ -304,21 +303,10 @@
             dgvInformation.Size = new Size(632, 184);
             dgvInformation.TabIndex = 25;
             // 
-            // btnSave
-            // 
-            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(1018, 635);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(75, 36);
-            btnSave.TabIndex = 26;
-            btnSave.Text = "Save";
-            btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
-            // 
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(1018, 695);
+            btnCancel.Location = new Point(916, 792);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 36);
             btnCancel.TabIndex = 27;
@@ -329,7 +317,7 @@
             // btnNext
             // 
             btnNext.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnNext.Location = new Point(916, 795);
+            btnNext.Location = new Point(835, 792);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(75, 36);
             btnNext.TabIndex = 28;
@@ -346,7 +334,6 @@
             Controls.Add(btnNext);
             Controls.Add(dgvInformation);
             Controls.Add(btnCancel);
-            Controls.Add(btnSave);
             Controls.Add(btnRemoveVehicle);
             Controls.Add(btnAddVehicle);
             Controls.Add(label9);
@@ -410,7 +397,6 @@
         private Button btnAddVehicle;
         private Button btnRemoveVehicle;
         private DataGridView dgvInformation;
-        private Button btnSave;
         private Button btnCancel;
         private Button btnNext;
     }

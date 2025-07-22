@@ -385,93 +385,7 @@ namespace ParkingManagement
             }
         }
 
-        private async void btnSave_Click(object sender, EventArgs e)
-        {
-            currentClient.Name = txtName.Text;
-            currentClient.Address = txtAddress.Text;
-            currentClient.CpNumber = txtContactNo.Text;
-
-            if (string.IsNullOrWhiteSpace(currentClient.Name) ||
-                string.IsNullOrWhiteSpace(currentClient.Address) ||
-                string.IsNullOrWhiteSpace(currentClient.CpNumber) ||
-                !Regex.IsMatch(currentClient.CpNumber, @"^\d{11}$"))
-            {
-                MessageBox.Show("Please fill in all client details correctly (contact number must be 11 digits).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (pcbIDPic.Image == null)
-            {
-                MessageBox.Show("Please capture an ID picture.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string imagePathToSave = string.Empty;
-
-            try
-            {
-                var existingClient = await _context.Clients.FindAsync(currentClient.ClientID);
-
-                if (existingClient == null)
-                {
-                    imagePathToSave = SaveImageToDisk(pcbIDPic.Image);
-                    currentClient.IDPicture = imagePathToSave;
-                    await _context.Clients.AddAsync(currentClient);
-                }
-                else
-                {
-                    existingClient.Name = currentClient.Name;
-                    existingClient.Address = currentClient.Address;
-                    existingClient.CpNumber = currentClient.CpNumber;
-
-                    if (pcbIDPic.Image != null)
-                    {
-                        if (!string.IsNullOrEmpty(existingClient.IDPicture) && File.Exists(existingClient.IDPicture))
-                        {
-                            try { File.Delete(existingClient.IDPicture); } catch (Exception ex) { Console.WriteLine($"Warning: Could not delete old image file {existingClient.IDPicture}. Error: {ex.Message}"); }
-                        }
-                        imagePathToSave = SaveImageToDisk(pcbIDPic.Image);
-                        existingClient.IDPicture = imagePathToSave;
-                    }
-                    _context.Clients.Update(existingClient);
-                }
-
-                foreach (var vehicle in currentClientVehicles)
-                {
-                    vehicle.ClientID = currentClient.ClientID;
-                    var existingVehicle = await _context.Vehicles.FindAsync(vehicle.VehicleID);
-                    if (existingVehicle == null)
-                    {
-                        await _context.Vehicles.AddAsync(vehicle);
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-                MessageBox.Show("Client and all associated vehicle(s) saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // --- CHANGE HERE: Call ClearForm(true) to clear all inputs AND reset DGV to empty for new entry ---
-                await ClearForm(true); // Clear input fields AND reset dgvInformation to empty for new client
-
-              
-            }
-            catch (DbUpdateException ex)
-            {
-                MessageBox.Show("Error saving data to database: " + ex.InnerException?.Message ?? ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (File.Exists(imagePathToSave))
-                {
-                    try { File.Delete(imagePathToSave); } catch { /* ignore */ }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (File.Exists(imagePathToSave))
-                {
-                    try { File.Delete(imagePathToSave); } catch { /* ignore */ }
-                }
-            }
-        }
-
+      
         private async void btnCancel_Click(object sender, EventArgs e)
         {
             await ClearForm(true); // Clear everything, including dgvInformation's content for new entry
@@ -594,14 +508,98 @@ namespace ParkingManagement
         }
 
      
-        private void btnNext_Click(object sender, EventArgs e)
+        private async void btnNext_Click(object sender, EventArgs e)
         {
-            // After successful save:
-            var homePage = this.ParentForm as HomePage;
-            if (homePage != null)
+            currentClient.Name = txtName.Text;
+            currentClient.Address = txtAddress.Text;
+            currentClient.CpNumber = txtContactNo.Text;
+
+            if (string.IsNullOrWhiteSpace(currentClient.Name) ||
+                string.IsNullOrWhiteSpace(currentClient.Address) ||
+                string.IsNullOrWhiteSpace(currentClient.CpNumber) ||
+                !Regex.IsMatch(currentClient.CpNumber, @"^\d{11}$"))
             {
-                var parkingSlot = new ParkingSlot();
-                homePage.ShowFormInPanel(parkingSlot);
+                MessageBox.Show("Please fill in all client details correctly (contact number must be 11 digits).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (pcbIDPic.Image == null)
+            {
+                MessageBox.Show("Please capture an ID picture.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string imagePathToSave = string.Empty;
+
+            try
+            {
+                // Save or update client
+                var existingClient = await _context.Clients.FindAsync(currentClient.ClientID);
+
+                if (existingClient == null)
+                {
+                    imagePathToSave = SaveImageToDisk(pcbIDPic.Image);
+                    currentClient.IDPicture = imagePathToSave;
+                    await _context.Clients.AddAsync(currentClient);
+                }
+                else
+                {
+                    existingClient.Name = currentClient.Name;
+                    existingClient.Address = currentClient.Address;
+                    existingClient.CpNumber = currentClient.CpNumber;
+
+                    if (pcbIDPic.Image != null)
+                    {
+                        if (!string.IsNullOrEmpty(existingClient.IDPicture) && File.Exists(existingClient.IDPicture))
+                        {
+                            try { File.Delete(existingClient.IDPicture); } catch (Exception ex) { Console.WriteLine($"Warning: Could not delete old image file {existingClient.IDPicture}. Error: {ex.Message}"); }
+                        }
+                        imagePathToSave = SaveImageToDisk(pcbIDPic.Image);
+                        existingClient.IDPicture = imagePathToSave;
+                    }
+                    _context.Clients.Update(existingClient);
+                }
+
+                // Save vehicles
+                foreach (var vehicle in currentClientVehicles)
+                {
+                    vehicle.ClientID = currentClient.ClientID;
+                    var existingVehicle = await _context.Vehicles.FindAsync(vehicle.VehicleID);
+                    if (existingVehicle == null)
+                    {
+                        await _context.Vehicles.AddAsync(vehicle);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                MessageBox.Show("Client and all associated vehicle(s) saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Navigate to ParkingSlot, passing currentClient
+                var homePage = this.ParentForm as HomePage;
+                if (homePage != null)
+                {
+                    var parkingSlot = new ParkingSlot(currentClient); // Pass currentClient
+                    homePage.ShowFormInPanel(parkingSlot);
+                }
+
+                // Clear form for new client entry
+                await ClearForm(true); // Clear input fields and reset dgvInformation
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show("Error saving data to database: " + ex.InnerException?.Message ?? ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (File.Exists(imagePathToSave))
+                {
+                    try { File.Delete(imagePathToSave); } catch { /* ignore */ }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (File.Exists(imagePathToSave))
+                {
+                    try { File.Delete(imagePathToSave); } catch { /* ignore */ }
+                }
             }
         }
     }

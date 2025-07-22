@@ -432,7 +432,7 @@ namespace ParkingManagement.Forms
             var homePage = this.ParentForm as HomePage;
             if (homePage != null)
             {
-                var parkingSlot = new ParkingSlot();
+                var parkingSlot = new ParkingSlot(_currentClient); // Pass _currentClient
                 homePage.ShowFormInPanel(parkingSlot);
             }
         }

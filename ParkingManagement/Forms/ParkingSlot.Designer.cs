@@ -128,15 +128,9 @@
             label32 = new Label();
             label46 = new Label();
             label47 = new Label();
-            label48 = new Label();
             label49 = new Label();
             btnAdd = new Button();
             cbVehicle = new ComboBox();
-            cbName = new ComboBox();
-            cbSlotV = new ComboBox();
-            label50 = new Label();
-            cbSlotM = new ComboBox();
-            label51 = new Label();
             btnSelect = new Button();
             label52 = new Label();
             label53 = new Label();
@@ -144,6 +138,7 @@
             pictureBox2 = new PictureBox();
             btnNext = new Button();
             btnBack = new Button();
+            lblName = new Label();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -225,7 +220,7 @@
             flpPakingSlot.Controls.Add(pnlV22);
             flpPakingSlot.Controls.Add(pnlV23);
             flpPakingSlot.Controls.Add(pnlV24);
-            flpPakingSlot.Location = new Point(84, 63);
+            flpPakingSlot.Location = new Point(84, 94);
             flpPakingSlot.Name = "flpPakingSlot";
             flpPakingSlot.Size = new Size(726, 225);
             flpPakingSlot.TabIndex = 0;
@@ -1225,7 +1220,7 @@
             // label46
             // 
             label46.AutoSize = true;
-            label46.Location = new Point(84, 45);
+            label46.Location = new Point(84, 76);
             label46.Name = "label46";
             label46.Size = new Size(44, 15);
             label46.TabIndex = 2;
@@ -1239,15 +1234,6 @@
             label47.Size = new Size(67, 15);
             label47.TabIndex = 3;
             label47.Text = "Motorcycle";
-            // 
-            // label48
-            // 
-            label48.AutoSize = true;
-            label48.Location = new Point(858, 144);
-            label48.Name = "label48";
-            label48.Size = new Size(72, 15);
-            label48.TabIndex = 6;
-            label48.Text = "Select Client";
             // 
             // label49
             // 
@@ -1274,50 +1260,6 @@
             cbVehicle.Name = "cbVehicle";
             cbVehicle.Size = new Size(133, 23);
             cbVehicle.TabIndex = 8;
-            // 
-            // cbName
-            // 
-            cbName.FormattingEnabled = true;
-            cbName.Location = new Point(856, 165);
-            cbName.Name = "cbName";
-            cbName.Size = new Size(133, 23);
-            cbName.TabIndex = 9;
-            // 
-            // cbSlotV
-            // 
-            cbSlotV.FormattingEnabled = true;
-            cbSlotV.Items.AddRange(new object[] { "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20", "V21", "V22", "V23", "V24" });
-            cbSlotV.Location = new Point(856, 386);
-            cbSlotV.Name = "cbSlotV";
-            cbSlotV.Size = new Size(133, 23);
-            cbSlotV.TabIndex = 11;
-            // 
-            // label50
-            // 
-            label50.AutoSize = true;
-            label50.Location = new Point(858, 368);
-            label50.Name = "label50";
-            label50.Size = new Size(109, 15);
-            label50.TabIndex = 10;
-            label50.Text = "Select Slot (Vehicle)";
-            // 
-            // cbSlotM
-            // 
-            cbSlotM.FormattingEnabled = true;
-            cbSlotM.Items.AddRange(new object[] { "M1  ", "M2  ", "M3  ", "M4  ", "M5  ", "M6  ", "M7  ", "M8  ", "M9  ", "M10  ", "M11  ", "M12  ", "M13  ", "M14  ", "M15  ", "M16  ", "M17  ", "M18  ", "M19  ", "M20  ", "M21  ", "M22  ", "M23  ", "M24  " });
-            cbSlotM.Location = new Point(855, 447);
-            cbSlotM.Name = "cbSlotM";
-            cbSlotM.Size = new Size(133, 23);
-            cbSlotM.TabIndex = 13;
-            // 
-            // label51
-            // 
-            label51.AutoSize = true;
-            label51.Location = new Point(857, 429);
-            label51.Name = "label51";
-            label51.Size = new Size(134, 15);
-            label51.TabIndex = 12;
-            label51.Text = "Select Slot (MotorCycle)";
             // 
             // btnSelect
             // 
@@ -1387,11 +1329,22 @@
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
             // 
+            // lblName
+            // 
+            lblName.AutoSize = true;
+            lblName.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblName.Location = new Point(84, 26);
+            lblName.Name = "lblName";
+            lblName.Size = new Size(336, 40);
+            lblName.TabIndex = 21;
+            lblName.Text = "Name of Current Client";
+            // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
+            Controls.Add(lblName);
             Controls.Add(btnBack);
             Controls.Add(btnNext);
             Controls.Add(pictureBox2);
@@ -1399,15 +1352,9 @@
             Controls.Add(label53);
             Controls.Add(label52);
             Controls.Add(btnSelect);
-            Controls.Add(cbSlotM);
-            Controls.Add(label51);
-            Controls.Add(cbSlotV);
-            Controls.Add(label50);
-            Controls.Add(cbName);
             Controls.Add(cbVehicle);
             Controls.Add(btnAdd);
             Controls.Add(label49);
-            Controls.Add(label48);
             Controls.Add(label47);
             Controls.Add(label46);
             Controls.Add(flowLayoutPanel1);
@@ -1621,15 +1568,9 @@
         private Label label8;
         private Label label46;
         private Label label47;
-        private Label label48;
         private Label label49;
         private Button btnAdd;
         private ComboBox cbVehicle;
-        private ComboBox cbName;
-        private ComboBox cbSlotV;
-        private Label label50;
-        private ComboBox cbSlotM;
-        private Label label51;
         private Button btnSelect;
         private Label label52;
         private Label label53;
@@ -1637,5 +1578,6 @@
         private PictureBox pictureBox2;
         private Button btnNext;
         private Button btnBack;
+        private Label lblName;
     }
 }
