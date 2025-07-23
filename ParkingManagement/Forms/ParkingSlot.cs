@@ -15,6 +15,7 @@ namespace ParkingManagement.Forms
         private List<Vehicle> vehicles;
         private Client currentClient; // Store the current client
         private string selectedSlot; // Track the currently selected slot
+        private bool panelEventsInitialized = false;
 
         public ParkingSlot(Client client)
         {
@@ -23,6 +24,7 @@ namespace ParkingManagement.Forms
             Load += ParkingSlot_Load;
             btnAdd.Click += btnPark_Click;
             btnSelect.Click += btnSelect_Click;
+            cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged; // Add event handler
         }
 
         private void ParkingSlot_Load(object sender, EventArgs e)
@@ -75,22 +77,30 @@ namespace ParkingManagement.Forms
             // Create a list for ComboBox binding with formatted display text
             var vehicleDisplayList = vehicles.Select(v => new
             {
-                v.VehicleID,
+                VehicleID = v.VehicleID,
                 DisplayText = $"{v.Brand} - {v.PlateNumber}",
                 v.VehicleType
             }).ToList();
+
+            // Add "Select Vehicle" as the first item
+            vehicleDisplayList.Insert(0, new
+            {
+                VehicleID = (string)null,
+                DisplayText = "Select Vehicle",
+                VehicleType = (string)null
+            });
 
             // Bind filtered vehicle list for the current client
             cbVehicle.DataSource = vehicleDisplayList;
             cbVehicle.DisplayMember = "DisplayText";
             cbVehicle.ValueMember = "VehicleID";
-            cbVehicle.Enabled = vehicleDisplayList.Any();
+            cbVehicle.Enabled = vehicleDisplayList.Count > 1; // Enable only if there are actual vehicles
 
-            if (vehicleDisplayList.Any())
-            {
-                cbVehicle.SelectedIndex = 0;
-            }
-            else
+            // Set default selection to "Select Vehicle"
+            cbVehicle.SelectedIndex = 0;
+            btnSelect.Enabled = false; // Disable btnSelect initially since "Select Vehicle" is selected
+
+            if (vehicleDisplayList.Count == 1) // Only "Select Vehicle" exists
             {
                 MessageBox.Show("All vehicles for this client are already parked.");
             }
@@ -108,10 +118,19 @@ namespace ParkingManagement.Forms
             {
                 if (control is Panel panel && panel.Name.StartsWith("pnl"))
                 {
-                    panel.Enabled = true; // Ensure panel is enabled
-                    panel.BringToFront(); // Ensure panel is not overlapped
-                    panel.Click -= Panel_Click; // Prevent duplicate handlers
+                    // Remove existing handler to prevent duplicates
+                    panel.Click -= Panel_Click;
                     panel.Click += Panel_Click;
+
+                    // Redirect clicks from child controls to the panel's click handler
+                    foreach (Control child in panel.Controls)
+                    {
+                        child.Click -= Panel_Click;
+                        child.Click += (s, e) => Panel_Click(panel, e); // Call Panel_Click directly with the parent panel
+                    }
+
+                    panel.Enabled = true; // Ensure panel is enabled
+                    panel.BringToFront(); // Prevent overlap issues
                     Console.WriteLine($"Attached click event to panel: {panel.Name} at {DateTime.Now}");
                 }
             }
@@ -180,28 +199,31 @@ namespace ParkingManagement.Forms
                     return;
                 }
 
-                // Reset other panels
-                foreach (Control control in GetAllControls(this))
+                // Reset previously selected panel
+                if (!string.IsNullOrEmpty(selectedSlot))
                 {
-                    if (control is Panel p && p != panel && p.Name.StartsWith("pnl"))
+                    var prevPanel = this.Controls.Find("pnl" + selectedSlot, true).FirstOrDefault() as Panel;
+                    if (prevPanel != null)
                     {
-                        string otherSlotNumber = p.Name.Replace("pnl", "");
-                        var otherSlot = slots.FirstOrDefault(s => s.SlotNumber == otherSlotNumber);
-                        p.BorderStyle = BorderStyle.None;
-                        p.BackColor = (otherSlot?.SlotStatus == "occupied") ? Color.Red : Color.Green;
+                        var prevSlot = slots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
+                        prevPanel.BorderStyle = BorderStyle.None;
+                        prevPanel.BackColor = (prevSlot?.SlotStatus == "occupied") ? Color.Red : Color.Green;
+                        prevPanel.Refresh();
                     }
                 }
 
-                // Update the clicked panel immediately
+                // Update the clicked panel
                 panel.BorderStyle = BorderStyle.FixedSingle;
                 panel.BackColor = Color.Red;
-                panel.Refresh(); // Force immediate UI update
-
                 selectedSlot = slotNumber; // Set the selected slot
                 btnAdd.Enabled = true; // Enable btnAdd
 
+                // Force immediate UI updates
+                panel.Refresh();
+                this.Invalidate(true); // Redraw the entire form
+                this.Update();
+
                 Console.WriteLine($"Panel clicked: {panel.Name}, Selected Slot: {selectedSlot}, Color: {panel.BackColor} at {DateTime.Now}");
-                this.Refresh(); // Force form refresh to ensure UI updates
             }
         }
 
@@ -311,7 +333,7 @@ namespace ParkingManagement.Forms
             var selectedVehicleId = (cbVehicle.SelectedItem as dynamic)?.VehicleID;
             if (selectedVehicleId == null)
             {
-                MessageBox.Show("Please select a vehicle first.");
+                MessageBox.Show("Please select a valid vehicle from the list. 'Select Vehicle' is not a valid option.");
                 return;
             }
 
@@ -348,6 +370,12 @@ namespace ParkingManagement.Forms
                 }
             }
             this.Refresh(); // Force UI update
+        }
+
+        private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedVehicleId = (cbVehicle.SelectedItem as dynamic)?.VehicleID;
+            btnSelect.Enabled = selectedVehicleId != null; // Enable btnSelect only if a valid vehicle is selected
         }
 
         private void btnNext_Click(object sender, EventArgs e)

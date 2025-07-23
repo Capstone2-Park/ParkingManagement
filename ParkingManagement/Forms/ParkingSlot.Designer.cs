@@ -128,7 +128,6 @@
             label32 = new Label();
             label46 = new Label();
             label47 = new Label();
-            label49 = new Label();
             btnAdd = new Button();
             cbVehicle = new ComboBox();
             btnSelect = new Button();
@@ -1235,15 +1234,6 @@
             label47.TabIndex = 3;
             label47.Text = "Motorcycle";
             // 
-            // label49
-            // 
-            label49.AutoSize = true;
-            label49.Location = new Point(858, 189);
-            label49.Name = "label49";
-            label49.Size = new Size(78, 15);
-            label49.TabIndex = 7;
-            label49.Text = "Select Vehicle";
-            // 
             // btnAdd
             // 
             btnAdd.Location = new Point(858, 407);
@@ -1256,14 +1246,14 @@
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(825, 207);
+            cbVehicle.Location = new Point(845, 212);
             cbVehicle.Name = "cbVehicle";
-            cbVehicle.Size = new Size(200, 23);
+            cbVehicle.Size = new Size(162, 23);
             cbVehicle.TabIndex = 8;
             // 
             // btnSelect
             // 
-            btnSelect.Location = new Point(854, 252);
+            btnSelect.Location = new Point(858, 254);
             btnSelect.Name = "btnSelect";
             btnSelect.Size = new Size(134, 36);
             btnSelect.TabIndex = 14;
@@ -1354,7 +1344,6 @@
             Controls.Add(btnSelect);
             Controls.Add(cbVehicle);
             Controls.Add(btnAdd);
-            Controls.Add(label49);
             Controls.Add(label47);
             Controls.Add(label46);
             Controls.Add(flowLayoutPanel1);
@@ -1568,7 +1557,6 @@
         private Label label8;
         private Label label46;
         private Label label47;
-        private Label label49;
         private Button btnAdd;
         private ComboBox cbVehicle;
         private Button btnSelect;
