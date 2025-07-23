@@ -381,7 +381,7 @@ namespace ParkingManagement.Forms
         private void btnNext_Click(object sender, EventArgs e)
         {
             var homePage = this.ParentForm as HomePage;
-            if (homePage != null)
+            if (homePage != null) 
             {
                 var parkRental = new ParkRental();
                 homePage.ShowFormInPanel(parkRental);
