@@ -198,22 +198,23 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("Brand");
             dt.Columns.Add("Color");
             dt.Columns.Add("VehicleType");
-            dt.Columns.Add("ClientObject", typeof(Client));    // Add this
-            dt.Columns.Add("VehicleObject", typeof(Vehicle));  // Add this
+            dt.Columns.Add("ClientObject", typeof(Client));
+            dt.Columns.Add("VehicleObject", typeof(Vehicle));
 
             foreach (var v in vehicles)
             {
+                // Defensive: Use null-coalescing to avoid nulls
                 dt.Rows.Add(
-                    _currentClient.ClientID,
-                    _currentClient.Name,
-                    _currentClient.CpNumber,
-                    v.VehicleID,
-                    v.PlateNumber,
-                    v.Brand,
-                    v.Color,
-                    v.VehicleType,
-                    _currentClient, // Set the actual Client object
-                    v               // Set the actual Vehicle object
+                    _currentClient.ClientID ?? "",
+                    _currentClient.Name ?? "",
+                    _currentClient.CpNumber ?? "",
+                    v.VehicleID ?? "",
+                    v.PlateNumber ?? "",
+                    v.Brand ?? "",
+                    v.Color ?? "",
+                    v.VehicleType ?? "",
+                    _currentClient,
+                    v
                 );
             }
 
@@ -233,7 +234,6 @@ namespace ParkingManagement.Forms
             {
                 _selectedClient = null;
                 _selectedVehicle = null;
-
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
             }
@@ -415,11 +415,66 @@ namespace ParkingManagement.Forms
 
         private async void btnCancel_Click(object sender, EventArgs e)
         {
-            _scheduledVehicles.Clear();
-            RefreshScheduledListView();
-            ClearFormForNewEntry();
+            var result = MessageBox.Show(
+                "Do you want to cancel the progress?",
+                "Cancel Progress",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Question);
 
-            await UpdateNextButtonStateAsync();
+            if (result != DialogResult.OK)
+                return;
+
+            using (var db = new ParkingDbContext())
+            {
+                // Get the latest client (by highest ClientID)
+                var latestClient = await db.Clients
+                    .OrderByDescending(c => c.ClientID)
+                    .FirstOrDefaultAsync();
+
+                if (latestClient != null)
+                {
+                    // Get all vehicles for this client
+                    var vehicles = await db.Vehicles
+                        .Where(v => v.ClientID == latestClient.ClientID)
+                        .ToListAsync();
+
+                    var vehicleIds = vehicles.Select(v => v.VehicleID).ToList();
+
+                    // For each slot where one of the client's vehicles is parked, reset statuses
+                    var slotsToUpdate = await db.Parkingslot
+                        .Where(s => vehicleIds.Contains(s.VehicleID))
+                        .ToListAsync();
+
+                    foreach (var slot in slotsToUpdate)
+                    {
+                        slot.VehicleStatus = "Not Parked";
+                        slot.SlotStatus = "Available";
+                        // Do NOT delete SlotNumber
+                        slot.VehicleID = null;
+                        slot.ClientID = null;
+                        db.Parkingslot.Update(slot);
+                    }
+
+                    // Remove vehicles
+                    if (vehicles.Any())
+                    {
+                        db.Vehicles.RemoveRange(vehicles);
+                    }
+
+                    // Remove client
+                    db.Clients.Remove(latestClient);
+
+                    await db.SaveChangesAsync();
+                }
+            }
+
+            // Navigate to ClientManagement
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var clientManagementForm = new ClientManagement();
+                homePage.ShowFormInPanel(clientManagementForm);
+            }
         }
 
         private async Task RefreshScheduledListView()

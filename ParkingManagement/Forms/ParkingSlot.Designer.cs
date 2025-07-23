@@ -185,6 +185,9 @@
             label47 = new Label();
             cbVehicle = new ComboBox();
             lblCname = new Label();
+            btnCancel = new Button();
+            label50 = new Label();
+            lblSlot = new Label();
             flpPakingSlot.SuspendLayout();
             pnlV1.SuspendLayout();
             pnlV2.SuspendLayout();
@@ -1942,11 +1945,42 @@
             lblCname.TabIndex = 21;
             lblCname.Text = "-";
             // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(854, 355);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(134, 36);
+            btnCancel.TabIndex = 22;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // label50
+            // 
+            label50.AutoSize = true;
+            label50.Location = new Point(856, 216);
+            label50.Name = "label50";
+            label50.Size = new Size(76, 15);
+            label50.TabIndex = 23;
+            label50.Text = "Client Name:";
+            // 
+            // lblSlot
+            // 
+            lblSlot.AutoSize = true;
+            lblSlot.Location = new Point(928, 216);
+            lblSlot.Name = "lblSlot";
+            lblSlot.Size = new Size(12, 15);
+            lblSlot.TabIndex = 24;
+            lblSlot.Text = "-";
+            // 
             // ParkingSlot
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 684);
+            Controls.Add(lblSlot);
+            Controls.Add(label50);
+            Controls.Add(btnCancel);
             Controls.Add(lblCname);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
@@ -2226,5 +2260,8 @@
         private Label label47;
         private ComboBox cbVehicle;
         private Label lblCname;
+        private Button btnCancel;
+        private Label label50;
+        private Label lblSlot;
     }
 }

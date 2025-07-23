@@ -151,9 +151,9 @@
             label5.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label5.Location = new Point(195, 367);
             label5.Name = "label5";
-            label5.Size = new Size(166, 25);
+            label5.Size = new Size(171, 25);
             label5.TabIndex = 18;
-            label5.Text = "Rented Client List";
+            label5.Text = "Scheduled Vehicle";
             // 
             // cbTime
             // 
