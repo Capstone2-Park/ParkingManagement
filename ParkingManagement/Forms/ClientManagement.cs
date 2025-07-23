@@ -64,7 +64,7 @@ namespace ParkingManagement
             btnRemoveVehicle.Enabled = true;
             dgvInformation.Enabled = true;
 
-            btnNext.Enabled = false; // Disable on load
+    
         }
 
         // --- Camera Initialization ---
@@ -449,24 +449,31 @@ namespace ParkingManagement
 
                 await ClearForm(true);
 
-                btnNext.Enabled = true; // Enable only after successful save
+                
             }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show("Error saving data to database: " + ex.InnerException?.Message ?? ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnNext.Enabled = false;
+               
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnNext.Enabled = false;
+              
+            }
+            // After successful save:
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkSlotForm = new ParkingSlot();
+                homePage.ShowFormInPanel(parkSlotForm);
             }
         }
 
         private async void btnCancel_Click(object sender, EventArgs e)
         {
             await ClearForm(true);
-            btnNext.Enabled = false; // Disable after cancel/reset
+           
         }
 
         // Added a parameter 'resetDGV' to control if dgvInformation should reset to empty or stay in "all data" view
@@ -604,7 +611,6 @@ namespace ParkingManagement
         private async Task UpdateNextButtonStateAsync()
         {
             int clientCount = await _context.Clients.CountAsync();
-            btnNext.Enabled = clientCount > 0;
         }
     }
 }

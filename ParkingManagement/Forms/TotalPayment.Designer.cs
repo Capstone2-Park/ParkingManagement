@@ -28,21 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnSelect = new Button();
             label1 = new Label();
-            cbClient = new ComboBox();
             rtbReceipt = new RichTextBox();
             SuspendLayout();
-            // 
-            // btnSelect
-            // 
-            btnSelect.Location = new Point(162, 58);
-            btnSelect.Name = "btnSelect";
-            btnSelect.Size = new Size(98, 35);
-            btnSelect.TabIndex = 1;
-            btnSelect.Text = "Select Client";
-            btnSelect.UseVisualStyleBackColor = true;
-            btnSelect.Click += btnSelect_Click;
             // 
             // label1
             // 
@@ -53,14 +41,6 @@
             label1.TabIndex = 2;
             label1.Text = "Client Info";
             label1.Click += label1_Click;
-            // 
-            // cbClient
-            // 
-            cbClient.FormattingEnabled = true;
-            cbClient.Location = new Point(162, 29);
-            cbClient.Name = "cbClient";
-            cbClient.Size = new Size(130, 23);
-            cbClient.TabIndex = 3;
             // 
             // rtbReceipt
             // 
@@ -77,9 +57,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(828, 726);
             Controls.Add(rtbReceipt);
-            Controls.Add(cbClient);
             Controls.Add(label1);
-            Controls.Add(btnSelect);
             Name = "TotalPayment";
             Text = "TotalPayment";
             ResumeLayout(false);
@@ -89,9 +67,7 @@
         #endregion
 
         private ListBox lstClientInfo;
-        private Button btnSelect;
         private Label label1;
-        private ComboBox cbClient;
         private RichTextBox rtbReceipt;
         private Label label2;
     }
