@@ -96,14 +96,15 @@ namespace ParkingManagement.Forms
 
         private void InitializePanelClickEvents()
         {
-            // Recursively search all controls to find panels
             foreach (Control control in GetAllControls(this))
             {
                 if (control is Panel panel && panel.Name.StartsWith("pnl"))
                 {
                     panel.Enabled = true; // Ensure panel is enabled
+                    panel.BringToFront(); // Ensure panel is not overlapped
+                    panel.Click -= Panel_Click; // Prevent duplicate handlers
                     panel.Click += Panel_Click;
-                    Console.WriteLine($"Attached click event to panel: {panel.Name} at {DateTime.Now}"); // Debug log with timestamp
+                    Console.WriteLine($"Attached click event to panel: {panel.Name} at {DateTime.Now}");
                 }
             }
         }
@@ -124,6 +125,8 @@ namespace ParkingManagement.Forms
         {
             if (sender is Panel panel)
             {
+                Console.WriteLine($"Panel_Click triggered for: {panel.Name} at {DateTime.Now}");
+
                 // Check if a vehicle is selected
                 var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
                 if (selectedVehicle == null)
@@ -143,7 +146,7 @@ namespace ParkingManagement.Forms
                     }
                 }
 
-                string slotNumber = panel.Name.Replace("pnl", ""); // Extract slot number (e.g., "V1", "M2")
+                string slotNumber = panel.Name.Replace("pnl", "");
                 var slot = slots.FirstOrDefault(s => s.SlotNumber == slotNumber);
 
                 if (slot == null || slot.SlotStatus == "occupied")
@@ -161,21 +164,28 @@ namespace ParkingManagement.Forms
                     return;
                 }
 
-                selectedSlot = slotNumber; // Set the selected slot
-                btnAdd.Enabled = true; // Enable btnAdd when a slot is selected
-
-                // Highlight the selected panel by changing to red immediately
+                // Reset other panels
                 foreach (Control control in GetAllControls(this))
                 {
-                    if (control is Panel p && p != panel)
+                    if (control is Panel p && p != panel && p.Name.StartsWith("pnl"))
                     {
-                        p.BorderStyle = BorderStyle.None; // Reset other panels
+                        string otherSlotNumber = p.Name.Replace("pnl", "");
+                        var otherSlot = slots.FirstOrDefault(s => s.SlotNumber == otherSlotNumber);
+                        p.BorderStyle = BorderStyle.None;
+                        p.BackColor = (otherSlot?.SlotStatus == "occupied") ? Color.Red : Color.Green;
                     }
                 }
-                panel.BorderStyle = BorderStyle.FixedSingle; // Highlight with border
-                panel.BackColor = Color.Red; // Change to red immediately
 
-                Console.WriteLine($"Panel clicked: {panel.Name}, Selected Slot: {selectedSlot} at {DateTime.Now}"); // Debug log
+                // Update the clicked panel immediately
+                panel.BorderStyle = BorderStyle.FixedSingle;
+                panel.BackColor = Color.Red;
+                panel.Refresh(); // Force immediate UI update
+
+                selectedSlot = slotNumber; // Set the selected slot
+                btnAdd.Enabled = true; // Enable btnAdd
+
+                Console.WriteLine($"Panel clicked: {panel.Name}, Selected Slot: {selectedSlot}, Color: {panel.BackColor} at {DateTime.Now}");
+                this.Refresh(); // Force form refresh to ensure UI updates
             }
         }
 
@@ -183,13 +193,15 @@ namespace ParkingManagement.Forms
         {
             foreach (var slot in slots)
             {
-                // Panel names are assumed to be "pnl" + SlotNumber (e.g., pnlV1, pnlM1)
                 var panel = this.Controls.Find("pnl" + slot.SlotNumber, true).FirstOrDefault() as Panel;
                 if (panel != null)
                 {
                     panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    panel.BorderStyle = BorderStyle.None; // Reset border
+                    panel.Refresh(); // Force immediate UI update
                 }
             }
+            this.Refresh(); // Force form refresh
         }
 
        
@@ -200,7 +212,7 @@ namespace ParkingManagement.Forms
             if (selectedVehicle == null || string.IsNullOrEmpty(selectedSlot))
             {
                 MessageBox.Show("Please select a vehicle and slot.");
-                btnAdd.Enabled = false; // Reset if invalid
+                btnAdd.Enabled = false;
                 return;
             }
 
@@ -211,14 +223,14 @@ namespace ParkingManagement.Forms
                 if (slot == null)
                 {
                     MessageBox.Show("Slot not found.");
-                    btnAdd.Enabled = false; // Reset if invalid
+                    btnAdd.Enabled = false;
                     return;
                 }
 
                 if (slot.SlotStatus == "occupied")
                 {
                     MessageBox.Show("Slot is already occupied.");
-                    btnAdd.Enabled = false; // Reset if invalid
+                    btnAdd.Enabled = false;
                     return;
                 }
 
@@ -255,38 +267,32 @@ namespace ParkingManagement.Forms
                 return;
             }
 
-            // Check if the selected vehicle is already parked
             using (var db = new ParkingDbContext())
             {
                 var isVehicleParked = db.Parkingslot.Any(s => s.VehicleID == selectedVehicle.VehicleID && s.SlotStatus == "occupied");
                 if (isVehicleParked)
                 {
                     MessageBox.Show($"Vehicle {selectedVehicle.PlateNumber} is already parked in a slot.");
-                    return; // Do not modify slot colors
+                    return;
                 }
             }
 
             var vehicleType = selectedVehicle.VehicleType?.Trim();
 
-            // Enable only the relevant panels based on vehicle type
             foreach (Control control in GetAllControls(this))
             {
                 if (control is Panel panel && panel.Name.StartsWith("pnl"))
                 {
                     string slotNumber = panel.Name.Replace("pnl", "");
-                    bool isRelevant = (vehicleType == "2-Wheels" && slotNumber.StartsWith("M")) ||
-                                     (vehicleType == "4-Wheels" && slotNumber.StartsWith("V"));
-                    panel.Enabled = isRelevant && slots.Any(s => s.SlotNumber == slotNumber && s.SlotStatus == "available");
-                    if (panel.Enabled)
-                    {
-                        panel.BackColor = Color.Green; // Reset to green for available slots
-                    }
-                    else
-                    {
-                        panel.BackColor = slots.Any(s => s.SlotNumber == slotNumber && s.SlotStatus == "occupied") ? Color.Red : Color.Green; // Retain red for occupied, green for others
-                    }
+                    var slot = slots.FirstOrDefault(s => s.SlotNumber == slotNumber);
+                    bool isCompatible = (vehicleType == "2-Wheels" && slotNumber.StartsWith("M")) ||
+                                       (vehicleType == "4-Wheels" && slotNumber.StartsWith("V"));
+                    panel.Enabled = isCompatible && slot?.SlotStatus == "available";
+                    panel.BackColor = panel.Enabled ? Color.Green : (slot?.SlotStatus == "occupied" ? Color.Red : Color.Green);
+                    Console.WriteLine($"Panel: {panel.Name}, Enabled: {panel.Enabled}, Color: {panel.BackColor} at {DateTime.Now}");
                 }
             }
+            this.Refresh(); // Force UI update
         }
 
         private void btnNext_Click(object sender, EventArgs e)

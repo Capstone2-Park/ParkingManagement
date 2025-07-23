@@ -1238,7 +1238,7 @@
             // label49
             // 
             label49.AutoSize = true;
-            label49.Location = new Point(858, 206);
+            label49.Location = new Point(858, 189);
             label49.Name = "label49";
             label49.Size = new Size(78, 15);
             label49.TabIndex = 7;
@@ -1246,7 +1246,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(855, 493);
+            btnAdd.Location = new Point(858, 407);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(134, 36);
             btnAdd.TabIndex = 1;
@@ -1256,14 +1256,14 @@
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(856, 224);
+            cbVehicle.Location = new Point(856, 207);
             cbVehicle.Name = "cbVehicle";
             cbVehicle.Size = new Size(133, 23);
             cbVehicle.TabIndex = 8;
             // 
             // btnSelect
             // 
-            btnSelect.Location = new Point(854, 269);
+            btnSelect.Location = new Point(854, 252);
             btnSelect.Name = "btnSelect";
             btnSelect.Size = new Size(134, 36);
             btnSelect.TabIndex = 14;
@@ -1275,7 +1275,7 @@
             // 
             label52.AutoSize = true;
             label52.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label52.Location = new Point(885, 104);
+            label52.Location = new Point(885, 144);
             label52.Name = "label52";
             label52.Size = new Size(65, 17);
             label52.TabIndex = 15;
@@ -1285,7 +1285,7 @@
             // 
             label53.AutoSize = true;
             label53.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label53.Location = new Point(885, 66);
+            label53.Location = new Point(885, 106);
             label53.Name = "label53";
             label53.Size = new Size(49, 17);
             label53.TabIndex = 16;
@@ -1294,7 +1294,7 @@
             // pictureBox1
             // 
             pictureBox1.BackColor = Color.Green;
-            pictureBox1.Location = new Point(854, 63);
+            pictureBox1.Location = new Point(854, 103);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(25, 25);
             pictureBox1.TabIndex = 17;
@@ -1303,7 +1303,7 @@
             // pictureBox2
             // 
             pictureBox2.BackColor = Color.Red;
-            pictureBox2.Location = new Point(854, 101);
+            pictureBox2.Location = new Point(854, 141);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(25, 25);
             pictureBox2.TabIndex = 18;
@@ -1311,7 +1311,7 @@
             // 
             // btnNext
             // 
-            btnNext.Location = new Point(857, 568);
+            btnNext.Location = new Point(860, 482);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(134, 36);
             btnNext.TabIndex = 19;
@@ -1321,7 +1321,7 @@
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(858, 622);
+            btnBack.Location = new Point(861, 536);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(134, 36);
             btnBack.TabIndex = 20;
