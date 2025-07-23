@@ -21,14 +21,18 @@ namespace ParkingManagement.Forms
         // Add this property to hold the current vehicle being parked
         private Vehicle currentVehicle;
 
+        // New property to keep track of the currently selected slot
+        private Parkingslot currentSlot;
+
         public ParkingSlot()
         {
             InitializeComponent();
 
             using (var db = new ParkingDbContext())
             {
-                // Get the latest client (by ClientID descending)
+                // Defensive: Only select clients with non-null ClientID
                 currentClient = db.Clients
+                    .Where(c => c.ClientID != null)
                     .OrderByDescending(c => c.ClientID)
                     .Include(c => c.VehicleList)
                     .FirstOrDefault();
@@ -36,7 +40,7 @@ namespace ParkingManagement.Forms
                 if (currentClient != null)
                 {
                     vehicles = db.Vehicles
-                        .Where(v => v.ClientID == currentClient.ClientID)
+                        .Where(v => v.ClientID == currentClient.ClientID && v.VehicleID != null)
                         .ToList();
                 }
                 else
@@ -67,32 +71,38 @@ namespace ParkingManagement.Forms
 
             using (var db = new ParkingDbContext())
             {
-                clients = db.Clients.Include(c => c.VehicleList).ToList();
+                clients = db.Clients
+                    .Where(c => c.ClientID != null)
+                    .Include(c => c.VehicleList)
+                    .ToList();
                 slots = db.Parkingslot.ToList();
             }
 
-            // Display client name
-            lblCname.Text = currentClient.Name;
+            lblCname.Text = currentClient.Name ?? "(No Name)";
 
-            // Populate cbVehicle with all vehicles, but do not select any
             cbVehicle.DataSource = null;
-            cbVehicle.DataSource = vehicles;
+            cbVehicle.DataSource = vehicles ?? new List<Vehicle>();
             cbVehicle.DisplayMember = "PlateNumber";
             cbVehicle.ValueMember = "VehicleID";
-            cbVehicle.SelectedIndex = -1; // No selection
+            cbVehicle.SelectedIndex = -1;
 
-            // Attach click event to all slot panels
             foreach (var slot in slots)
             {
                 var panel = this.Controls.Find("pnl" + slot.SlotNumber, true).FirstOrDefault() as Panel;
                 if (panel != null)
                 {
-                    panel.Click -= SlotPanel_Click; // Avoid duplicate handlers
+                    panel.Click -= SlotPanel_Click;
                     panel.Click += SlotPanel_Click;
+
+                    // Add hover events
+                    panel.MouseEnter -= SlotPanel_MouseEnter;
+                    panel.MouseEnter += SlotPanel_MouseEnter;
+                    panel.MouseLeave -= SlotPanel_MouseLeave;
+                    panel.MouseLeave += SlotPanel_MouseLeave;
                 }
             }
 
-            currentVehicle = null; // No vehicle selected by default
+            currentVehicle = null;
 
             UpdateSlotPanelColors();
             UpdateSlotStatusLabels();
@@ -346,6 +356,75 @@ namespace ParkingManagement.Forms
 
         }
 
+        private async void btnCancel_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Do you want to cancel the progress?",
+                "Cancel Progress",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Question);
+
+            if (result != DialogResult.OK)
+                return;
+
+            using (var db = new ParkingDbContext())
+            {
+                // Get the latest client (by highest ClientID)
+                var latestClient = db.Clients
+                    .OrderByDescending(c => c.ClientID)
+                    .Include(c => c.VehicleList)
+                    .FirstOrDefault();
+
+                if (latestClient != null)
+                {
+                    // Get all vehicles for this client
+                    var vehicles = db.Vehicles
+                        .Where(v => v.ClientID == latestClient.ClientID)
+                        .ToList();
+
+                    var vehicleIds = vehicles.Select(v => v.VehicleID).ToList();
+
+                    // For each slot where one of the client's vehicles is parked, reset statuses
+                    var slotsToUpdate = db.Parkingslot
+                        .Where(s => vehicleIds.Contains(s.VehicleID))
+                        .ToList();
+
+                    foreach (var slot in slotsToUpdate)
+                    {
+                        slot.VehicleStatus = "Not Parked";
+                        slot.SlotStatus = "Available";
+                        // Do NOT delete SlotNumber
+                        slot.VehicleID = null;
+                        slot.ClientID = null;
+                        db.Parkingslot.Update(slot);
+                    }
+
+                    // Remove vehicles
+                    if (vehicles.Any())
+                    {
+                        db.Vehicles.RemoveRange(vehicles);
+                    }
+
+                    // Remove client
+                    db.Clients.Remove(latestClient);
+
+                    await db.SaveChangesAsync();
+                }
+            }
+
+            // Navigate to ClientManagement
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var clientManagementForm = new ClientManagement();
+                homePage.ShowFormInPanel(clientManagementForm);
+            }
+            else
+            {
+                this.Close();
+            }
+        }
+
         //private async void btnAdd_Click(object sender, EventArgs e)
         //{
         //    // Determine which slot ComboBox is enabled and get the selected slot
@@ -407,5 +486,34 @@ namespace ParkingManagement.Forms
 
         //    btnNext.Enabled = true; // Enable Next only after successful add
         //}
+
+        private void SlotPanel_MouseEnter(object sender, EventArgs e)
+        {
+            var panel = sender as Panel;
+            if (panel != null)
+            {
+                // Set to semi-transparent white
+                panel.BackColor = Color.FromArgb(128, Color.White);
+            }
+        }
+
+        private void SlotPanel_MouseLeave(object sender, EventArgs e)
+        {
+            var panel = sender as Panel;
+            if (panel != null)
+            {
+                // Restore color based on slot status
+                string slotNumber = panel.Name.Replace("pnl", "");
+                var slot = slots.FirstOrDefault(s => s.SlotNumber == slotNumber);
+                if (slot != null)
+                {
+                    panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                }
+                else
+                {
+                    panel.BackColor = Color.Green;
+                }
+            }
+        }
     }
 }
