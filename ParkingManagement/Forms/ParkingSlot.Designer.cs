@@ -1256,9 +1256,9 @@
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(856, 207);
+            cbVehicle.Location = new Point(825, 207);
             cbVehicle.Name = "cbVehicle";
-            cbVehicle.Size = new Size(133, 23);
+            cbVehicle.Size = new Size(200, 23);
             cbVehicle.TabIndex = 8;
             // 
             // btnSelect

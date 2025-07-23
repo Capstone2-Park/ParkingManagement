@@ -72,13 +72,21 @@ namespace ParkingManagement.Forms
                 slots = db.Parkingslot.ToList();
             }
 
-            // Bind filtered vehicle list for the current client
-            cbVehicle.DataSource = vehicles;
-            cbVehicle.DisplayMember = "PlateNumber";
-            cbVehicle.ValueMember = "VehicleID";
-            cbVehicle.Enabled = vehicles.Any();
+            // Create a list for ComboBox binding with formatted display text
+            var vehicleDisplayList = vehicles.Select(v => new
+            {
+                v.VehicleID,
+                DisplayText = $"{v.Brand} - {v.PlateNumber}",
+                v.VehicleType
+            }).ToList();
 
-            if (vehicles.Any())
+            // Bind filtered vehicle list for the current client
+            cbVehicle.DataSource = vehicleDisplayList;
+            cbVehicle.DisplayMember = "DisplayText";
+            cbVehicle.ValueMember = "VehicleID";
+            cbVehicle.Enabled = vehicleDisplayList.Any();
+
+            if (vehicleDisplayList.Any())
             {
                 cbVehicle.SelectedIndex = 0;
             }
@@ -128,20 +136,28 @@ namespace ParkingManagement.Forms
                 Console.WriteLine($"Panel_Click triggered for: {panel.Name} at {DateTime.Now}");
 
                 // Check if a vehicle is selected
-                var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+                var selectedVehicle = (cbVehicle.SelectedItem as dynamic)?.VehicleID;
                 if (selectedVehicle == null)
                 {
                     MessageBox.Show("Please select a vehicle first.");
                     return;
                 }
 
+                // Get the actual Vehicle object from the vehicles list
+                var vehicle = vehicles.FirstOrDefault(v => v.VehicleID == selectedVehicle);
+                if (vehicle == null)
+                {
+                    MessageBox.Show("Selected vehicle not found.");
+                    return;
+                }
+
                 // Check if the selected vehicle is already parked
                 using (var db = new ParkingDbContext())
                 {
-                    var isVehicleParked = db.Parkingslot.Any(s => s.VehicleID == selectedVehicle.VehicleID && s.SlotStatus == "occupied");
+                    var isVehicleParked = db.Parkingslot.Any(s => s.VehicleID == vehicle.VehicleID && s.SlotStatus == "occupied");
                     if (isVehicleParked)
                     {
-                        MessageBox.Show($"Vehicle {selectedVehicle.PlateNumber} is already parked in a slot.");
+                        MessageBox.Show($"Vehicle {vehicle.PlateNumber} is already parked in a slot.");
                         return;
                     }
                 }
@@ -156,8 +172,8 @@ namespace ParkingManagement.Forms
                 }
 
                 // Check if the slot is compatible with the vehicle type
-                bool isCompatible = (selectedVehicle.VehicleType?.Trim() == "2-Wheels" && slotNumber.StartsWith("M")) ||
-                                   (selectedVehicle.VehicleType?.Trim() == "4-Wheels" && slotNumber.StartsWith("V"));
+                bool isCompatible = (vehicle.VehicleType?.Trim() == "2-Wheels" && slotNumber.StartsWith("M")) ||
+                                   (vehicle.VehicleType?.Trim() == "4-Wheels" && slotNumber.StartsWith("V"));
                 if (!isCompatible)
                 {
                     MessageBox.Show($"Slot {slotNumber} is not compatible with the selected vehicle type.");
@@ -232,10 +248,18 @@ namespace ParkingManagement.Forms
      
         private void btnPark_Click(object sender, EventArgs e)
         {
-            var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
-            if (selectedVehicle == null || string.IsNullOrEmpty(selectedSlot))
+            var selectedVehicleId = (cbVehicle.SelectedItem as dynamic)?.VehicleID;
+            if (selectedVehicleId == null || string.IsNullOrEmpty(selectedSlot))
             {
                 MessageBox.Show("Please select a vehicle and slot.");
+                btnAdd.Enabled = false;
+                return;
+            }
+
+            var selectedVehicle = vehicles.FirstOrDefault(v => v.VehicleID == selectedVehicleId);
+            if (selectedVehicle == null)
+            {
+                MessageBox.Show("Selected vehicle not found.");
                 btnAdd.Enabled = false;
                 return;
             }
@@ -284,10 +308,17 @@ namespace ParkingManagement.Forms
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
-            if (selectedVehicle == null)
+            var selectedVehicleId = (cbVehicle.SelectedItem as dynamic)?.VehicleID;
+            if (selectedVehicleId == null)
             {
                 MessageBox.Show("Please select a vehicle first.");
+                return;
+            }
+
+            var selectedVehicle = vehicles.FirstOrDefault(v => v.VehicleID == selectedVehicleId);
+            if (selectedVehicle == null)
+            {
+                MessageBox.Show("Selected vehicle not found.");
                 return;
             }
 
