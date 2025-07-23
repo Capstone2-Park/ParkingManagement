@@ -196,9 +196,33 @@ namespace ParkingManagement.Forms
                 var panel = this.Controls.Find("pnl" + slot.SlotNumber, true).FirstOrDefault() as Panel;
                 if (panel != null)
                 {
+                    // Set panel color based on slot status
                     panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
                     panel.BorderStyle = BorderStyle.None; // Reset border
                     panel.Refresh(); // Force immediate UI update
+
+                    // Find or create a label for the panel
+                    var label = panel.Controls.OfType<Label>().FirstOrDefault(l => l.Name == "lblStatus" + slot.SlotNumber);
+                    if (label == null)
+                    {
+                        label = new Label
+                        {
+                            Name = "lblStatus" + slot.SlotNumber,
+                            Text = slot.SlotStatus == "occupied" ? "Occupied" : "Available",
+                            AutoSize = true,
+                            ForeColor = Color.White,
+                            BackColor = Color.Transparent,
+                            Location = new Point(5, 5), // Position label in top-left corner
+                            Font = new Font("Arial", 10, FontStyle.Bold)
+                        };
+                        panel.Controls.Add(label);
+                        label.BringToFront();
+                    }
+                    else
+                    {
+                        // Update existing label
+                        label.Text = slot.SlotStatus == "occupied" ? "Occupied" : "Available";
+                    }
                 }
             }
             this.Refresh(); // Force form refresh
@@ -255,7 +279,7 @@ namespace ParkingManagement.Forms
             btnAdd.Enabled = false; // Disable btnAdd after parking
 
             MessageBox.Show("Vehicle parked successfully.");
-            UpdateSlotPanelColors(); // Reset colors based on database state
+            UpdateSlotPanelColors(); // Update colors and labels based on database state
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
