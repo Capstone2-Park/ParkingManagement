@@ -221,14 +221,20 @@ namespace ParkingManagement.Forms
             dgvVehicles.DataSource = dt;
         }
 
+        // Update the selection changed event handler
         private void dgvVehicles_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvVehicles.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = dgvVehicles.SelectedRows[0];
-
                 _selectedClient = selectedRow.Cells["ClientObject"].Value as Client;
                 _selectedVehicle = selectedRow.Cells["VehicleObject"].Value as Vehicle;
+
+                // Set lblVSelect to the selected vehicle's PlateNumber
+                if (_selectedVehicle != null)
+                    lblVSelect.Text = _selectedVehicle.PlateNumber;
+                else
+                    lblVSelect.Text = "Vehicle Selection";
             }
             else
             {
@@ -236,6 +242,7 @@ namespace ParkingManagement.Forms
                 _selectedVehicle = null;
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
+                lblVSelect.Text = "Vehicle Selection";
             }
         }
 
@@ -292,17 +299,17 @@ namespace ParkingManagement.Forms
         // Renamed and modified to store values internally, not display on labels
         private async Task<bool> CalculateAndSetRentalDetailsForSave()
         {
-            if (_selectedVehicle == null || cmbDurationType.SelectedItem == null || cbTime.SelectedItem == null)
+            if (_selectedVehicle == null || cmbDurationType.SelectedItem == null || cbTime.SelectedItem == null || dtpTime == null)
             {
                 _calculatedEndDateTime = DateTime.MinValue;
                 _calculatedTotalAmount = 0;
                 return false;
             }
 
-            // Start at midnight, end at selected time
-            DateTime today = DateTime.Today;
-            DateTime startDate = today;
-            DateTime endDate = today.AddHours(cbTime.SelectedIndex + 1);
+            // Use dtpTime for start time, cbTime for hours per day
+            DateTime startDate = dtpTime.Value;
+            int hoursPerDay = cbTime.SelectedIndex + 1;
+            DateTime endDate = startDate.AddHours(hoursPerDay);
 
             string durationType = cmbDurationType.SelectedItem.ToString();
             string vehicleType = _selectedVehicle.VehicleType?.Trim();
@@ -326,7 +333,7 @@ namespace ParkingManagement.Forms
             }
 
             // Calculate the number of hours selected
-            double selectedHours = (endDate - startDate).TotalHours;
+            double selectedHours = hoursPerDay;
             if (selectedHours <= 0) selectedHours = 1; // Minimum 1 hour
 
             // 24 hours is always 100% of the fee, regardless of duration type
@@ -402,8 +409,8 @@ namespace ParkingManagement.Forms
                 _selectedClient,
                 _selectedVehicle,
                 cmbDurationType.SelectedItem.ToString(),
-                DateTime.Today,
-                DateTime.Today.AddHours(cbTime.SelectedIndex + 1),
+                dtpTime.Value, // Use selected time as start
+                dtpTime.Value.AddHours(cbTime.SelectedIndex + 1), // End time
                 _calculatedTotalAmount
             ));
 
@@ -411,6 +418,9 @@ namespace ParkingManagement.Forms
             dgvVehicles.ClearSelection();
             _selectedClient = null;
             _selectedVehicle = null;
+
+            // Reset lblVSelect after scheduling
+            lblVSelect.Text = "Vehicle Selection";
         }
 
         private async void btnCancel_Click(object sender, EventArgs e)
@@ -484,6 +494,7 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("HoursPerDay"); // <-- New column
             dt.Columns.Add("TimeStart");
             dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
@@ -505,11 +516,15 @@ namespace ParkingManagement.Forms
 
             foreach (var sched in saved)
             {
+                // For saved schedules, you may not have HoursPerDay, so you can calculate it:
+                int hoursPerDay = (int)(sched.TimeEnd - sched.TimeStart).TotalHours;
+
                 dt.Rows.Add(
                     sched.ClientID,
                     sched.ClientName,
                     sched.Vehicle,
                     sched.DurationType,
+                    hoursPerDay,
                     sched.TimeStart.ToString("yyyy-MM-dd HH:mm"),
                     sched.TimeEnd.ToString("yyyy-MM-dd HH:mm"),
                     sched.TotalAmount
@@ -527,11 +542,15 @@ namespace ParkingManagement.Forms
                 );
                 if (!alreadySaved)
                 {
+                    // For unsaved scheduled vehicles:
+                    int hoursPerDay = (int)(sched.endDateTime - sched.startDate).TotalHours;
+
                     dt.Rows.Add(
                         sched.client.ClientID,
                         sched.client.Name,
                         $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
                         sched.durationType,
+                        hoursPerDay,
                         sched.startDate.ToString("yyyy-MM-dd HH:mm"),
                         sched.endDateTime.ToString("yyyy-MM-dd HH:mm"),
                         sched.totalAmount
@@ -563,6 +582,7 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("HoursPerDay"); // <-- New column
             dt.Columns.Add("TimeStart");
             dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
@@ -628,10 +648,10 @@ namespace ParkingManagement.Forms
             cbTime.Items.Clear();
             for (int hour = 1; hour <= 23; hour++)
             {
-                string timeLabel = DateTime.Today.AddHours(hour).ToString("HH:mm");
-                cbTime.Items.Add(timeLabel);
+                string timeLabel = DateTime.Today.AddHours(hour).ToString("HH");
+                cbTime.Items.Add(timeLabel + "-hour/s");
             }
-            cbTime.Items.Add("24:00"); // Explicitly add "24:00" as the last item
+            cbTime.Items.Add("24-hour/s"); // Explicitly add "24hours" as the last item
             cbTime.SelectedIndex = 0; // Default to first time slot
         }
         private async Task RefreshScheduledListViewAsync()
@@ -641,6 +661,7 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("HoursPerDay"); // <-- New column
             dt.Columns.Add("TimeStart");
             dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
@@ -662,11 +683,15 @@ namespace ParkingManagement.Forms
 
             foreach (var sched in saved)
             {
+                // For saved schedules, you may not have HoursPerDay, so you can calculate it:
+                int hoursPerDay = (int)(sched.TimeEnd - sched.TimeStart).TotalHours;
+
                 dt.Rows.Add(
                     sched.ClientID,
                     sched.ClientName,
                     sched.Vehicle,
                     sched.DurationType,
+                    hoursPerDay,
                     sched.TimeStart.ToString("yyyy-MM-dd HH:mm"),
                     sched.TimeEnd.ToString("yyyy-MM-dd HH:mm"),
                     sched.TotalAmount
@@ -684,11 +709,15 @@ namespace ParkingManagement.Forms
                 );
                 if (!alreadySaved)
                 {
+                    // For unsaved scheduled vehicles:
+                    int hoursPerDay = (int)(sched.endDateTime - sched.startDate).TotalHours;
+
                     dt.Rows.Add(
                         sched.client.ClientID,
                         sched.client.Name,
                         $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
                         sched.durationType,
+                        hoursPerDay,
                         sched.startDate.ToString("yyyy-MM-dd HH:mm"),
                         sched.endDateTime.ToString("yyyy-MM-dd HH:mm"),
                         sched.totalAmount

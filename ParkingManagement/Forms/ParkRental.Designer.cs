@@ -41,7 +41,9 @@
             dgvList = new DataGridView();
             label5 = new Label();
             cbTime = new ComboBox();
-            label4 = new Label();
+            lblVSelect = new Label();
+            label6 = new Label();
+            dtpTime = new DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvList).BeginInit();
             SuspendLayout();
@@ -57,7 +59,7 @@
             // 
             // dtpDateStart
             // 
-            dtpDateStart.Location = new Point(292, 292);
+            dtpDateStart.Location = new Point(292, 297);
             dtpDateStart.Name = "dtpDateStart";
             dtpDateStart.Size = new Size(200, 23);
             dtpDateStart.TabIndex = 3;
@@ -65,7 +67,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(198, 298);
+            label2.Location = new Point(220, 297);
             label2.Name = "label2";
             label2.Size = new Size(58, 15);
             label2.TabIndex = 5;
@@ -82,7 +84,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(194, 211);
+            label3.Location = new Point(198, 206);
             label3.Name = "label3";
             label3.Size = new Size(80, 15);
             label3.TabIndex = 7;
@@ -100,7 +102,7 @@
             // 
             // btnSetSched
             // 
-            btnSetSched.Location = new Point(194, 329);
+            btnSetSched.Location = new Point(194, 324);
             btnSetSched.Name = "btnSetSched";
             btnSetSched.Size = new Size(92, 23);
             btnSetSched.TabIndex = 9;
@@ -131,11 +133,11 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(194, 256);
+            label1.Location = new Point(218, 267);
             label1.Name = "label1";
-            label1.Size = new Size(67, 15);
+            label1.Size = new Size(60, 15);
             label1.TabIndex = 14;
-            label1.Text = "Select Time";
+            label1.Text = "Time Start";
             // 
             // dgvList
             // 
@@ -158,27 +160,47 @@
             // cbTime
             // 
             cbTime.FormattingEnabled = true;
-            cbTime.Location = new Point(292, 253);
+            cbTime.Location = new Point(292, 235);
             cbTime.Name = "cbTime";
-            cbTime.Size = new Size(129, 23);
+            cbTime.Size = new Size(121, 23);
             cbTime.TabIndex = 21;
             // 
-            // label4
+            // lblVSelect
             // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(626, 158);
-            label4.Name = "label4";
-            label4.Size = new Size(160, 25);
-            label4.TabIndex = 22;
-            label4.Text = "Vehicle Selection";
+            lblVSelect.AutoSize = true;
+            lblVSelect.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblVSelect.Location = new Point(626, 158);
+            lblVSelect.Name = "lblVSelect";
+            lblVSelect.Size = new Size(160, 25);
+            lblVSelect.TabIndex = 22;
+            lblVSelect.Text = "Vehicle Selection";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(196, 235);
+            label6.Name = "label6";
+            label6.Size = new Size(82, 15);
+            label6.TabIndex = 23;
+            label6.Text = "Hours Per Day";
+            // 
+            // dtpTime
+            // 
+            dtpTime.Format = DateTimePickerFormat.Time;
+            dtpTime.Location = new Point(292, 267);
+            dtpTime.Name = "dtpTime";
+            dtpTime.ShowUpDown = true;
+            dtpTime.Size = new Size(121, 23);
+            dtpTime.TabIndex = 24;
             // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1248, 749);
-            Controls.Add(label4);
+            Controls.Add(dtpTime);
+            Controls.Add(label6);
+            Controls.Add(lblVSelect);
             Controls.Add(cbTime);
             Controls.Add(label5);
             Controls.Add(dgvList);
@@ -193,7 +215,6 @@
             Controls.Add(dtpDateStart);
             Controls.Add(dgvVehicles);
             Name = "ParkRental";
-            Text = "Fee";
             FormClosing += ParkRental_FormClosing;
             Load += ParkRental_Load_1;
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).EndInit();
@@ -217,6 +238,8 @@
         private DataGridView dgvList;
         private Label label5;
         private ComboBox cbTime;
-        private Label label4;
+        private Label lblVSelect;
+        private Label label6;
+        private DateTimePicker dtpTime;
     }
 }
