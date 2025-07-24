@@ -30,12 +30,13 @@
         {
             label1 = new Label();
             rtbReceipt = new RichTextBox();
+            btnReturn = new Button();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(162, 112);
+            label1.Location = new Point(162, 38);
             label1.Name = "label1";
             label1.Size = new Size(62, 15);
             label1.TabIndex = 2;
@@ -45,17 +46,28 @@
             // rtbReceipt
             // 
             rtbReceipt.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rtbReceipt.Location = new Point(162, 142);
+            rtbReceipt.Location = new Point(162, 68);
             rtbReceipt.Name = "rtbReceipt";
             rtbReceipt.Size = new Size(351, 541);
             rtbReceipt.TabIndex = 4;
             rtbReceipt.Text = "";
+            // 
+            // btnReturn
+            // 
+            btnReturn.Location = new Point(537, 525);
+            btnReturn.Name = "btnReturn";
+            btnReturn.Size = new Size(119, 38);
+            btnReturn.TabIndex = 5;
+            btnReturn.Text = "Return";
+            btnReturn.UseVisualStyleBackColor = true;
+            btnReturn.Click += btnReturn_Click;
             // 
             // TotalPayment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(828, 726);
+            Controls.Add(btnReturn);
             Controls.Add(rtbReceipt);
             Controls.Add(label1);
             Name = "TotalPayment";
@@ -70,5 +82,6 @@
         private Label label1;
         private RichTextBox rtbReceipt;
         private Label label2;
+        private Button btnReturn;
     }
 }
