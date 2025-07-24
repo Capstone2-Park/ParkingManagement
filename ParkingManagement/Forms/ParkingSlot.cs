@@ -375,7 +375,7 @@ namespace ParkingManagement.Forms
         private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedVehicleId = (cbVehicle.SelectedItem as dynamic)?.VehicleID;
-            btnSelect.Enabled = selectedVehicleId != null; // Enable btnSelect only if a valid vehicle is selected
+            btnSelect.Enabled = selectedVehicleId != null; 
         }
 
         private void btnNext_Click(object sender, EventArgs e)
