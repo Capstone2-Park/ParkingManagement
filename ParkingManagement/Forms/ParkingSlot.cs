@@ -123,6 +123,9 @@ namespace ParkingManagement.Forms
 
             currentVehicle = selectedVehicle;
 
+            // Restrict slot panels based on vehicle type
+            SetSlotPanelRestrictions(currentVehicle.VehicleType?.Trim() ?? "");
+
             MessageBox.Show($"Vehicle {currentVehicle.PlateNumber} selected. Now click a slot to park.", "Vehicle Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -202,6 +205,10 @@ namespace ParkingManagement.Forms
             cbVehicle.DisplayMember = "PlateNumber";
             cbVehicle.ValueMember = "VehicleID";
             cbVehicle.SelectedIndex = -1;
+
+            // Restore all slot panels to normal state
+            RestoreAllSlotPanels();
+
             currentVehicle = null;
 
             // If all vehicles are parked, navigate to ParkRental
@@ -512,6 +519,111 @@ namespace ParkingManagement.Forms
                 else
                 {
                     panel.BackColor = Color.Green;
+                }
+            }
+        }
+
+        private void pnlV6_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void lblSlot_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void SetSlotPanelRestrictions(string vehicleType)
+        {
+            // 2-Wheels: disable V slots, 4-Wheels: disable M slots
+            for (int i = 1; i <= 24; i++)
+            {
+                string vPanelName = $"pnlV{i}";
+                string mPanelName = $"pnlM{i}";
+
+                var vPanel = this.Controls.Find(vPanelName, true).FirstOrDefault() as Panel;
+                var mPanel = this.Controls.Find(mPanelName, true).FirstOrDefault() as Panel;
+
+                if (vehicleType.Equals("2-Wheels", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (vPanel != null)
+                    {
+                        vPanel.Enabled = false;
+                        vPanel.BackColor = Color.Gray;
+                    }
+                    if (mPanel != null)
+                    {
+                        mPanel.Enabled = true;
+                        // Restore color based on slot status
+                        var slot = slots.FirstOrDefault(s => s.SlotNumber == $"M{i}");
+                        if (slot != null)
+                            mPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    }
+                }
+                else if (vehicleType.Equals("4-Wheels", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (mPanel != null)
+                    {
+                        mPanel.Enabled = false;
+                        mPanel.BackColor = Color.Gray;
+                    }
+                    if (vPanel != null)
+                    {
+                        vPanel.Enabled = true;
+                        var slot = slots.FirstOrDefault(s => s.SlotNumber == $"V{i}");
+                        if (slot != null)
+                            vPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    }
+                }
+                else
+                {
+                    // If vehicle type is unknown, enable all panels
+                    if (vPanel != null)
+                    {
+                        vPanel.Enabled = true;
+                        var slot = slots.FirstOrDefault(s => s.SlotNumber == $"V{i}");
+                        if (slot != null)
+                            vPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    }
+                    if (mPanel != null)
+                    {
+                        mPanel.Enabled = true;
+                        var slot = slots.FirstOrDefault(s => s.SlotNumber == $"M{i}");
+                        if (slot != null)
+                            mPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    }
+                }
+            }
+        }
+
+        private void RestoreAllSlotPanels()
+        {
+            for (int i = 1; i <= 24; i++)
+            {
+                string vPanelName = $"pnlV{i}";
+                string mPanelName = $"pnlM{i}";
+
+                var vPanel = this.Controls.Find(vPanelName, true).FirstOrDefault() as Panel;
+                var mPanel = this.Controls.Find(mPanelName, true).FirstOrDefault() as Panel;
+
+                if (vPanel != null)
+                {
+                    vPanel.Enabled = true;
+                    var slot = slots.FirstOrDefault(s => s.SlotNumber == $"V{i}");
+                    if (slot != null)
+                        vPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                }
+                if (mPanel != null)
+                {
+                    mPanel.Enabled = true;
+                    var slot = slots.FirstOrDefault(s => s.SlotNumber == $"M{i}");
+                    if (slot != null)
+                        mPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
                 }
             }
         }
