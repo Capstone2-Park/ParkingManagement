@@ -115,5 +115,15 @@ namespace ParkingManagement.Forms
         {
             // Empty event handler
         }
+
+        private void btnReturn_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkSlotForm = new ParkingSlot();
+                homePage.ShowFormInPanel(parkSlotForm);
+            }
+        }
     }
 }
