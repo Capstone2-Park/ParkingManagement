@@ -24,6 +24,9 @@ namespace ParkingManagement.Forms
         // New property to keep track of the currently selected slot
         private Parkingslot currentSlot;
 
+        // Add this field to your class
+        private bool isInitializing = false;
+
         public ParkingSlot()
         {
             InitializeComponent();
@@ -51,7 +54,7 @@ namespace ParkingManagement.Forms
 
             Load += ParkingSlot_Load;
             cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
-            btnSelect.Click += btnSelect_Click;
+           
         }
 
         public ParkingSlot(Client client)
@@ -61,11 +64,15 @@ namespace ParkingManagement.Forms
             Load += ParkingSlot_Load;
         }
 
+        // In ParkingSlot_Load, use the flag to suppress unwanted events
         private void ParkingSlot_Load(object sender, EventArgs e)
         {
+            isInitializing = true; // Suppress event
+
             if (currentClient == null)
             {
                 MessageBox.Show("Current client is not set.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                isInitializing = false;
                 return;
             }
 
@@ -85,6 +92,7 @@ namespace ParkingManagement.Forms
             cbVehicle.DisplayMember = "PlateNumber";
             cbVehicle.ValueMember = "VehicleID";
             cbVehicle.SelectedIndex = -1;
+            cbVehicle.Text = "Select Vehicle";
 
             foreach (var slot in slots)
             {
@@ -94,7 +102,6 @@ namespace ParkingManagement.Forms
                     panel.Click -= SlotPanel_Click;
                     panel.Click += SlotPanel_Click;
 
-                    // Add hover events
                     panel.MouseEnter -= SlotPanel_MouseEnter;
                     panel.MouseEnter += SlotPanel_MouseEnter;
                     panel.MouseLeave -= SlotPanel_MouseLeave;
@@ -107,6 +114,7 @@ namespace ParkingManagement.Forms
             UpdateSlotPanelColors();
             UpdateSlotStatusLabels();
 
+            isInitializing = false; // Allow event
         }
 
         // The issue arises because there are duplicate event handler methods with the same name and signature.
@@ -249,73 +257,22 @@ namespace ParkingManagement.Forms
             }
         }
 
-        //private void cbName_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    var selectedClient = cbName.SelectedItem as Client;
-        //    if (selectedClient != null)
-        //    {
-        //        cbVehicle.DataSource = selectedClient.VehicleList.ToList();
-        //        cbVehicle.DisplayMember = "PlateNumber";
-        //        cbVehicle.ValueMember = "VehicleID";
-        //        cbVehicle.Enabled = true;
-
-        //        // Always trigger the vehicle selection logic
-        //        if (cbVehicle.Items.Count > 0)
-        //        {
-        //            cbVehicle.SelectedIndex = 0;
-        //            // This will automatically trigger cbVehicle_SelectedIndexChanged
-        //            // If you want to ensure it triggers, you can call it explicitly:
-        //            // cbVehicle_SelectedIndexChanged(cbVehicle, EventArgs.Empty);
-        //        }
-        //        else
-        //        {
-        //            cbSlotV.Enabled = false;
-        //            cbSlotM.Enabled = false;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        cbVehicle.DataSource = null;
-        //        cbVehicle.Enabled = false;
-        //        cbSlotV.Enabled = false;
-        //        cbSlotM.Enabled = false;
-        //    }
-        //}
-
+        // Update cbVehicle_SelectedIndexChanged to check the flag
         private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
-            //if (selectedVehicle == null) return;
+            if (isInitializing) return;
 
-            //var vehicleType = selectedVehicle.VehicleType;
+            var selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+            if (selectedVehicle == null)
+            {
+                currentVehicle = null;
+                RestoreAllSlotPanels();
+                return;
+            }
 
-            //if (vehicleType == "2-wheels")
-            //{
-            //    var availableSlots = slots
-            //        .Where(s => s.SlotNumber.StartsWith("M") && s.SlotStatus == "available")
-            //        .Select(s => s.SlotNumber)
-            //        .ToList();
-
-            //    cbSlotM.DataSource = availableSlots;
-            //    cbSlotM.Enabled = availableSlots.Count > 0;
-            //    cbSlotV.Enabled = false;
-            //}
-            //else if (vehicleType == "4-wheels")
-            //{
-            //    var availableSlots = slots
-            //        .Where(s => s.SlotNumber.StartsWith("V") && s.SlotStatus == "available")
-            //        .Select(s => s.SlotNumber)
-            //        .ToList();
-
-            //    cbSlotV.DataSource = availableSlots;
-            //    cbSlotV.Enabled = availableSlots.Count > 0;
-            //    cbSlotM.Enabled = false;
-            //}
-            //else
-            //{
-            //    cbSlotV.Enabled = false;
-            //    cbSlotM.Enabled = false;
-            //}
+            currentVehicle = selectedVehicle;
+            SetSlotPanelRestrictions(currentVehicle.VehicleType?.Trim() ?? "");
+            MessageBox.Show($"{currentVehicle.PlateNumber} has been selected", "Vehicle Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         //private void cbSlot_SelectedIndexChanged(object sender, EventArgs e)

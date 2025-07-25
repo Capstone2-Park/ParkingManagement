@@ -181,9 +181,7 @@
             flowLayoutPanel1 = new FlowLayoutPanel();
             label47 = new Label();
             label48 = new Label();
-            label49 = new Label();
             cbVehicle = new ComboBox();
-            btnSelect = new Button();
             lblCname = new Label();
             btnCancel = new Button();
             panel1 = new Panel();
@@ -1904,42 +1902,25 @@
             // label48
             // 
             label48.AutoSize = true;
+            label48.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label48.Location = new Point(16, 107);
             label48.Name = "label48";
-            label48.Size = new Size(76, 15);
+            label48.Size = new Size(78, 15);
             label48.TabIndex = 6;
             label48.Text = "Client Name:";
-            // 
-            // label49
-            // 
-            label49.AutoSize = true;
-            label49.Location = new Point(18, 136);
-            label49.Name = "label49";
-            label49.Size = new Size(78, 15);
-            label49.TabIndex = 7;
-            label49.Text = "Select Vehicle";
             // 
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(16, 154);
+            cbVehicle.Location = new Point(14, 141);
             cbVehicle.Name = "cbVehicle";
             cbVehicle.Size = new Size(133, 23);
             cbVehicle.TabIndex = 8;
             // 
-            // btnSelect
-            // 
-            btnSelect.Location = new Point(13, 199);
-            btnSelect.Name = "btnSelect";
-            btnSelect.Size = new Size(134, 36);
-            btnSelect.TabIndex = 14;
-            btnSelect.Text = "Select Vehicle";
-            btnSelect.UseVisualStyleBackColor = true;
-            btnSelect.Click += btnSelect_Click;
-            // 
             // lblCname
             // 
             lblCname.AutoSize = true;
+            lblCname.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCname.Location = new Point(87, 107);
             lblCname.Name = "lblCname";
             lblCname.Size = new Size(12, 15);
@@ -1948,7 +1929,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(15, 255);
+            btnCancel.Location = new Point(15, 176);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(134, 36);
             btnCancel.TabIndex = 22;
@@ -1962,11 +1943,9 @@
             panel1.Controls.Add(pictureBox2);
             panel1.Controls.Add(lblCname);
             panel1.Controls.Add(pictureBox1);
-            panel1.Controls.Add(btnSelect);
             panel1.Controls.Add(label53);
             panel1.Controls.Add(cbVehicle);
             panel1.Controls.Add(label52);
-            panel1.Controls.Add(label49);
             panel1.Controls.Add(label48);
             panel1.Location = new Point(813, 110);
             panel1.Name = "panel1";
@@ -2248,9 +2227,7 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private Label label47;
         private Label label48;
-        private Label label49;
         private ComboBox cbVehicle;
-        private Button btnSelect;
         private Label lblCname;
         private Button btnCancel;
         private Panel panel1;
