@@ -149,7 +149,7 @@ CREATE TABLE RegularParkingslot (
 
 );
 
-INSERT INTO RegularParkingslot (VehicleStatus, SlotStatus, SlotNumber)
+INSERT INTO RegularParkingSlot (VehicleStatus, SlotStatus, SlotNumber)
 VALUES
 ('NotParked', 'available', 'V1'),
 ('NotParked', 'available', 'V2'),
