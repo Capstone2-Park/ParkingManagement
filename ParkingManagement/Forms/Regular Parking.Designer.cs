@@ -132,7 +132,6 @@
             // 
             // btnNext
             // 
-            btnNext.Enabled = false;
             btnNext.Location = new Point(972, 647);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(97, 39);

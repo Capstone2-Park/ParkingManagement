@@ -17,6 +17,7 @@ namespace ParkingManagement
         public DbSet<VehicleSession> VehicleSessions { get; set; }
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
         public DbSet<Parkingslot> Parkingslot { get; set; }
+        public DbSet<RegularParkingSlot> RegularParkingslot{ get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

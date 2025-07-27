@@ -18,7 +18,7 @@ namespace ParkingManagement.Models
         public string VehicleStatus { get; set; }
 
 
-        public string SessionID { get; set; }
+        public int SessionID { get; set; } // Change from string to int
 
         public string SlotNumber { get; set; }
 
