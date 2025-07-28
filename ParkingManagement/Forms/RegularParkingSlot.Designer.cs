@@ -106,7 +106,6 @@
             pictureBox1 = new PictureBox();
             label53 = new Label();
             label52 = new Label();
-            btnSelect = new Button();
             cbVehicle = new ComboBox();
             label49 = new Label();
             label47 = new Label();
@@ -1084,16 +1083,6 @@
             label52.TabIndex = 19;
             label52.Text = "Occupied";
             // 
-            // btnSelect
-            // 
-            btnSelect.Location = new Point(805, 213);
-            btnSelect.Name = "btnSelect";
-            btnSelect.Size = new Size(134, 36);
-            btnSelect.TabIndex = 30;
-            btnSelect.Text = "Select Vehicle";
-            btnSelect.UseVisualStyleBackColor = true;
-            btnSelect.Click += btnSelect_Click;
-            // 
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
@@ -1927,7 +1916,6 @@
             ClientSize = new Size(1060, 661);
             Controls.Add(label47);
             Controls.Add(flowLayoutPanel1);
-            Controls.Add(btnSelect);
             Controls.Add(cbVehicle);
             Controls.Add(label49);
             Controls.Add(pictureBox2);
@@ -2123,7 +2111,6 @@
         private PictureBox pictureBox1;
         private Label label53;
         private Label label52;
-        private Button btnSelect;
         private ComboBox cbVehicle;
         private Label label49;
         private Label label47;

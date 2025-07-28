@@ -78,7 +78,7 @@ namespace ParkingManagement.Forms
                 btnTimeOut.Enabled = false;
             }
 
-            UpdateNextButtonState();
+            //UpdateNextButtonState();
         }
 
         private void InitializeDbContext()

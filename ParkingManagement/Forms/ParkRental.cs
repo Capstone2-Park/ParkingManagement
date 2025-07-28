@@ -300,6 +300,8 @@ namespace ParkingManagement.Forms
 ));
 
             await RefreshScheduledListView();
+            LoadClientVehicles(); // <-- Add this line to refresh cbVehicle
+
             cbVehicle.SelectedIndex = -1;
             _selectedVehicle = null;
             lblVSelect.Text = "Vehicle Selection";
@@ -375,6 +377,7 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientID");
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
+            dt.Columns.Add("PlateNumber"); // <-- Add this line
             dt.Columns.Add("DurationType");
             dt.Columns.Add("HoursPerDay");
             dt.Columns.Add("TimeStart");
@@ -389,6 +392,7 @@ namespace ParkingManagement.Forms
                     ClientID = c.ClientID,
                     ClientName = c.Name,
                     Vehicle = temp.v.Brand + " " + temp.v.PlateNumber,
+                    PlateNumber = temp.v.PlateNumber, // <-- Add this line
                     DurationType = temp.vs.DurationType,
                     TimeStart = temp.vs.StartDate,
                     TimeEnd = temp.vs.EndDateTime,
@@ -405,6 +409,7 @@ namespace ParkingManagement.Forms
                     sched.ClientID,
                     sched.ClientName,
                     sched.Vehicle,
+                    sched.PlateNumber, // <-- Add this line
                     sched.DurationType,
                     hoursPerDay,
                     sched.TimeStart.ToString("yyyy-MM-dd HH:mm"),
@@ -429,6 +434,7 @@ namespace ParkingManagement.Forms
                         sched.client.ClientID,
                         sched.client.Name,
                         $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
+                        sched.vehicle.PlateNumber, // <-- Add this line
                         sched.durationType,
                         hoursPerDay,
                         sched.startDate.ToString("yyyy-MM-dd HH:mm"),

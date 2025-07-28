@@ -17,7 +17,7 @@ namespace ParkingManagement
         public DbSet<VehicleSession> VehicleSessions { get; set; }
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
         public DbSet<Parkingslot> Parkingslot { get; set; }
-        public DbSet<RegularParkingSlot> RegularParkingslot{ get; set; }
+        public DbSet<RegularParkingSlot> RegularParkingSlot{ get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -89,6 +89,18 @@ namespace ParkingManagement
                 .WithMany()
                 .HasForeignKey(ps => ps.ClientID)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<RegularParkingSlot>().ToTable("RegularParkingSlot");
+            modelBuilder.Entity<RegularParkingSlot>().HasKey(rps => rps.SlotID);
+            modelBuilder.Entity<RegularParkingSlot>().Property(rps => rps.SlotNumber).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<RegularParkingSlot>().Property(rps => rps.SlotStatus).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<RegularParkingSlot>().Property(rps => rps.VehicleStatus).HasMaxLength(50).IsRequired();
+
+            modelBuilder.Entity<RegularParkingSlot>()
+            .HasOne(ps => ps.Session)
+            .WithMany()
+            .HasForeignKey(ps => ps.SessionID)
+            .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
