@@ -25,6 +25,7 @@ CREATE TABLE Vehicle (
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
 );
 
+
 -- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
     SessionID INT IDENTITY(1,1) PRIMARY KEY,
@@ -32,7 +33,7 @@ CREATE TABLE RegularParkingSessions (
     PlateNumber NVARCHAR(20) NOT NULL,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
-    TimeOut DATETIME NULL,
+    [TimeOut] DATETIME NULL,
     TotalAmount DECIMAL(10,2) NULL,
     QRCodeData NVARCHAR(MAX) NULL
 );
@@ -138,10 +139,9 @@ VALUES
 ('NotParked', 'available', 'M24');
 
 
-
-CREATE TABLE RegularParkingslot (
+CREATE TABLE RegularParkingSlot (
     SlotID INT IDENTITY(1,1) PRIMARY KEY,
-    SessionID int NULL,
+    SessionID int,
     VehicleStatus VARCHAR(50),
     SlotStatus VARCHAR(50) NOT NULL,
     SlotNumber VARCHAR(50) NOT NULL,
@@ -149,7 +149,9 @@ CREATE TABLE RegularParkingslot (
 
 );
 
-INSERT INTO RegularParkingslot (VehicleStatus, SlotStatus, SlotNumber)
+
+
+INSERT INTO RegularParkingSlot (VehicleStatus, SlotStatus, SlotNumber)
 VALUES
 ('NotParked', 'available', 'V1'),
 ('NotParked', 'available', 'V2'),

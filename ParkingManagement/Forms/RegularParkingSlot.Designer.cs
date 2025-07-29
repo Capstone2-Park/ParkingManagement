@@ -106,13 +106,7 @@
             pictureBox1 = new PictureBox();
             label53 = new Label();
             label52 = new Label();
-            btnSelect = new Button();
-            cbSlotM = new ComboBox();
-            label51 = new Label();
-            cbSlotV = new ComboBox();
-            label50 = new Label();
             cbVehicle = new ComboBox();
-            btnAdd = new Button();
             label49 = new Label();
             label47 = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -1089,52 +1083,6 @@
             label52.TabIndex = 19;
             label52.Text = "Occupied";
             // 
-            // btnSelect
-            // 
-            btnSelect.Location = new Point(805, 213);
-            btnSelect.Name = "btnSelect";
-            btnSelect.Size = new Size(134, 36);
-            btnSelect.TabIndex = 30;
-            btnSelect.Text = "Select Vehicle";
-            btnSelect.UseVisualStyleBackColor = true;
-            btnSelect.Click += btnSelect_Click;
-            // 
-            // cbSlotM
-            // 
-            cbSlotM.FormattingEnabled = true;
-            cbSlotM.Items.AddRange(new object[] { "M1  ", "M2  ", "M3  ", "M4  ", "M5  ", "M6  ", "M7  ", "M8  ", "M9  ", "M10  ", "M11  ", "M12  ", "M13  ", "M14  ", "M15  ", "M16  ", "M17  ", "M18  ", "M19  ", "M20  ", "M21  ", "M22  ", "M23  ", "M24  " });
-            cbSlotM.Location = new Point(806, 391);
-            cbSlotM.Name = "cbSlotM";
-            cbSlotM.Size = new Size(133, 23);
-            cbSlotM.TabIndex = 29;
-            // 
-            // label51
-            // 
-            label51.AutoSize = true;
-            label51.Location = new Point(808, 373);
-            label51.Name = "label51";
-            label51.Size = new Size(134, 15);
-            label51.TabIndex = 28;
-            label51.Text = "Select Slot (MotorCycle)";
-            // 
-            // cbSlotV
-            // 
-            cbSlotV.FormattingEnabled = true;
-            cbSlotV.Items.AddRange(new object[] { "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20", "V21", "V22", "V23", "V24" });
-            cbSlotV.Location = new Point(807, 330);
-            cbSlotV.Name = "cbSlotV";
-            cbSlotV.Size = new Size(133, 23);
-            cbSlotV.TabIndex = 27;
-            // 
-            // label50
-            // 
-            label50.AutoSize = true;
-            label50.Location = new Point(809, 312);
-            label50.Name = "label50";
-            label50.Size = new Size(109, 15);
-            label50.TabIndex = 26;
-            label50.Text = "Select Slot (Vehicle)";
-            // 
             // cbVehicle
             // 
             cbVehicle.FormattingEnabled = true;
@@ -1142,16 +1090,6 @@
             cbVehicle.Name = "cbVehicle";
             cbVehicle.Size = new Size(133, 23);
             cbVehicle.TabIndex = 25;
-            // 
-            // btnAdd
-            // 
-            btnAdd.Location = new Point(806, 437);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(134, 36);
-            btnAdd.TabIndex = 23;
-            btnAdd.Text = "Park Vehicle";
-            btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += btnAdd_Click;
             // 
             // label49
             // 
@@ -1978,13 +1916,7 @@
             ClientSize = new Size(1060, 661);
             Controls.Add(label47);
             Controls.Add(flowLayoutPanel1);
-            Controls.Add(btnSelect);
-            Controls.Add(cbSlotM);
-            Controls.Add(label51);
-            Controls.Add(cbSlotV);
-            Controls.Add(label50);
             Controls.Add(cbVehicle);
-            Controls.Add(btnAdd);
             Controls.Add(label49);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
@@ -2179,13 +2111,7 @@
         private PictureBox pictureBox1;
         private Label label53;
         private Label label52;
-        private Button btnSelect;
-        private ComboBox cbSlotM;
-        private Label label51;
-        private ComboBox cbSlotV;
-        private Label label50;
         private ComboBox cbVehicle;
-        private Button btnAdd;
         private Label label49;
         private Label label47;
         private FlowLayoutPanel flowLayoutPanel1;

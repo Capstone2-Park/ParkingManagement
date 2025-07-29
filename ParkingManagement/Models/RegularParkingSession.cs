@@ -18,3 +18,5 @@ namespace ParkingManagement.Models
         public string QRCodeData { get; set; }            // Data that was encoded into the QR (e.g., SessionID)
     }
 }
+
+

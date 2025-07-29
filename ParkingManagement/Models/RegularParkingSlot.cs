@@ -18,7 +18,7 @@ namespace ParkingManagement.Models
         public string VehicleStatus { get; set; }
 
 
-        public string SessionID { get; set; }
+        public int? SessionID { get; set; }
 
         public string SlotNumber { get; set; }
 
@@ -26,6 +26,6 @@ namespace ParkingManagement.Models
 
         // Navigation properties
         [ForeignKey("SessionID")]
-        public virtual RegularParkingSession Vehicle { get; set; }
+        public virtual RegularParkingSession Session { get; set; }
     }
 }

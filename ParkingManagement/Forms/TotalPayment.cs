@@ -121,8 +121,8 @@ namespace ParkingManagement.Forms
             var homePage = this.ParentForm as HomePage;
             if (homePage != null)
             {
-                var parkSlotForm = new ParkingSlot();
-                homePage.ShowFormInPanel(parkSlotForm);
+                var clientManagementForm = new ClientManagement();
+                homePage.ShowFormInPanel(clientManagementForm);
             }
         }
     }

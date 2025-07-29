@@ -32,11 +32,12 @@ namespace ParkingManagement.Forms
         {
             InitializeComponent();
             _context = new ParkingDbContext();
-            InitializeDataGridView();
+
             SetupDurationTypeComboBox();
             PopulateTimeComboBox();
             // Wire up the selection changed event
-            dgvVehicles.SelectionChanged += dgvVehicles_SelectionChanged;
+            cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
+
 
             // Get the latest client (assuming highest ClientID is the latest)
             _currentClient = _context.Clients
@@ -51,7 +52,7 @@ namespace ParkingManagement.Forms
             else
             {
                 lblClientName.Text = "No client found";
-                dgvVehicles.DataSource = null;
+
             }
         }
 
@@ -71,90 +72,7 @@ namespace ParkingManagement.Forms
 
 
 
-        // Initialize the DataTable structure for fees display
-        private void InitializeDataGridView()
-        {
-            dgvVehicles.AutoGenerateColumns = false;
 
-            // Client Columns
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientID",
-                HeaderText = "Client ID",
-                DataPropertyName = "ClientID",
-                ReadOnly = true
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientName",
-                HeaderText = "Client Name",
-                DataPropertyName = "ClientName", // This maps to the `ClientName` property in the anonymous object
-                ReadOnly = true
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientContact",
-                HeaderText = "Contact No.",
-                DataPropertyName = "ClientContact", // <--- CRITICAL FIX: Match the name in the anonymous object
-                ReadOnly = true
-            });
-
-            // Vehicle Columns (flattened for DGV)
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "VehicleID",
-                HeaderText = "Vehicle ID",
-                DataPropertyName = "VehicleID",
-                ReadOnly = true
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "PlateNumber",
-                HeaderText = "Plate No.",
-                DataPropertyName = "PlateNumber",
-                ReadOnly = true
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Brand",
-                HeaderText = "Brand",
-                DataPropertyName = "Brand",
-                ReadOnly = true
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Color",
-                HeaderText = "Color",
-                DataPropertyName = "Color",
-                ReadOnly = true
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "VehicleType",
-                HeaderText = "Type",
-                DataPropertyName = "VehicleType",
-                ReadOnly = true
-            });
-
-            // Hidden columns to store the actual objects
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientObject",
-                HeaderText = "",
-                DataPropertyName = "ClientObject",
-                Visible = false
-            });
-            dgvVehicles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "VehicleObject",
-                HeaderText = "",
-                DataPropertyName = "VehicleObject",
-                Visible = false
-            });
-
-            dgvVehicles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvVehicles.MultiSelect = false;
-        }
 
         private void SetupDurationTypeComboBox()
         {
@@ -181,63 +99,38 @@ namespace ParkingManagement.Forms
         {
             if (_currentClient == null)
             {
-                dgvVehicles.DataSource = null;
+                cbVehicle.DataSource = null;
                 return;
             }
 
+            // Get all vehicles for the current client
             var vehicles = _context.Vehicles
                 .Where(v => v.ClientID == _currentClient.ClientID)
                 .ToList();
 
-            var dt = new DataTable();
-            dt.Columns.Add("ClientID");
-            dt.Columns.Add("ClientName");
-            dt.Columns.Add("ClientContact");
-            dt.Columns.Add("VehicleID");
-            dt.Columns.Add("PlateNumber");
-            dt.Columns.Add("Brand");
-            dt.Columns.Add("Color");
-            dt.Columns.Add("VehicleType");
-            dt.Columns.Add("ClientObject", typeof(Client));
-            dt.Columns.Add("VehicleObject", typeof(Vehicle));
+            // Get IDs of vehicles already scheduled in the database
+            var scheduledVehicleIdsDb = _context.VehicleSessions
+                .Select(vs => vs.VehicleID)
+                .ToList();
 
-            foreach (var v in vehicles)
-            {
-                // Defensive: Use null-coalescing to avoid nulls
-                dt.Rows.Add(
-                    _currentClient.ClientID ?? "",
-                    _currentClient.Name ?? "",
-                    _currentClient.CpNumber ?? "",
-                    v.VehicleID ?? "",
-                    v.PlateNumber ?? "",
-                    v.Brand ?? "",
-                    v.Color ?? "",
-                    v.VehicleType ?? "",
-                    _currentClient,
-                    v
-                );
-            }
+            // Get IDs of vehicles already scheduled in the current session
+            var scheduledVehicleIdsSession = _scheduledVehicles
+                .Select(s => s.vehicle.VehicleID)
+                .ToList();
 
-            dgvVehicles.DataSource = dt;
+            // Filter out vehicles that are already scheduled
+            var availableVehicles = vehicles
+                .Where(v => !scheduledVehicleIdsDb.Contains(v.VehicleID) && !scheduledVehicleIdsSession.Contains(v.VehicleID))
+                .ToList();
+
+            cbVehicle.DataSource = availableVehicles;
+            cbVehicle.DisplayMember = "PlateNumber";
+            cbVehicle.ValueMember = "VehicleID";
+            cbVehicle.SelectedIndex = -1;
         }
 
-        private void dgvVehicles_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvVehicles.SelectedRows.Count > 0)
-            {
-                DataGridViewRow selectedRow = dgvVehicles.SelectedRows[0];
+        // Update the selection changed event handler
 
-                _selectedClient = selectedRow.Cells["ClientObject"].Value as Client;
-                _selectedVehicle = selectedRow.Cells["VehicleObject"].Value as Vehicle;
-            }
-            else
-            {
-                _selectedClient = null;
-                _selectedVehicle = null;
-                _calculatedEndDateTime = DateTime.MinValue;
-                _calculatedTotalAmount = 0;
-            }
-        }
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
@@ -277,7 +170,7 @@ namespace ParkingManagement.Forms
                 MessageBox.Show($"Error saving rental sessions: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             await RefreshScheduledListView();
-            dgvVehicles.ClearSelection();
+
             _selectedClient = null;
             _selectedVehicle = null;
             // After successful save:
@@ -299,10 +192,10 @@ namespace ParkingManagement.Forms
                 return false;
             }
 
-            // Start at midnight, end at selected time
-            DateTime today = DateTime.Today;
-            DateTime startDate = today;
-            DateTime endDate = today.AddHours(cbTime.SelectedIndex + 1);
+            // Combine date and time
+            DateTime startDate = dtpDateStart.Value.Date + dtpTime.Value.TimeOfDay;
+            int hoursPerDay = cbTime.SelectedIndex + 1;
+            DateTime endDate = startDate.AddHours(hoursPerDay);
 
             string durationType = cmbDurationType.SelectedItem.ToString();
             string vehicleType = _selectedVehicle.VehicleType?.Trim();
@@ -313,7 +206,6 @@ namespace ParkingManagement.Forms
                 return false;
             }
 
-            // Query the Fee table for the fixed price
             var fee = await _context.Fees
                 .FirstOrDefaultAsync(f => f.VehicleType == vehicleType && f.DurationType == durationType);
 
@@ -325,13 +217,11 @@ namespace ParkingManagement.Forms
                 return false;
             }
 
-            // Calculate the number of hours selected
-            double selectedHours = (endDate - startDate).TotalHours;
-            if (selectedHours <= 0) selectedHours = 1; // Minimum 1 hour
+            double selectedHours = hoursPerDay;
+            if (selectedHours <= 0) selectedHours = 1;
 
-            // 24 hours is always 100% of the fee, regardless of duration type
             double percentage = selectedHours / 24.0;
-            if (percentage > 1) percentage = 1; // Cap at 100%
+            if (percentage > 1) percentage = 1;
 
             _calculatedEndDateTime = endDate;
             _calculatedTotalAmount = fee.FixedPrice * (decimal)percentage;
@@ -341,14 +231,14 @@ namespace ParkingManagement.Forms
 
         private void ClearFormForNewEntry()
         {
-            dgvVehicles.DataSource = null; // Clear DGV results
-            _selectedClient = null;
+            cbVehicle.SelectedIndex = -1;
             _selectedVehicle = null;
-            dtpDateStart.Value = DateTime.Now; // Reset to current date
-            cmbDurationType.SelectedIndex = 0; // Default to Weekly
-
+            dtpDateStart.Value = DateTime.Now;
+            dtpTime.Value = DateTime.Now;
+            cmbDurationType.SelectedIndex = 0;
             _calculatedEndDateTime = DateTime.MinValue;
             _calculatedTotalAmount = 0;
+            lblVSelect.Text = "Vehicle Selection";
         }
 
         private void ParkRental_FormClosing(object sender, FormClosingEventArgs e)
@@ -362,9 +252,9 @@ namespace ParkingManagement.Forms
 
         private async void btnSetSched_Click(object sender, EventArgs e)
         {
-            if (_selectedClient == null || _selectedVehicle == null)
+            if (_currentClient == null || _selectedVehicle == null)
             {
-                MessageBox.Show("Please select a client and their vehicle first from the list.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a vehicle first from the list.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (cmbDurationType.SelectedItem == null)
@@ -372,8 +262,6 @@ namespace ParkingManagement.Forms
                 MessageBox.Show("Please select a Duration Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-
 
             // Check if the vehicle already has a schedule in the database
             var alreadyScheduled = await _context.VehicleSessions
@@ -398,19 +286,25 @@ namespace ParkingManagement.Forms
                 return;
 
             // Add to the scheduled list
+            // Combine date and time for scheduling
+            DateTime startDate = dtpDateStart.Value.Date + dtpTime.Value.TimeOfDay;
+            DateTime endDate = startDate.AddHours(cbTime.SelectedIndex + 1);
+
             _scheduledVehicles.Add((
-                _selectedClient,
+                _currentClient,
                 _selectedVehicle,
                 cmbDurationType.SelectedItem.ToString(),
-                DateTime.Today,
-                DateTime.Today.AddHours(cbTime.SelectedIndex + 1),
+                startDate,
+                endDate,
                 _calculatedTotalAmount
-            ));
+));
 
-            RefreshScheduledListView();
-            dgvVehicles.ClearSelection();
-            _selectedClient = null;
+            await RefreshScheduledListView();
+            LoadClientVehicles(); // <-- Add this line to refresh cbVehicle
+
+            cbVehicle.SelectedIndex = -1;
             _selectedVehicle = null;
+            lblVSelect.Text = "Vehicle Selection";
         }
 
         private async void btnCancel_Click(object sender, EventArgs e)
@@ -483,12 +377,14 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientID");
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
+            dt.Columns.Add("PlateNumber"); // <-- Add this line
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("HoursPerDay");
             dt.Columns.Add("TimeStart");
             dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
 
-            // 1. Add already saved schedules from the database
+            // 1. Add already saved schedules from the database for the current client only
             var saved = await _context.VehicleSessions
                 .Join(_context.Vehicles, vs => vs.VehicleID, v => v.VehicleID, (vs, v) => new { vs, v })
                 .Join(_context.Clients, temp => temp.v.ClientID, c => c.ClientID, (temp, c) => new
@@ -496,30 +392,35 @@ namespace ParkingManagement.Forms
                     ClientID = c.ClientID,
                     ClientName = c.Name,
                     Vehicle = temp.v.Brand + " " + temp.v.PlateNumber,
+                    PlateNumber = temp.v.PlateNumber, // <-- Add this line
                     DurationType = temp.vs.DurationType,
                     TimeStart = temp.vs.StartDate,
                     TimeEnd = temp.vs.EndDateTime,
                     TotalAmount = temp.vs.TotalAmount
                 })
+                .Where(s => s.ClientID == _currentClient.ClientID)
                 .ToListAsync();
 
             foreach (var sched in saved)
             {
+                int hoursPerDay = (int)(sched.TimeEnd - sched.TimeStart).TotalHours;
+
                 dt.Rows.Add(
                     sched.ClientID,
                     sched.ClientName,
                     sched.Vehicle,
+                    sched.PlateNumber, // <-- Add this line
                     sched.DurationType,
+                    hoursPerDay,
                     sched.TimeStart.ToString("yyyy-MM-dd HH:mm"),
                     sched.TimeEnd.ToString("yyyy-MM-dd HH:mm"),
                     sched.TotalAmount
                 );
             }
 
-            // 2. Add unsaved scheduled vehicles (avoid duplicates)
-            foreach (var sched in _scheduledVehicles)
+            // 2. Add unsaved scheduled vehicles for the current client only (avoid duplicates)
+            foreach (var sched in _scheduledVehicles.Where(s => s.client.ClientID == _currentClient.ClientID))
             {
-                // Check if this vehicle is already in the saved list (by VehicleID and time overlap)
                 bool alreadySaved = saved.Any(s =>
                     s.Vehicle == $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}" &&
                     s.TimeStart == sched.startDate &&
@@ -527,11 +428,15 @@ namespace ParkingManagement.Forms
                 );
                 if (!alreadySaved)
                 {
+                    int hoursPerDay = (int)(sched.endDateTime - sched.startDate).TotalHours;
+
                     dt.Rows.Add(
                         sched.client.ClientID,
                         sched.client.Name,
                         $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
+                        sched.vehicle.PlateNumber, // <-- Add this line
                         sched.durationType,
+                        hoursPerDay,
                         sched.startDate.ToString("yyyy-MM-dd HH:mm"),
                         sched.endDateTime.ToString("yyyy-MM-dd HH:mm"),
                         sched.totalAmount
@@ -563,6 +468,7 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("HoursPerDay"); // <-- New column
             dt.Columns.Add("TimeStart");
             dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
@@ -609,7 +515,7 @@ namespace ParkingManagement.Forms
             }
         }
 
-     
+
 
         private async void ParkRental_Load_1(object sender, EventArgs e)
         {
@@ -620,7 +526,7 @@ namespace ParkingManagement.Forms
 
             await LoadScheduledVehiclesToListViewAsync();
             await RefreshScheduledListView();
-     
+
         }
 
         private void PopulateTimeComboBox()
@@ -628,10 +534,10 @@ namespace ParkingManagement.Forms
             cbTime.Items.Clear();
             for (int hour = 1; hour <= 23; hour++)
             {
-                string timeLabel = DateTime.Today.AddHours(hour).ToString("HH:mm");
-                cbTime.Items.Add(timeLabel);
+                string timeLabel = DateTime.Today.AddHours(hour).ToString("HH");
+                cbTime.Items.Add(timeLabel + "-hour/s");
             }
-            cbTime.Items.Add("24:00"); // Explicitly add "24:00" as the last item
+            cbTime.Items.Add("24-hour/s"); // Explicitly add "24hours" as the last item
             cbTime.SelectedIndex = 0; // Default to first time slot
         }
         private async Task RefreshScheduledListViewAsync()
@@ -641,6 +547,7 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("ClientName");
             dt.Columns.Add("Vehicle");
             dt.Columns.Add("DurationType");
+            dt.Columns.Add("HoursPerDay"); // <-- New column
             dt.Columns.Add("TimeStart");
             dt.Columns.Add("TimeEnd");
             dt.Columns.Add("TotalAmount", typeof(decimal));
@@ -662,11 +569,15 @@ namespace ParkingManagement.Forms
 
             foreach (var sched in saved)
             {
+                // For saved schedules, you may not have HoursPerDay, so you can calculate it:
+                int hoursPerDay = (int)(sched.TimeEnd - sched.TimeStart).TotalHours;
+
                 dt.Rows.Add(
                     sched.ClientID,
                     sched.ClientName,
                     sched.Vehicle,
                     sched.DurationType,
+                    hoursPerDay,
                     sched.TimeStart.ToString("yyyy-MM-dd HH:mm"),
                     sched.TimeEnd.ToString("yyyy-MM-dd HH:mm"),
                     sched.TotalAmount
@@ -684,11 +595,15 @@ namespace ParkingManagement.Forms
                 );
                 if (!alreadySaved)
                 {
+                    // For unsaved scheduled vehicles:
+                    int hoursPerDay = (int)(sched.endDateTime - sched.startDate).TotalHours;
+
                     dt.Rows.Add(
                         sched.client.ClientID,
                         sched.client.Name,
                         $"{sched.vehicle.Brand} {sched.vehicle.PlateNumber}",
                         sched.durationType,
+                        hoursPerDay,
                         sched.startDate.ToString("yyyy-MM-dd HH:mm"),
                         sched.endDateTime.ToString("yyyy-MM-dd HH:mm"),
                         sched.totalAmount
@@ -697,6 +612,20 @@ namespace ParkingManagement.Forms
             }
 
             dgvList.DataSource = dt;
+        }
+
+        private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _selectedVehicle = cbVehicle.SelectedItem as Vehicle;
+            if (_selectedVehicle != null)
+                lblVSelect.Text = _selectedVehicle.PlateNumber;
+            else
+                lblVSelect.Text = "Vehicle Selection";
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
