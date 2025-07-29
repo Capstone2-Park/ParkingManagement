@@ -17,11 +17,11 @@ namespace ParkingManagement
         public DbSet<VehicleSession> VehicleSessions { get; set; }
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
         public DbSet<Parkingslot> Parkingslot { get; set; }
-        public DbSet<RegularParkingSlot> RegularParkingSlot{ get; set; }
+        public DbSet<RegularParkingSlot> RegularParkingSlot { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=SYSTEMADMIN\\SQLEXPRESS;Initial Catalog=ParkingSystem;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseSqlServer("Data Source=CECILE030103\\SQLEXPRESS;Initial Catalog=ParkingSystem;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

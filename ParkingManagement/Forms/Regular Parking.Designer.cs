@@ -34,7 +34,6 @@
             dgvTimeInTimeOutData = new DataGridView();
             pcbQRcode = new PictureBox();
             btnTimeIn = new Button();
-            btnTimeOut = new Button();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -85,23 +84,13 @@
             // 
             // btnTimeIn
             // 
-            btnTimeIn.Location = new Point(811, 560);
+            btnTimeIn.Location = new Point(783, 562);
             btnTimeIn.Name = "btnTimeIn";
-            btnTimeIn.Size = new Size(75, 23);
+            btnTimeIn.Size = new Size(95, 39);
             btnTimeIn.TabIndex = 5;
             btnTimeIn.Text = "Time in";
             btnTimeIn.UseVisualStyleBackColor = true;
             btnTimeIn.Click += btnTimeIn_Click;
-            // 
-            // btnTimeOut
-            // 
-            btnTimeOut.Location = new Point(917, 560);
-            btnTimeOut.Name = "btnTimeOut";
-            btnTimeOut.Size = new Size(75, 23);
-            btnTimeOut.TabIndex = 6;
-            btnTimeOut.Text = "Time out";
-            btnTimeOut.UseVisualStyleBackColor = true;
-            btnTimeOut.Click += btnTimeOut_Click;
             // 
             // label1
             // 
@@ -132,7 +121,7 @@
             // 
             // btnNext
             // 
-            btnNext.Location = new Point(972, 647);
+            btnNext.Location = new Point(895, 562);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(97, 39);
             btnNext.TabIndex = 10;
@@ -149,7 +138,6 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(btnTimeOut);
             Controls.Add(btnTimeIn);
             Controls.Add(pcbQRcode);
             Controls.Add(dgvTimeInTimeOutData);
@@ -174,7 +162,6 @@
         private DataGridView dgvTimeInTimeOutData;
         private PictureBox pcbQRcode;
         private Button btnTimeIn;
-        private Button btnTimeOut;
         private Label label1;
         private Label label2;
         private Label label3;

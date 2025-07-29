@@ -23,13 +23,42 @@ namespace ParkingManagement.Forms
 
         private void RegularParkingSlot_Load(object sender, EventArgs e)
         {
+            LoadSlots();
+
             using (var db = new ParkingDbContext())
             {
-                var plateNumbers = db.RegularParkingSessions
-                    .Select(s => s.PlateNumber)
-                    .Distinct()
-                    .ToList();
-                cbVehicle.DataSource = plateNumbers;
+                var recentSession = db.RegularParkingSessions
+                    .OrderByDescending(s => s.SessionID)
+                    .FirstOrDefault();
+
+                if (recentSession != null)
+                {
+                    selectedPlateNumber = recentSession.PlateNumber;
+                    selectedVehicleType = recentSession.VehicleType;
+                    lblVehicle.Text = selectedPlateNumber;
+
+                    MessageBox.Show("Please select a Slot.", "Select Slot", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (selectedVehicleType == "2-Wheels")
+                    {
+                        SetPanelsEnabled("V", false, Color.Gray); // disables and sets gray
+                        SetPanelsEnabled("M", true);              // enables and updates color
+                    }
+                    else if (selectedVehicleType == "4-Wheels")
+                    {
+                        SetPanelsEnabled("M", false, Color.Gray); // disables and sets gray
+                        SetPanelsEnabled("V", true);              // enables and updates color
+                    }
+                    else
+                    {
+                        SetAllPanelsEnabled(false);
+                    }
+                }
+                else
+                {
+                    lblVehicle.Text = "No vehicle found";
+                    SetAllPanelsEnabled(false);
+                }
             }
 
             // Attach click event to all panels
@@ -41,58 +70,21 @@ namespace ParkingManagement.Forms
                 if (mPanel != null) mPanel.Click += Panel_Click;
             }
 
-            cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
-            LoadSlots();
-            UpdateSlotPanelColors();
-            SetAllPanelsEnabled(false); // Disable all until vehicle is selected
+            // Only update slot panel colors after loading slots or parking
+            // Remove this line from here:
+            // UpdateSlotPanelColors();
         }
 
         private void LoadSlots()
         {
             using (var db = new ParkingDbContext())
             {
-                slots = db.Set<Models.RegularParkingSlot>().ToList();
+                var slotSet = db.Set<Models.RegularParkingSlot>();
+                slots = slotSet != null ? slotSet.ToList() : new List<Models.RegularParkingSlot>();
             }
         }
 
-        private void cbVehicle_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            selectedPlateNumber = cbVehicle.SelectedItem?.ToString();
-            if (string.IsNullOrEmpty(selectedPlateNumber))
-                return;
-
-            using (var db = new ParkingDbContext())
-            {
-                selectedVehicleType = db.RegularParkingSessions
-                    .Where(s => s.PlateNumber == selectedPlateNumber)
-                    .Select(s => s.VehicleType)
-                    .FirstOrDefault();
-            }
-
-            if (string.IsNullOrEmpty(selectedVehicleType))
-            {
-                MessageBox.Show("Vehicle type not found for selected plate.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                SetAllPanelsEnabled(false);
-                return;
-            }
-
-            MessageBox.Show("Please choose a slot.", "Select Slot", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            if (selectedVehicleType == "2-Wheels")
-            {
-                SetPanelsEnabled("M", true);
-                SetPanelsEnabled("V", false, Color.Gray);
-            }
-            else if (selectedVehicleType == "4-Wheels")
-            {
-                SetPanelsEnabled("V", true);
-                SetPanelsEnabled("M", false, Color.Gray);
-            }
-            else
-            {
-                SetAllPanelsEnabled(false);
-            }
-        }
+       
 
         private void SetPanelsEnabled(string prefix, bool enabled, Color? disabledColor = null)
         {
@@ -182,9 +174,10 @@ namespace ParkingManagement.Forms
                 }
                 LoadSlots();
                 UpdateSlotPanelColors();
+                panel.BackColor = Color.Red;
                 MessageBox.Show($"Vehicle parked in slot {slotNumber}.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 SetAllPanelsEnabled(false);
-                cbVehicle.SelectedIndex = -1;
+
                 selectedPlateNumber = null;
                 selectedVehicleType = null;
             }

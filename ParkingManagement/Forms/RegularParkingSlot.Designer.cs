@@ -106,8 +106,7 @@
             pictureBox1 = new PictureBox();
             label53 = new Label();
             label52 = new Label();
-            cbVehicle = new ComboBox();
-            label49 = new Label();
+            lblVehicle = new Label();
             label47 = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             pnlM1 = new Panel();
@@ -1083,22 +1082,14 @@
             label52.TabIndex = 19;
             label52.Text = "Occupied";
             // 
-            // cbVehicle
+            // lblVehicle
             // 
-            cbVehicle.FormattingEnabled = true;
-            cbVehicle.Location = new Point(807, 168);
-            cbVehicle.Name = "cbVehicle";
-            cbVehicle.Size = new Size(133, 23);
-            cbVehicle.TabIndex = 25;
-            // 
-            // label49
-            // 
-            label49.AutoSize = true;
-            label49.Location = new Point(809, 150);
-            label49.Name = "label49";
-            label49.Size = new Size(78, 15);
-            label49.TabIndex = 24;
-            label49.Text = "Select Vehicle";
+            lblVehicle.AutoSize = true;
+            lblVehicle.Location = new Point(809, 150);
+            lblVehicle.Name = "lblVehicle";
+            lblVehicle.Size = new Size(78, 15);
+            lblVehicle.TabIndex = 24;
+            lblVehicle.Text = "Select Vehicle";
             // 
             // label47
             // 
@@ -1916,8 +1907,7 @@
             ClientSize = new Size(1060, 661);
             Controls.Add(label47);
             Controls.Add(flowLayoutPanel1);
-            Controls.Add(cbVehicle);
-            Controls.Add(label49);
+            Controls.Add(lblVehicle);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
             Controls.Add(label53);
@@ -2111,8 +2101,7 @@
         private PictureBox pictureBox1;
         private Label label53;
         private Label label52;
-        private ComboBox cbVehicle;
-        private Label label49;
+        private Label lblVehicle;
         private Label label47;
         private FlowLayoutPanel flowLayoutPanel1;
         private Panel pnlM1;

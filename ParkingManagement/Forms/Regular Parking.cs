@@ -68,14 +68,14 @@ namespace ParkingManagement.Forms
                 {
                     // This message is fine here as it's typically on the UI thread during form load
                     MessageBox.Show("No video input devices found on this system.", "Camera Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    btnTimeOut.Enabled = false; // Disable timeout button if no camera is available
+               
                 }
             }
             catch (Exception ex)
             {
                 // Catch any errors during device enumeration (e.g., driver issues)
                 MessageBox.Show($"Error initializing video devices: {ex.Message}", "Camera Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnTimeOut.Enabled = false;
+            
             }
 
             //UpdateNextButtonState();
@@ -433,15 +433,7 @@ namespace ParkingManagement.Forms
             _context?.Dispose();
         }
 
-        private void btnTimeOut_Click(object sender, EventArgs e)
-        {
-            // Reset cancellation token for a new scan
-            _qrScanCancellationTokenSource?.Dispose();
-            _qrScanCancellationTokenSource = new CancellationTokenSource();
 
-            // Start the camera and QR scanning process
-            InitializeCamera();
-        }
 
         private async Task ProcessScannedQRCodeDataAsync(string qrCodeData)
         {
