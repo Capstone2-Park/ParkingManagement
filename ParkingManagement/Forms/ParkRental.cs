@@ -194,10 +194,29 @@ namespace ParkingManagement.Forms
 
             // Combine date and time
             DateTime startDate = dtpDateStart.Value.Date + dtpTime.Value.TimeOfDay;
-            int hoursPerDay = cbTime.SelectedIndex + 1;
-            DateTime endDate = startDate.AddHours(hoursPerDay);
-
             string durationType = cmbDurationType.SelectedItem.ToString();
+            DateTime endDate;
+
+            switch (durationType)
+            {
+                case "Daily":
+                    int hoursPerDay = cbTime.SelectedIndex + 1;
+                    endDate = startDate.AddHours(hoursPerDay);
+                    break;
+                case "Weekly":
+                    endDate = startDate.AddDays(7);
+                    break;
+                case "Monthly":
+                    endDate = startDate.AddMonths(1);
+                    break;
+                case "Yearly":
+                    endDate = startDate.AddYears(1);
+                    break;
+                default:
+                    endDate = startDate;
+                    break;
+            }
+
             string vehicleType = _selectedVehicle.VehicleType?.Trim();
 
             if (endDate <= startDate)
@@ -217,7 +236,7 @@ namespace ParkingManagement.Forms
                 return false;
             }
 
-            double selectedHours = hoursPerDay;
+            double selectedHours = cbTime.SelectedIndex + 1;
             if (selectedHours <= 0) selectedHours = 1;
 
             double percentage = selectedHours / 24.0;
@@ -285,19 +304,39 @@ namespace ParkingManagement.Forms
             if (!calculationSuccess)
                 return;
 
-            // Add to the scheduled list
             // Combine date and time for scheduling
             DateTime startDate = dtpDateStart.Value.Date + dtpTime.Value.TimeOfDay;
-            DateTime endDate = startDate.AddHours(cbTime.SelectedIndex + 1);
+            string durationType = cmbDurationType.SelectedItem.ToString();
+            DateTime endDate;
+
+            switch (durationType)
+            {
+                case "Daily":
+                    int hoursPerDay = cbTime.SelectedIndex + 1;
+                    endDate = startDate.AddHours(hoursPerDay);
+                    break;
+                case "Weekly":
+                    endDate = startDate.AddDays(7);
+                    break;
+                case "Monthly":
+                    endDate = startDate.AddMonths(1);
+                    break;
+                case "Yearly":
+                    endDate = startDate.AddYears(1);
+                    break;
+                default:
+                    endDate = startDate;
+                    break;
+            }
 
             _scheduledVehicles.Add((
                 _currentClient,
                 _selectedVehicle,
-                cmbDurationType.SelectedItem.ToString(),
+                durationType,
                 startDate,
                 endDate,
                 _calculatedTotalAmount
-));
+            ));
 
             await RefreshScheduledListView();
             LoadClientVehicles(); // <-- Add this line to refresh cbVehicle
