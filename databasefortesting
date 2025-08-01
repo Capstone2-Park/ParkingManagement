@@ -1,7 +1,8 @@
 
-CREATE DATABASE ParkingSystem
+-- Create the database
+CREATE DATABASE ParkingSystem;
 
-use ParkingSystem
+USE ParkingSystem;
 
 
 -- Client Table
@@ -24,6 +25,7 @@ CREATE TABLE Vehicle (
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
 );
 
+
 -- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
     SessionID INT IDENTITY(1,1) PRIMARY KEY,
@@ -31,17 +33,19 @@ CREATE TABLE RegularParkingSessions (
     PlateNumber NVARCHAR(20) NOT NULL,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
-    TimeOut DATETIME NULL,
+    [TimeOut] DATETIME NULL,
     TotalAmount DECIMAL(10,2) NULL,
-    QRCodeData NVARCHAR(MAX) NULL
+
 );
 
--- Now create the Fee table
+-- Fee Table
 CREATE TABLE Fee (
     FeeID INT PRIMARY KEY IDENTITY(1,1),
     ClientID NVARCHAR(10) NULL,
     SessionID INT NULL,
     VehicleType NVARCHAR(50),
+    DurationType NVARCHAR(50),
+    FixedPrice DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
 );
@@ -55,34 +59,34 @@ VALUES
 ('2-Wheels', 5000.00, 'Yearly'),
 ('4-Wheels', 40.00, 'Daily'),
 ('4-Wheels', 300.00, 'Weekly'),
-('4-Wheels', 1000.00, 'Motherly'),
-('4-Wheels', 10000.00, 'Yearly'),
+('4-Wheels', 1000.00, 'Monthly'),
+('4-Wheels', 10000.00, 'Yearly');
 
--- VehicleSessions Table
+-- VehicleSessions Table (now includes 'Daily' in the CHECK constraint)
 CREATE TABLE VehicleSessions (
     SessionID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     VehicleID VARCHAR(50) NOT NULL,
-    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Weekly', 'Monthly', 'Yearly')),
+    DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Daily', 'Weekly', 'Monthly', 'Yearly')),
     StartDate DATE NOT NULL,
     EndDateTime DATETIME NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL
 );
 
-
-
-CREATE TABLE ParkingSlot (
+-- Parkingslot Table
+CREATE TABLE Parkingslot (
     SlotID INT IDENTITY(1,1) PRIMARY KEY,
     VehicleID NVARCHAR(10) NULL,
     ClientID NVARCHAR(10) NULL,
-	VehicleStatus VARCHAR(50) NOT NULL,
-	SlotStatus VARCHAR(50) NOT NULL,
+    SessionID INT NULL,
+    VehicleStatus VARCHAR(50),
+    SlotStatus VARCHAR(50) NOT NULL,
     SlotNumber VARCHAR(50) NOT NULL,
     FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
 );
 
-
-
+-- Sample data for Parkingslot
 INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber)
 VALUES
 ('NotParked', 'available', 'V1'),
@@ -133,3 +137,20 @@ VALUES
 ('NotParked', 'available', 'M22'),
 ('NotParked', 'available', 'M23'),
 ('NotParked', 'available', 'M24');
+
+
+CREATE TABLE RegularParkingTotal (
+    TotalID INT IDENTITY(1,1) PRIMARY KEY,
+    SessionID int,
+    SlotID int,
+	PlateNumber NVARCHAR(20) NOT NULL,
+    VehicleType NVARCHAR(50) NOT NULL,
+    TimeIn DATETIME NOT NULL,
+    [TimeOut] DATETIME NULL,
+	SlotNumber VARCHAR(50) NOT NULL,
+	QRCodeImage NVARCHAR(MAX) NULL,
+	Totalamount NVARCHAR(MAX) NULL,
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
+	FOREIGN KEY (SlotID) REFERENCES ParkingSlot(SlotID),
+);
+
