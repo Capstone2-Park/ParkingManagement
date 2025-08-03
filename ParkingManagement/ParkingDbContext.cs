@@ -17,7 +17,7 @@ namespace ParkingManagement
         public DbSet<VehicleSession> VehicleSessions { get; set; }
         public DbSet<RegularParkingSession> RegularParkingSessions { get; set; }
         public DbSet<Parkingslot> Parkingslot { get; set; }
-        public DbSet<RegularParkingSlot> RegularParkingSlot { get; set; }
+        public DbSet<RegularParkingTotals> RegularParkingTotal { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -67,7 +67,7 @@ namespace ParkingManagement
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeIn).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeOut).IsRequired(false);
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TotalAmount).HasColumnType("DECIMAL(10,2)").IsRequired(false);
-            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.QRCodeData).HasColumnType("NVARCHAR(MAX)").IsRequired(false);
+          
 
             modelBuilder.Entity<Parkingslot>().ToTable("Parkingslot");
             modelBuilder.Entity<Parkingslot>().HasKey(ps => ps.SlotID);
@@ -90,17 +90,16 @@ namespace ParkingManagement
                 .HasForeignKey(ps => ps.ClientID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<RegularParkingSlot>().ToTable("RegularParkingSlot");
-            modelBuilder.Entity<RegularParkingSlot>().HasKey(rps => rps.SlotID);
-            modelBuilder.Entity<RegularParkingSlot>().Property(rps => rps.SlotNumber).HasMaxLength(50).IsRequired();
-            modelBuilder.Entity<RegularParkingSlot>().Property(rps => rps.SlotStatus).HasMaxLength(50).IsRequired();
-            modelBuilder.Entity<RegularParkingSlot>().Property(rps => rps.VehicleStatus).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Parkingslot>()
+                .HasOne(ps => ps.Session)
+                .WithMany()
+                .HasForeignKey(ps => ps.SessionID)
+                .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<RegularParkingSlot>()
-            .HasOne(ps => ps.Session)
-            .WithMany()
-            .HasForeignKey(ps => ps.SessionID)
-            .OnDelete(DeleteBehavior.SetNull);
+
+
+            modelBuilder.Entity<RegularParkingTotals>().ToTable("RegularParkingTotals");
+            modelBuilder.Entity<RegularParkingTotals>().HasKey(rpt => rpt.TotalID);
         }
     }
 }

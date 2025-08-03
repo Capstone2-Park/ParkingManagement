@@ -117,7 +117,7 @@ namespace ParkingManagement.Forms
                 }
 
                 // Fix for CS0019: Ensure both operands are of the same type by converting session.SessionID to string
-                var slot = db.RegularParkingSlot.FirstOrDefault(s => s.SessionID == session.SessionID);
+                var slot = db.Parkingslot.FirstOrDefault(s => s.SessionID.ToString() == session.SessionID.ToString());
 
                 var confirm = MessageBox.Show($"Checkout {session.PlateNumber}?", "Confirm", MessageBoxButtons.YesNo);
                 if (confirm == DialogResult.Yes)

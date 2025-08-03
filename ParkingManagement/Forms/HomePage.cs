@@ -69,9 +69,10 @@ namespace ParkingManagement
             ShowFormInPanel(new Regular_Parking());
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+        private void button1_Click_2(object sender, EventArgs e)
         {
-            ShowFormInPanel(new ParkingSlot());
+          
         }
     }
 }

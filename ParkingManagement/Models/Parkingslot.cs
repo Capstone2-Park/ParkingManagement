@@ -23,7 +23,8 @@ namespace ParkingManagement.Models
        
         public string VehicleID { get; set; }
 
-       
+        public int? SessionID { get; set; }
+
         public string ClientID { get; set; }
 
         public string SlotNumber { get; set; }
@@ -37,6 +38,7 @@ namespace ParkingManagement.Models
         [ForeignKey("ClientID")]
         public virtual Client Client { get; set; }
 
-        
+        [ForeignKey("SessionID")]
+        public virtual required RegularParkingSession Session { get; set; }
     }
 }

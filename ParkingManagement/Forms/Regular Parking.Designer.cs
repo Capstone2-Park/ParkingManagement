@@ -32,14 +32,12 @@
             txtPlateNumber = new TextBox();
             cmbTypeOfVehicle = new ComboBox();
             dgvTimeInTimeOutData = new DataGridView();
-            pcbQRcode = new PictureBox();
             btnTimeIn = new Button();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
-            btnNext = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvTimeInTimeOutData).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pcbQRcode).BeginInit();
             SuspendLayout();
             // 
             // txtVehicleId
@@ -73,18 +71,9 @@
             dgvTimeInTimeOutData.Size = new Size(865, 150);
             dgvTimeInTimeOutData.TabIndex = 3;
             // 
-            // pcbQRcode
-            // 
-            pcbQRcode.BackColor = SystemColors.ControlLight;
-            pcbQRcode.Location = new Point(674, 104);
-            pcbQRcode.Name = "pcbQRcode";
-            pcbQRcode.Size = new Size(233, 233);
-            pcbQRcode.TabIndex = 4;
-            pcbQRcode.TabStop = false;
-            // 
             // btnTimeIn
             // 
-            btnTimeIn.Location = new Point(783, 562);
+            btnTimeIn.Location = new Point(897, 564);
             btnTimeIn.Name = "btnTimeIn";
             btnTimeIn.Size = new Size(95, 39);
             btnTimeIn.TabIndex = 5;
@@ -119,27 +108,26 @@
             label3.TabIndex = 9;
             label3.Text = "Type of Vehicle";
             // 
-            // btnNext
+            // button1
             // 
-            btnNext.Location = new Point(895, 562);
-            btnNext.Name = "btnNext";
-            btnNext.Size = new Size(97, 39);
-            btnNext.TabIndex = 10;
-            btnNext.Text = "Next";
-            btnNext.UseVisualStyleBackColor = true;
-            btnNext.Click += btnNext_Click;
+            button1.Location = new Point(526, 564);
+            button1.Name = "button1";
+            button1.Size = new Size(95, 39);
+            button1.TabIndex = 10;
+            button1.Text = "Time in";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // Regular_Parking
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1138, 734);
-            Controls.Add(btnNext);
+            Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(btnTimeIn);
-            Controls.Add(pcbQRcode);
             Controls.Add(dgvTimeInTimeOutData);
             Controls.Add(cmbTypeOfVehicle);
             Controls.Add(txtPlateNumber);
@@ -149,7 +137,6 @@
             FormClosing += Regular_Parking_FormClosing;
             Load += Regular_Parking_Load;
             ((System.ComponentModel.ISupportInitialize)dgvTimeInTimeOutData).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pcbQRcode).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -160,11 +147,10 @@
         private TextBox txtPlateNumber;
         private ComboBox cmbTypeOfVehicle;
         private DataGridView dgvTimeInTimeOutData;
-        private PictureBox pcbQRcode;
         private Button btnTimeIn;
         private Label label1;
         private Label label2;
         private Label label3;
-        private Button btnNext;
+        private Button button1;
     }
 }

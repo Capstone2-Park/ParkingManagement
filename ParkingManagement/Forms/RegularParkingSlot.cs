@@ -11,80 +11,91 @@ namespace ParkingManagement.Forms
 {
     public partial class RegularParkingSlot : Form
     {
-        private List<Models.RegularParkingSlot> slots;
+        private List<Parkingslot> slots;
+        private int sessionId;
         private string selectedPlateNumber = null;
         private string selectedVehicleType = null;
 
-        public RegularParkingSlot()
+        public RegularParkingSlot(int sessionId)
         {
             InitializeComponent();
+            this.sessionId = sessionId;
             Load += RegularParkingSlot_Load;
         }
 
         private void RegularParkingSlot_Load(object sender, EventArgs e)
         {
-            LoadSlots();
-
-            using (var db = new ParkingDbContext())
+            try
             {
-                var recentSession = db.RegularParkingSessions
-                    .OrderByDescending(s => s.SessionID)
-                    .FirstOrDefault();
+                LoadSlots();
 
-                if (recentSession != null)
+                using (var db = new ParkingDbContext())
                 {
-                    selectedPlateNumber = recentSession.PlateNumber;
-                    selectedVehicleType = recentSession.VehicleType;
-                    lblVehicle.Text = selectedPlateNumber;
+                    var session = db.RegularParkingSessions
+                        .OrderByDescending(s => s.SessionID)
+                        .FirstOrDefault();
+
+                    if (session == null)
+                    {
+                        lblVehicle.Text = "No vehicle found";
+                        SetAllPanelsEnabled(false);
+                        MessageBox.Show("No parking session found. Please create a session first.", "No Session", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    selectedPlateNumber = session.PlateNumber ?? string.Empty;
+                    selectedVehicleType = session.VehicleType ?? string.Empty;
+                    lblVehicle.Text = !string.IsNullOrEmpty(selectedPlateNumber) ? selectedPlateNumber : "No Plate Number";
+
+                    if (string.IsNullOrEmpty(selectedPlateNumber) || string.IsNullOrEmpty(selectedVehicleType))
+                    {
+                        SetAllPanelsEnabled(false);
+                        MessageBox.Show("Session data is incomplete. Please check vehicle information.", "Incomplete Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
 
                     MessageBox.Show("Please select a Slot.", "Select Slot", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     if (selectedVehicleType == "2-Wheels")
                     {
-                        SetPanelsEnabled("V", false, Color.Gray); // disables and sets gray
-                        SetPanelsEnabled("M", true);              // enables and updates color
+                        SetPanelsEnabled("V", false, Color.Gray);
+                        SetPanelsEnabled("M", true);
                     }
                     else if (selectedVehicleType == "4-Wheels")
                     {
-                        SetPanelsEnabled("M", false, Color.Gray); // disables and sets gray
-                        SetPanelsEnabled("V", true);              // enables and updates color
+                        SetPanelsEnabled("M", false, Color.Gray);
+                        SetPanelsEnabled("V", true);
                     }
                     else
                     {
                         SetAllPanelsEnabled(false);
                     }
                 }
-                else
+
+                for (int i = 1; i <= 24; i++)
                 {
-                    lblVehicle.Text = "No vehicle found";
-                    SetAllPanelsEnabled(false);
+                    var vPanel = this.Controls.Find($"pnlV{i}", true).FirstOrDefault() as Panel;
+                    var mPanel = this.Controls.Find($"pnlM{i}", true).FirstOrDefault() as Panel;
+                    if (vPanel != null) vPanel.Click += Panel_Click;
+                    if (mPanel != null) mPanel.Click += Panel_Click;
                 }
             }
-
-            // Attach click event to all panels
-            for (int i = 1; i <= 24; i++)
+            catch (Exception ex)
             {
-                var vPanel = this.Controls.Find($"pnlV{i}", true).FirstOrDefault() as Panel;
-                var mPanel = this.Controls.Find($"pnlM{i}", true).FirstOrDefault() as Panel;
-                if (vPanel != null) vPanel.Click += Panel_Click;
-                if (mPanel != null) mPanel.Click += Panel_Click;
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetAllPanelsEnabled(false);
+                lblVehicle.Text = "Error";
             }
-
-            // Only update slot panel colors after loading slots or parking
-            // Remove this line from here:
-            // UpdateSlotPanelColors();
         }
 
         private void LoadSlots()
         {
             using (var db = new ParkingDbContext())
             {
-                var slotSet = db.Set<Models.RegularParkingSlot>();
-                slots = slotSet != null ? slotSet.ToList() : new List<Models.RegularParkingSlot>();
+                var slotSet = db.Set<Parkingslot>();
+                slots = slotSet != null ? slotSet.ToList() : new List<Parkingslot>();
             }
         }
-
-       
 
         private void SetPanelsEnabled(string prefix, bool enabled, Color? disabledColor = null)
         {
@@ -164,11 +175,13 @@ namespace ParkingManagement.Forms
             {
                 using (var db = new ParkingDbContext())
                 {
-                    var dbSlot = db.Set<Models.RegularParkingSlot>().FirstOrDefault(s => s.SlotNumber == slotNumber);
+                    var dbSlot = db.Set<Parkingslot>().FirstOrDefault(s => s.SlotNumber == slotNumber);
                     if (dbSlot != null)
                     {
                         dbSlot.VehicleStatus = "Parked";
                         dbSlot.SlotStatus = "occupied";
+                        dbSlot.SessionID = sessionId; // Link to RegularParkingSession
+                        
                         db.SaveChanges();
                     }
                 }
@@ -180,6 +193,20 @@ namespace ParkingManagement.Forms
 
                 selectedPlateNumber = null;
                 selectedVehicleType = null;
+
+                // Navigate to QRcode form
+                var homePage = this.ParentForm as HomePage;
+                if (homePage != null)
+                {
+                    var qrForm = new QRcode(sessionId); // Pass sessionId if QRcode expects it
+                    homePage.ShowFormInPanel(qrForm);
+                }
+                else
+                {
+                    // Fallback: just show QRcode as a dialog if not hosted in HomePage
+                    var qrForm = new QRcode(sessionId);
+                    qrForm.ShowDialog();
+                }
             }
         }
     }
