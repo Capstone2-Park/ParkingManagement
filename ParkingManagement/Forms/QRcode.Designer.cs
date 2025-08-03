@@ -34,9 +34,9 @@
             // 
             // pbQRCode
             // 
-            pbQRCode.Location = new Point(217, 117);
+            pbQRCode.Location = new Point(319, 162);
             pbQRCode.Name = "pbQRCode";
-            pbQRCode.Size = new Size(347, 239);
+            pbQRCode.Size = new Size(519, 478);
             pbQRCode.SizeMode = PictureBoxSizeMode.StretchImage;
             pbQRCode.TabIndex = 0;
             pbQRCode.TabStop = false;
@@ -45,7 +45,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1185, 736);
             Controls.Add(pbQRCode);
             Name = "QRcode";
             Text = "QRcode";

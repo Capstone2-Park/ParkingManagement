@@ -32,12 +32,12 @@
             panelHome = new Panel();
             ptbLogo = new PictureBox();
             panel1 = new Panel();
+            button1 = new Button();
             btnRegParkSess = new Button();
             btnRegularParking = new Button();
             btnFeeM = new Button();
             btnClientM = new Button();
             btnRental = new Button();
-            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbLogo).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -75,9 +75,22 @@
             panel1.Size = new Size(161, 711);
             panel1.TabIndex = 0;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.FromArgb(255, 128, 128);
+            button1.Dock = DockStyle.Top;
+            button1.Location = new Point(0, 225);
+            button1.Name = "button1";
+            button1.Size = new Size(161, 45);
+            button1.TabIndex = 9;
+            button1.Text = "Regular Parking LogOut";
+            button1.UseVisualStyleBackColor = false;
+            button1.Visible = false;
+            button1.Click += button1_Click_2;
+            // 
             // btnRegParkSess
             // 
-            btnRegParkSess.BackColor = Color.FromArgb(255, 192, 192);
+            btnRegParkSess.BackColor = Color.FromArgb(255, 128, 128);
             btnRegParkSess.Dock = DockStyle.Top;
             btnRegParkSess.Location = new Point(0, 180);
             btnRegParkSess.Name = "btnRegParkSess";
@@ -114,7 +127,7 @@
             // 
             // btnClientM
             // 
-            btnClientM.BackColor = Color.FromArgb(255, 192, 192);
+            btnClientM.BackColor = Color.FromArgb(255, 128, 128);
             btnClientM.Dock = DockStyle.Top;
             btnClientM.Location = new Point(0, 45);
             btnClientM.Name = "btnClientM";
@@ -135,19 +148,6 @@
             btnRental.Text = "Rental";
             btnRental.UseVisualStyleBackColor = false;
             btnRental.Click += btnRental_Click;
-            // 
-            // button1
-            // 
-            button1.BackColor = Color.FromArgb(255, 192, 192);
-            button1.Dock = DockStyle.Top;
-            button1.Location = new Point(0, 225);
-            button1.Name = "button1";
-            button1.Size = new Size(161, 45);
-            button1.TabIndex = 9;
-            button1.Text = "Regular Parking Session";
-            button1.UseVisualStyleBackColor = false;
-            button1.Visible = false;
-            button1.Click += button1_Click_2;
             // 
             // HomePage
             // 
