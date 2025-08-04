@@ -46,9 +46,9 @@
             // 
             // rtbReceipt
             // 
-            rtbReceipt.Location = new Point(430, 86);
+            rtbReceipt.Location = new Point(451, 86);
             rtbReceipt.Name = "rtbReceipt";
-            rtbReceipt.Size = new Size(329, 281);
+            rtbReceipt.Size = new Size(351, 492);
             rtbReceipt.TabIndex = 1;
             rtbReceipt.Text = "";
             // 
@@ -76,7 +76,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(862, 464);
+            ClientSize = new Size(930, 590);
             Controls.Add(btnOff);
             Controls.Add(btnOn);
             Controls.Add(rtbReceipt);
