@@ -95,7 +95,7 @@ namespace ParkingManagement.Forms
 
         private void ProcessQRCode(string qrData)
         {
-            // Parse SessionID from qrData (assuming format: "SessionID: 123\n...")
+            // Example: qrData contains "SessionID: 123\nPlate: ABC123\n..."
             var lines = qrData.Split('\n');
             var sessionIdLine = lines.FirstOrDefault(l => l.StartsWith("SessionID:"));
             if (sessionIdLine == null)
@@ -108,40 +108,55 @@ namespace ParkingManagement.Forms
 
             using (var db = new ParkingDbContext())
             {
-                var session = db.RegularParkingSessions.FirstOrDefault(s => s.SessionID == sessionId);
-                if (session == null)
+                // Find the RegularParkingTotals record by SessionID
+                var total = db.RegularParkingTotal.FirstOrDefault(t => t.SessionID == sessionId);
+                if (total == null)
                 {
-                    MessageBox.Show("Session not found.");
+                    MessageBox.Show("Parking record not found.");
                     _isScanning = true;
                     return;
                 }
 
-                // Fix for CS0019: Ensure both operands are of the same type by converting session.SessionID to string
-                var slot = db.Parkingslot.FirstOrDefault(s => s.SessionID.ToString() == session.SessionID.ToString());
+                // Set TimeOut to now if not already set
+                if (total.TimeOut == null)
+                    total.TimeOut = DateTime.Now;
 
-                var confirm = MessageBox.Show($"Checkout {session.PlateNumber}?", "Confirm", MessageBoxButtons.YesNo);
-                if (confirm == DialogResult.Yes)
-                {
-                    // Compose receipt
-                    var receipt = new StringBuilder();
-                    receipt.AppendLine("=== Parking Receipt ===");
-                    receipt.AppendLine($"Vehicle ID: {session.RegularVehicleID}");
-                    receipt.AppendLine($"Plate Number: {session.PlateNumber}");
-                    receipt.AppendLine($"Vehicle Type: {session.VehicleType}");
-                    receipt.AppendLine($"Time In: {session.TimeIn}");
-                    receipt.AppendLine($"Time Out: {DateTime.Now}");
-                    receipt.AppendLine($"Slot: {slot?.SlotNumber ?? "N/A"}");
-                    receipt.AppendLine($"Total Amount: {session.TotalAmount?.ToString("N2") ?? "Pending"}");
-                    rtbReceipt.Text = receipt.ToString();
+                // Calculate total hours
+                var timeIn = total.TimeIn;
+                var timeOut = total.TimeOut.Value;
+                var totalHours = (timeOut - timeIn).TotalHours;
 
-                    // Optionally update session/slot status here
-                }
-                else
-                {
-                    _isScanning = true;
-                }
+                // Get the correct daily fee from Fee table
+                string vehicleType = total.VehicleType?.Trim();
+                string durationType = "Daily";
+                var fee = db.Fees.FirstOrDefault(f => f.VehicleType == vehicleType && f.DurationType == durationType);
+                decimal dailyRate = fee?.FixedPrice ?? 0;
+
+                // Calculate total amount: 1 daily fee for up to 2 hours, add another for each additional 2 hours
+                int days = (int)Math.Ceiling(totalHours / 2.0);
+                total.TotalAmount = days * dailyRate;
+
+                // Save changes
+                db.SaveChanges();
+
+                // Compose and display receipt
+                var receipt = new StringBuilder();
+                receipt.AppendLine("=== Parking Receipt ===");
+                receipt.AppendLine($"Plate Number: {total.PlateNumber}");
+                receipt.AppendLine($"Vehicle Type: {total.VehicleType}");
+                receipt.AppendLine($"Time In: {total.TimeIn}");
+                receipt.AppendLine($"Time Out: {total.TimeOut}");
+                receipt.AppendLine($"Slot: {total.SlotNumber}");
+                receipt.AppendLine($"Total Hours: {totalHours:F2}");
+                receipt.AppendLine($"Total Amount: {total.TotalAmount:N2}");
+                rtbReceipt.Text = receipt.ToString();
             }
             StopCamera();
+        }
+
+        private void RegularParkingTotal_Load(object sender, EventArgs e)
+        {
+           
         }
     }
 }

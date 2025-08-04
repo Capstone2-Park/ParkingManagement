@@ -83,6 +83,7 @@
             Controls.Add(ptbCheckOut);
             Name = "RegularParkingTotal";
             Text = "RegularParkingTotal";
+            Load += RegularParkingTotal_Load;
             ((System.ComponentModel.ISupportInitialize)ptbCheckOut).EndInit();
             ResumeLayout(false);
         }
