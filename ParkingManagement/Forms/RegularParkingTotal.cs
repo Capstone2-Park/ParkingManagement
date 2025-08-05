@@ -18,7 +18,7 @@ namespace ParkingManagement.Forms
         private VideoCaptureDevice _videoDevice;
         private FilterInfoCollection _videoDevices;
         private BarcodeReader<Bitmap> _qrReader;
-        private bool _isScanning;
+        private Bitmap _lastFrame; // Store the last frame for capture
 
         public RegularParkingTotal()
         {
@@ -26,12 +26,19 @@ namespace ParkingManagement.Forms
             _qrReader = new BarcodeReader<Bitmap>(
                 bitmap =>
                 {
-                    // Convert Bitmap to byte[] for RGBLuminanceSource
-                    using (var memoryStream = new System.IO.MemoryStream())
+                    // Lock the bitmap's bits to access raw pixel data
+                    var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                    var bmpData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppRgb);
+                    try
                     {
-                        bitmap.Save(memoryStream, ImageFormat.Bmp);
-                        var bitmapBytes = memoryStream.ToArray();
-                        return new RGBLuminanceSource(bitmapBytes, bitmap.Width, bitmap.Height, RGBLuminanceSource.BitmapFormat.BGR32);
+                        int bytes = Math.Abs(bmpData.Stride) * bitmap.Height;
+                        byte[] rgbValues = new byte[bytes];
+                        System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, rgbValues, 0, bytes);
+                        return new RGBLuminanceSource(rgbValues, bitmap.Width, bitmap.Height, RGBLuminanceSource.BitmapFormat.BGR32);
+                    }
+                    finally
+                    {
+                        bitmap.UnlockBits(bmpData);
                     }
                 })
             {
@@ -42,6 +49,9 @@ namespace ParkingManagement.Forms
 
         private void btnOn_Click(object sender, EventArgs e)
         {
+            lblScanStatus.Text = "Camera On. Ready to capture.";
+            lblScanStatus.Visible = true;
+
             _videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (_videoDevices.Count == 0)
             {
@@ -51,11 +61,30 @@ namespace ParkingManagement.Forms
             _videoDevice = new VideoCaptureDevice(_videoDevices[0].MonikerString);
             _videoDevice.NewFrame += VideoDevice_NewFrame;
             _videoDevice.Start();
-            _isScanning = true;
         }
 
         private void btnOff_Click(object sender, EventArgs e)
         {
+            // Capture the current frame and scan for QR code
+            if (_lastFrame != null)
+            {
+                Bitmap captured = (Bitmap)_lastFrame.Clone();
+                var result = _qrReader.Decode(captured);
+                captured.Dispose();
+
+                if (result != null && !string.IsNullOrWhiteSpace(result.Text))
+                {
+                    ProcessQRCode(result.Text);
+                }
+                else
+                {
+                    MessageBox.Show("No QR code detected in the captured image.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No image captured from camera.");
+            }
             StopCamera();
         }
 
@@ -69,28 +98,35 @@ namespace ParkingManagement.Forms
                 _videoDevice = null;
             }
             ptbCheckOut.Image = null;
-            _isScanning = false;
+            _lastFrame?.Dispose();
+            _lastFrame = null;
         }
 
         private void VideoDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            if (!_isScanning) return;
-
             Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
+
+            // Store the latest frame for capture
+            _lastFrame?.Dispose();
+            _lastFrame = (Bitmap)frame.Clone();
+
+            // Resize for display
+            Bitmap resizedFrame = new Bitmap(ptbCheckOut.Width, ptbCheckOut.Height);
+            using (Graphics g = Graphics.FromImage(resizedFrame))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(frame, 0, 0, ptbCheckOut.Width, ptbCheckOut.Height);
+            }
+
             ptbCheckOut.Invoke(new Action(() =>
             {
                 ptbCheckOut.Image?.Dispose();
-                ptbCheckOut.Image = (Bitmap)frame.Clone();
+                ptbCheckOut.Image = (Bitmap)resizedFrame.Clone();
+          
             }));
 
-            var result = _qrReader.Decode(frame);
             frame.Dispose();
-
-            if (result != null && !string.IsNullOrWhiteSpace(result.Text))
-            {
-                _isScanning = false;
-                Invoke(new Action(() => ProcessQRCode(result.Text)));
-            }
+            resizedFrame.Dispose();
         }
 
         private void ProcessQRCode(string qrData)
@@ -101,10 +137,14 @@ namespace ParkingManagement.Forms
             if (sessionIdLine == null)
             {
                 MessageBox.Show("Invalid QR code.");
-                _isScanning = true;
                 return;
             }
-            int sessionId = int.Parse(sessionIdLine.Split(':')[1].Trim());
+            var parts = sessionIdLine.Split(':'); 
+            if (parts.Length < 2 || !int.TryParse(parts[1].Trim(), out int sessionId))
+            {
+                MessageBox.Show("Invalid SessionID format in QR code.");
+                return;
+            }
 
             using (var db = new ParkingDbContext())
             {
@@ -113,7 +153,6 @@ namespace ParkingManagement.Forms
                 if (total == null)
                 {
                     MessageBox.Show("Parking record not found.");
-                    _isScanning = true;
                     return;
                 }
 
@@ -151,7 +190,7 @@ namespace ParkingManagement.Forms
                 receipt.AppendLine($"Total Amount: {total.TotalAmount:N2}");
                 rtbReceipt.Text = receipt.ToString();
             }
-            StopCamera();
+            lblScanStatus.Visible = false;
         }
 
         private void RegularParkingTotal_Load(object sender, EventArgs e)

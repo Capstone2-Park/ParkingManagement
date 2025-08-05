@@ -32,21 +32,23 @@
             rtbReceipt = new RichTextBox();
             btnOn = new Button();
             btnOff = new Button();
+            lblScanStatus = new Label();
             ((System.ComponentModel.ISupportInitialize)ptbCheckOut).BeginInit();
             SuspendLayout();
             // 
             // ptbCheckOut
             // 
             ptbCheckOut.BackColor = SystemColors.ActiveCaption;
-            ptbCheckOut.Location = new Point(120, 86);
+            ptbCheckOut.Location = new Point(49, 121);
             ptbCheckOut.Name = "ptbCheckOut";
-            ptbCheckOut.Size = new Size(232, 194);
+            ptbCheckOut.Size = new Size(452, 311);
+            ptbCheckOut.SizeMode = PictureBoxSizeMode.StretchImage;
             ptbCheckOut.TabIndex = 0;
             ptbCheckOut.TabStop = false;
             // 
             // rtbReceipt
             // 
-            rtbReceipt.Location = new Point(451, 86);
+            rtbReceipt.Location = new Point(565, 121);
             rtbReceipt.Name = "rtbReceipt";
             rtbReceipt.Size = new Size(351, 492);
             rtbReceipt.TabIndex = 1;
@@ -54,7 +56,7 @@
             // 
             // btnOn
             // 
-            btnOn.Location = new Point(120, 298);
+            btnOn.Location = new Point(141, 516);
             btnOn.Name = "btnOn";
             btnOn.Size = new Size(106, 30);
             btnOn.TabIndex = 2;
@@ -64,7 +66,7 @@
             // 
             // btnOff
             // 
-            btnOff.Location = new Point(246, 298);
+            btnOff.Location = new Point(289, 516);
             btnOff.Name = "btnOff";
             btnOff.Size = new Size(106, 30);
             btnOff.TabIndex = 3;
@@ -72,11 +74,21 @@
             btnOff.UseVisualStyleBackColor = true;
             btnOff.Click += btnOff_Click;
             // 
+            // lblScanStatus
+            // 
+            lblScanStatus.AutoSize = true;
+            lblScanStatus.Location = new Point(264, 90);
+            lblScanStatus.Name = "lblScanStatus";
+            lblScanStatus.Size = new Size(38, 15);
+            lblScanStatus.TabIndex = 4;
+            lblScanStatus.Text = "label1";
+            // 
             // RegularParkingTotal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(930, 590);
+            ClientSize = new Size(967, 720);
+            Controls.Add(lblScanStatus);
             Controls.Add(btnOff);
             Controls.Add(btnOn);
             Controls.Add(rtbReceipt);
@@ -86,6 +98,7 @@
             Load += RegularParkingTotal_Load;
             ((System.ComponentModel.ISupportInitialize)ptbCheckOut).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -94,5 +107,6 @@
         private RichTextBox rtbReceipt;
         private Button btnOn;
         private Button btnOff;
+        private Label lblScanStatus;
     }
 }

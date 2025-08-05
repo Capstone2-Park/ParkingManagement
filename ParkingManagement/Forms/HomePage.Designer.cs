@@ -34,7 +34,6 @@
             panel1 = new Panel();
             button1 = new Button();
             btnRegParkSess = new Button();
-            btnRegularParking = new Button();
             btnFeeM = new Button();
             btnClientM = new Button();
             btnRental = new Button();
@@ -66,7 +65,6 @@
             // 
             panel1.Controls.Add(button1);
             panel1.Controls.Add(btnRegParkSess);
-            panel1.Controls.Add(btnRegularParking);
             panel1.Controls.Add(btnFeeM);
             panel1.Controls.Add(btnClientM);
             panel1.Controls.Add(btnRental);
@@ -79,39 +77,25 @@
             // 
             button1.BackColor = Color.FromArgb(255, 128, 128);
             button1.Dock = DockStyle.Top;
-            button1.Location = new Point(0, 225);
+            button1.Location = new Point(0, 180);
             button1.Name = "button1";
             button1.Size = new Size(161, 45);
             button1.TabIndex = 9;
             button1.Text = "Regular Parking LogOut";
             button1.UseVisualStyleBackColor = false;
-            button1.Visible = false;
             button1.Click += button1_Click_2;
             // 
             // btnRegParkSess
             // 
             btnRegParkSess.BackColor = Color.FromArgb(255, 128, 128);
             btnRegParkSess.Dock = DockStyle.Top;
-            btnRegParkSess.Location = new Point(0, 180);
+            btnRegParkSess.Location = new Point(0, 135);
             btnRegParkSess.Name = "btnRegParkSess";
             btnRegParkSess.Size = new Size(161, 45);
             btnRegParkSess.TabIndex = 8;
             btnRegParkSess.Text = "Regular Parking Session";
             btnRegParkSess.UseVisualStyleBackColor = false;
-            btnRegParkSess.Visible = false;
             btnRegParkSess.Click += btnRegParkSess_Click;
-            // 
-            // btnRegularParking
-            // 
-            btnRegularParking.BackColor = Color.FromArgb(255, 128, 128);
-            btnRegularParking.Dock = DockStyle.Top;
-            btnRegularParking.Location = new Point(0, 135);
-            btnRegularParking.Name = "btnRegularParking";
-            btnRegularParking.Size = new Size(161, 45);
-            btnRegularParking.TabIndex = 7;
-            btnRegularParking.Text = "Regular Parking";
-            btnRegularParking.UseVisualStyleBackColor = false;
-            btnRegularParking.Click += btnRegularParking_Click;
             // 
             // btnFeeM
             // 
@@ -175,7 +159,6 @@
         private Button btnRental;
         private Button btnClientM;
         private Button btnFeeM;
-        private Button btnRegularParking;
         private Button btnRegParkSess;
         private Button button1;
     }
