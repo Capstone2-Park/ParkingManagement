@@ -19,6 +19,7 @@ namespace ParkingManagement.Forms
         private FilterInfoCollection _videoDevices;
         private BarcodeReader<Bitmap> _qrReader;
         private Bitmap _lastFrame; // Store the last frame for capture
+        private volatile bool _isProcessingQRCode = false; // Prevent multiple scans in quick succession
 
         public RegularParkingTotal()
         {
@@ -49,7 +50,7 @@ namespace ParkingManagement.Forms
 
         private void btnOn_Click(object sender, EventArgs e)
         {
-            lblScanStatus.Text = "Camera On. Ready to capture.";
+            lblScanStatus.Text = "Camera On. Ready to scan.";
             lblScanStatus.Visible = true;
 
             _videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -65,26 +66,6 @@ namespace ParkingManagement.Forms
 
         private void btnOff_Click(object sender, EventArgs e)
         {
-            // Capture the current frame and scan for QR code
-            if (_lastFrame != null)
-            {
-                Bitmap captured = (Bitmap)_lastFrame.Clone();
-                var result = _qrReader.Decode(captured);
-                captured.Dispose();
-
-                if (result != null && !string.IsNullOrWhiteSpace(result.Text))
-                {
-                    ProcessQRCode(result.Text);
-                }
-                else
-                {
-                    MessageBox.Show("No QR code detected in the captured image.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("No image captured from camera.");
-            }
             StopCamera();
         }
 
@@ -144,8 +125,38 @@ namespace ParkingManagement.Forms
             {
                 ptbCheckOut.Image?.Dispose();
                 ptbCheckOut.Image = (Bitmap)resizedFrame.Clone();
-          
             }));
+
+            // Automatic QR code scanning
+            if (!_isProcessingQRCode)
+            {
+                _isProcessingQRCode = true;
+                Bitmap scanFrame = (Bitmap)frame.Clone();
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    try
+                    {
+                        var result = _qrReader.Decode(scanFrame);
+                        if (result != null && !string.IsNullOrWhiteSpace(result.Text))
+                        {
+                            // Process QR code on UI thread
+                            this.Invoke(new Action(() =>
+                            {
+                                ProcessQRCode(result.Text);
+                            }));
+                        }
+                        else
+                        {
+                            // No QR code found, allow next scan
+                            _isProcessingQRCode = false;
+                        }
+                    }
+                    finally
+                    {
+                        scanFrame.Dispose();
+                    }
+                });
+            }
 
             frame.Dispose();
             resizedFrame.Dispose();
@@ -153,28 +164,29 @@ namespace ParkingManagement.Forms
 
         private void ProcessQRCode(string qrData)
         {
-            // Example: qrData contains "SessionID: 123\nPlate: ABC123\n..."
             var lines = qrData.Split('\n');
             var sessionIdLine = lines.FirstOrDefault(l => l.StartsWith("SessionID:"));
             if (sessionIdLine == null)
             {
                 MessageBox.Show("Invalid QR code.");
+                _isProcessingQRCode = false;
                 return;
             }
             var parts = sessionIdLine.Split(':');
             if (parts.Length < 2 || !int.TryParse(parts[1].Trim(), out int sessionId))
             {
                 MessageBox.Show("Invalid SessionID format in QR code.");
+                _isProcessingQRCode = false;
                 return;
             }
 
             using (var db = new ParkingDbContext())
             {
-                // Find the RegularParkingTotals record by SessionID
                 var total = db.RegularParkingTotal.FirstOrDefault(t => t.SessionID == sessionId);
                 if (total == null)
                 {
-                    MessageBox.Show("Parking record not found.");
+                    MessageBox.Show("QR code not found in the system.");
+                    _isProcessingQRCode = false;
                     return;
                 }
 
@@ -182,35 +194,22 @@ namespace ParkingManagement.Forms
 
                 if (!alreadyCheckedOut)
                 {
-                    // Set TimeOut to now if not already set
                     total.TimeOut = DateTime.Now;
-
-                    // Calculate total hours
                     var timeIn = total.TimeIn;
                     var timeOut = total.TimeOut.Value;
                     var totalHours = (timeOut - timeIn).TotalHours;
-
-                    // Treat any positive duration as at least 2 hours
                     if (totalHours > 0 && totalHours < 2)
                         totalHours = 2;
-
-                    // Get the correct daily fee from Fee table
                     string vehicleType = total.VehicleType?.Trim() ?? "";
                     string durationType = "Daily";
                     var fee = db.Fees.FirstOrDefault(f => f.VehicleType.Trim().ToLower() == vehicleType.ToLower() && f.DurationType == durationType);
-
                     decimal dailyRate = fee?.FixedPrice ?? 0;
-
-                    // Calculate total amount: 1 daily fee for up to 2 hours, add another for each additional 2 hours
                     int days = (int)Math.Ceiling(Math.Max(totalHours, 0.01) / 2.0);
                     if (days < 1) days = 1;
                     total.TotalAmount = days * dailyRate;
-
-                    // Save changes
                     db.SaveChanges();
                 }
 
-                // Compose and display receipt
                 var receipt = new StringBuilder();
                 receipt.AppendLine("=== Parking Receipt ===");
                 receipt.AppendLine($"Plate Number: {total.PlateNumber}");
@@ -225,12 +224,13 @@ namespace ParkingManagement.Forms
             }
 
             lblScanStatus.Visible = false;
-            StopCamera(); // Turn off camera and clear ptbCheckOut
+            StopCamera();
+            _isProcessingQRCode = false;
         }
 
         private void RegularParkingTotal_Load(object sender, EventArgs e)
         {
-           
+
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

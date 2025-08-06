@@ -31,7 +31,6 @@
             ptbCheckOut = new PictureBox();
             rtbReceipt = new RichTextBox();
             btnOn = new Button();
-            btnOff = new Button();
             lblScanStatus = new Label();
             ((System.ComponentModel.ISupportInitialize)ptbCheckOut).BeginInit();
             SuspendLayout();
@@ -64,16 +63,6 @@
             btnOn.UseVisualStyleBackColor = true;
             btnOn.Click += btnOn_Click;
             // 
-            // btnOff
-            // 
-            btnOff.Location = new Point(289, 516);
-            btnOff.Name = "btnOff";
-            btnOff.Size = new Size(106, 30);
-            btnOff.TabIndex = 3;
-            btnOff.Text = "Camera Off";
-            btnOff.UseVisualStyleBackColor = true;
-            btnOff.Click += btnOff_Click;
-            // 
             // lblScanStatus
             // 
             lblScanStatus.AutoSize = true;
@@ -89,7 +78,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(967, 720);
             Controls.Add(lblScanStatus);
-            Controls.Add(btnOff);
             Controls.Add(btnOn);
             Controls.Add(rtbReceipt);
             Controls.Add(ptbCheckOut);
@@ -106,7 +94,6 @@
         private PictureBox ptbCheckOut;
         private RichTextBox rtbReceipt;
         private Button btnOn;
-        private Button btnOff;
         private Label lblScanStatus;
     }
 }
