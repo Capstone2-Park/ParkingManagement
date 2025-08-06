@@ -133,15 +133,53 @@ namespace ParkingManagement.Forms
             if (panel == null) return;
             string slotNumber = panelName.Replace("pnl", "");
             var slot = slots.FirstOrDefault(s => s.SlotNumber == slotNumber);
+
+            // Find or create a label for the panel
+            Label statusLabel = panel.Controls.OfType<Label>().FirstOrDefault();
+            if (statusLabel == null)
+            {
+                statusLabel = new Label
+                {
+                    AutoSize = false,
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    BackColor = Color.Transparent
+                };
+                panel.Controls.Add(statusLabel);
+                statusLabel.BringToFront();
+            }
+
             if (slot == null)
             {
                 panel.BackColor = Color.Gold;
+                statusLabel.Text = "Available";
                 return;
             }
-            if (slot.SlotStatus == "occupied")
-                panel.BackColor = Color.Red;
+
+            // Check if slot is occupied
+            if (string.Equals(slot.SlotStatus, "occupied", StringComparison.OrdinalIgnoreCase))
+            {
+                // Check if the occupying session is a rental
+                // Example: If you have a property in Session that marks it as rental, e.g., IsRental
+                if (slot.Session != null && slot.Session.GetType().Name == "RentalParkingSession")
+                {
+                    // This slot is occupied by a rental session
+                    panel.BackColor = Color.Red;
+                    statusLabel.Text = "Rented";
+                }
+                else
+                {
+                    // This slot is occupied by a regular session
+                    panel.BackColor = Color.Red;
+                    statusLabel.Text = "Occupied";
+                }
+            }
             else
+            {
                 panel.BackColor = Color.Gold;
+                statusLabel.Text = "Available";
+            }
         }
 
         private void Panel_Click(object sender, EventArgs e)
