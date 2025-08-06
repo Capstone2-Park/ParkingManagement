@@ -149,7 +149,7 @@ CREATE TABLE RegularParkingTotals (
     [TimeOut] DATETIME NULL,
 	SlotNumber VARCHAR(50) NOT NULL,
 	QRCodeImage NVARCHAR(MAX) NOT NULL,
-	Totalamount NVARCHAR(MAX) NULL,
+	Totalamount DECIMAL(10,2) NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
 	FOREIGN KEY (SlotID) REFERENCES ParkingSlot(SlotID),
 );
