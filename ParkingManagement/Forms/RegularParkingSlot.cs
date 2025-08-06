@@ -157,26 +157,24 @@ namespace ParkingManagement.Forms
                 return;
             }
 
-            // Check if slot is occupied
-            if (string.Equals(slot.SlotStatus, "occupied", StringComparison.OrdinalIgnoreCase))
+            // Determine slot status
+            if (!string.IsNullOrEmpty(slot.ClientID))
             {
-                // Check if the occupying session is a rental
-                // Example: If you have a property in Session that marks it as rental, e.g., IsRental
-                if (slot.Session != null && slot.Session.GetType().Name == "RentalParkingSession")
-                {
-                    // This slot is occupied by a rental session
-                    panel.BackColor = Color.Red;
-                    statusLabel.Text = "Rented";
-                }
-                else
-                {
-                    // This slot is occupied by a regular session
-                    panel.BackColor = Color.Red;
-                    statusLabel.Text = "Occupied";
-                }
+                // Slot is rented to a client
+                panel.BackColor = Color.Red;
+                statusLabel.Text = "Rented";
+            }
+            else if (!string.IsNullOrEmpty(slot.SlotStatus) && 
+                     slot.SlotStatus.Equals("occupied", StringComparison.OrdinalIgnoreCase) &&
+                     slot.SessionID != null)
+            {
+                // Slot is occupied by a regular parking session
+                panel.BackColor = Color.Red;
+                statusLabel.Text = "Occupied";
             }
             else
             {
+                // Slot is available
                 panel.BackColor = Color.Gold;
                 statusLabel.Text = "Available";
             }

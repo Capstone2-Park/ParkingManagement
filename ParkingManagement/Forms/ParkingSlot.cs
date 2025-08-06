@@ -235,11 +235,21 @@ namespace ParkingManagement.Forms
         {
             foreach (var slot in slots)
             {
-                // Panel names are assumed to be "pnl" + SlotNumber (e.g., pnlV1, pnlM1)
                 var panel = this.Controls.Find("pnl" + slot.SlotNumber, true).FirstOrDefault() as Panel;
                 if (panel != null)
                 {
-                    panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    if (!string.IsNullOrEmpty(slot.ClientID))
+                    {
+                        panel.BackColor = Color.Red; // Rented
+                    }
+                    else if (slot.SessionID != null)
+                    {
+                        panel.BackColor = Color.Red; // Occupied
+                    }
+                    else
+                    {
+                        panel.BackColor = Color.Green; // Available
+                    }
                 }
             }
         }
@@ -248,11 +258,21 @@ namespace ParkingManagement.Forms
         {
             foreach (var slot in slots)
             {
-                // Label names are assumed to be "lblStat" + SlotNumber (e.g., lblStatV1, lblStatM1)
                 var label = this.Controls.Find("lblStat" + slot.SlotNumber, true).FirstOrDefault() as Label;
                 if (label != null)
                 {
-                    label.Text = slot.SlotStatus == "occupied" ? "Rented" : "Available";
+                    if (!string.IsNullOrEmpty(slot.ClientID))
+                    {
+                        label.Text = "Rented";
+                    }
+                    else if (slot.SessionID != null)
+                    {
+                        label.Text = "Occupied";
+                    }
+                    else
+                    {
+                        label.Text = "Available";
+                    }
                 }
             }
         }
@@ -389,68 +409,7 @@ namespace ParkingManagement.Forms
             }
         }
 
-        //private async void btnAdd_Click(object sender, EventArgs e)
-        //{
-        //    // Determine which slot ComboBox is enabled and get the selected slot
-        //    string selectedSlot = cbSlotV.Enabled ? cbSlotV.SelectedItem?.ToString() : cbSlotM.Enabled ? cbSlotM.SelectedItem?.ToString() : null;
-
-        //    if (string.IsNullOrEmpty(selectedSlot))
-        //    {
-        //        MessageBox.Show("Please select a slot.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //        btnNext.Enabled = false;
-        //        return;
-        //    }
-
-        //    using (var db = new ParkingDbContext())
-        //    {
-        //        var slot = await db.Parkingslot.FirstOrDefaultAsync(s => s.SlotNumber == selectedSlot);
-
-        //        if (slot == null)
-        //        {
-        //            MessageBox.Show("Slot not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //            btnNext.Enabled = false;
-        //            return;
-        //        }
-
-        //        if (slot.SlotStatus == "occupied")
-        //        {
-        //            MessageBox.Show("Slot is already occupied.", "Occupied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //            btnNext.Enabled = false;
-        //            return;
-        //        }
-
-        //        // Update slot info
-        //        slot.SlotStatus = "occupied";
-        //        slot.VehicleStatus = "parked";
-        //        db.Parkingslot.Update(slot);
-        //        await db.SaveChangesAsync();
-        //    }
-
-        //    // Update local slot and panel color
-        //    var updatedSlot = slots.FirstOrDefault(s => s.SlotNumber == selectedSlot);
-        //    if (updatedSlot != null)
-        //    {
-        //        updatedSlot.SlotStatus = "occupied";
-        //    }
-        //    var panel = this.Controls.Find("pnl" + selectedSlot, true).FirstOrDefault() as Panel;
-        //    if (panel != null)
-        //    {
-        //        panel.BackColor = Color.Red;
-        //    }
-
-        //    MessageBox.Show("Vehicle parked successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        //    // Refresh the slot list and UI
-        //    using (var db = new ParkingDbContext())
-        //    {
-        //        slots = db.Parkingslot.ToList();
-        //    }
-        //    UpdateSlotPanelColors();
-        //    UpdateSlotStatusLabels();
-
-        //    btnNext.Enabled = true; // Enable Next only after successful add
-        //}
-
+      
         private void SlotPanel_MouseEnter(object sender, EventArgs e)
         {
             var panel = sender as Panel;
@@ -471,7 +430,18 @@ namespace ParkingManagement.Forms
                 var slot = slots.FirstOrDefault(s => s.SlotNumber == slotNumber);
                 if (slot != null)
                 {
-                    panel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
+                    if (!string.IsNullOrEmpty(slot.ClientID))
+                    {
+                        panel.BackColor = Color.Red; // Rented
+                    }
+                    else if (slot.SessionID != null)
+                    {
+                        panel.BackColor = Color.Red; // Occupied
+                    }
+                    else
+                    {
+                        panel.BackColor = Color.Green; // Available
+                    }
                 }
                 else
                 {
