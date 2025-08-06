@@ -49,7 +49,9 @@ namespace ParkingManagement.Forms
                     return;
                 }
 
-                string qrData = $"Plate: {session.PlateNumber}\n" +
+                string qrData = $"SessionID: {session.SessionID}\n" +
+                                $"SlotID: {slot.SlotID}\n" +
+                                $"Plate: {session.PlateNumber}\n" +
                                 $"Type: {session.VehicleType}\n" +
                                 $"Time In: {session.TimeIn}\n" +
                                 $"Time Out: {session.TimeOut}\n" +
@@ -87,7 +89,7 @@ namespace ParkingManagement.Forms
                             SlotNumber = slot.SlotNumber,
                             SlotID = slot.SlotID,           // Set the foreign key
                             SessionID = session.SessionID,  // Set the foreign key
-                            QRCodeImage = qrBytes
+                            QRCodeImage = Convert.ToBase64String(qrBytes) // Save as Base64 string
                         };
 
                         try
@@ -104,6 +106,18 @@ namespace ParkingManagement.Forms
                                 MessageBoxIcon.Error
                             );
                         }
+                    }
+                }
+
+                var totalRecord = db.RegularParkingTotal
+                    .FirstOrDefault(t => t.SessionID == sessionId);
+
+                if (totalRecord != null && !string.IsNullOrEmpty(totalRecord.QRCodeImage))
+                {
+                    byte[] qrBytes = Convert.FromBase64String(totalRecord.QRCodeImage);
+                    using (var ms = new MemoryStream(qrBytes))
+                    {
+                        pbQRCode.Image = Image.FromStream(ms);
                     }
                 }
             }

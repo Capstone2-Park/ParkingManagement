@@ -90,14 +90,30 @@ namespace ParkingManagement.Forms
 
         private void StopCamera()
         {
-            if (_videoDevice != null && _videoDevice.IsRunning)
+            if (_videoDevice != null)
             {
-                _videoDevice.SignalToStop();
-                _videoDevice.WaitForStop();
-                _videoDevice.NewFrame -= VideoDevice_NewFrame;
+                if (_videoDevice.IsRunning)
+                {
+                    // Unsubscribe before stopping to avoid deadlocks
+                    _videoDevice.NewFrame -= VideoDevice_NewFrame;
+
+                    // Stop the camera on a background thread to avoid UI freeze
+                    Task.Run(() =>
+                    {
+                        _videoDevice.SignalToStop();
+                        _videoDevice.WaitForStop();
+                    });
+                }
                 _videoDevice = null;
             }
-            ptbCheckOut.Image = null;
+            if (ptbCheckOut.InvokeRequired)
+            {
+                ptbCheckOut.Invoke(new Action(() => ptbCheckOut.Image = null));
+            }
+            else
+            {
+                ptbCheckOut.Image = null;
+            }
             _lastFrame?.Dispose();
             _lastFrame = null;
         }
@@ -139,7 +155,7 @@ namespace ParkingManagement.Forms
                 MessageBox.Show("Invalid QR code.");
                 return;
             }
-            var parts = sessionIdLine.Split(':'); 
+            var parts = sessionIdLine.Split(':');
             if (parts.Length < 2 || !int.TryParse(parts[1].Trim(), out int sessionId))
             {
                 MessageBox.Show("Invalid SessionID format in QR code.");
@@ -156,27 +172,37 @@ namespace ParkingManagement.Forms
                     return;
                 }
 
-                // Set TimeOut to now if not already set
-                if (total.TimeOut == null)
+                bool alreadyCheckedOut = total.TimeOut != null;
+
+                if (!alreadyCheckedOut)
+                {
+                    // Set TimeOut to now if not already set
                     total.TimeOut = DateTime.Now;
 
-                // Calculate total hours
-                var timeIn = total.TimeIn;
-                var timeOut = total.TimeOut.Value;
-                var totalHours = (timeOut - timeIn).TotalHours;
+                    // Calculate total hours
+                    var timeIn = total.TimeIn;
+                    var timeOut = total.TimeOut.Value;
+                    var totalHours = (timeOut - timeIn).TotalHours;
 
-                // Get the correct daily fee from Fee table
-                string vehicleType = total.VehicleType?.Trim();
-                string durationType = "Daily";
-                var fee = db.Fees.FirstOrDefault(f => f.VehicleType == vehicleType && f.DurationType == durationType);
-                decimal dailyRate = fee?.FixedPrice ?? 0;
+                    // Treat any positive duration as at least 2 hours
+                    if (totalHours > 0 && totalHours < 2)
+                        totalHours = 2;
 
-                // Calculate total amount: 1 daily fee for up to 2 hours, add another for each additional 2 hours
-                int days = (int)Math.Ceiling(totalHours / 2.0);
-                total.TotalAmount = days * dailyRate;
+                    // Get the correct daily fee from Fee table
+                    string vehicleType = total.VehicleType?.Trim() ?? "";
+                    string durationType = "Daily";
+                    var fee = db.Fees.FirstOrDefault(f => f.VehicleType.Trim().ToLower() == vehicleType.ToLower() && f.DurationType == durationType);
 
-                // Save changes
-                db.SaveChanges();
+                    decimal dailyRate = fee?.FixedPrice ?? 0;
+
+                    // Calculate total amount: 1 daily fee for up to 2 hours, add another for each additional 2 hours
+                    int days = (int)Math.Ceiling(Math.Max(totalHours, 0.01) / 2.0);
+                    if (days < 1) days = 1;
+                    total.TotalAmount = days * dailyRate;
+
+                    // Save changes
+                    db.SaveChanges();
+                }
 
                 // Compose and display receipt
                 var receipt = new StringBuilder();
@@ -186,16 +212,25 @@ namespace ParkingManagement.Forms
                 receipt.AppendLine($"Time In: {total.TimeIn}");
                 receipt.AppendLine($"Time Out: {total.TimeOut}");
                 receipt.AppendLine($"Slot: {total.SlotNumber}");
-                receipt.AppendLine($"Total Hours: {totalHours:F2}");
+                var totalHoursDisplay = (total.TimeOut.Value - total.TimeIn).TotalHours;
+                receipt.AppendLine($"Total Hours: {totalHoursDisplay:F2}");
                 receipt.AppendLine($"Total Amount: {total.TotalAmount:N2}");
                 rtbReceipt.Text = receipt.ToString();
             }
+
             lblScanStatus.Visible = false;
+            StopCamera(); // Turn off camera and clear ptbCheckOut
         }
 
         private void RegularParkingTotal_Load(object sender, EventArgs e)
         {
            
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            StopCamera();
+            base.OnFormClosing(e);
         }
     }
 }

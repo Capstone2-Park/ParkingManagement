@@ -50,7 +50,7 @@
             // 
             rtbReceipt.Location = new Point(565, 121);
             rtbReceipt.Name = "rtbReceipt";
-            rtbReceipt.Size = new Size(351, 492);
+            rtbReceipt.Size = new Size(351, 367);
             rtbReceipt.TabIndex = 1;
             rtbReceipt.Text = "";
             // 

@@ -17,9 +17,9 @@ namespace ParkingManagement.Models
         public DateTime? TimeOut { get; set; }
         public decimal? TotalAmount { get; set; }
         public string SlotNumber { get; set; } // Add this property to fix the error  
-        public byte[] QRCodeImage { get; set; }
-        public int? SessionID { get; set; }
-        public int? SlotID { get; set; } // Foreign key for Parkingslot
+        public string QRCodeImage { get; set; }
+        public int SessionID { get; set; }
+        public int SlotID { get; set; } // Foreign key for Parkingslot
 
         [ForeignKey("SessionID")]
         public virtual RegularParkingSession Session { get; set; }
