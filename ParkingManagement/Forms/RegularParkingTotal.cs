@@ -90,25 +90,31 @@ namespace ParkingManagement.Forms
 
         private void StopCamera()
         {
-            if (_videoDevice != null)
-            {
-                if (_videoDevice.IsRunning)
-                {
-                    // Unsubscribe before stopping to avoid deadlocks
-                    _videoDevice.NewFrame -= VideoDevice_NewFrame;
+            var videoDevice = _videoDevice;
+            if (videoDevice == null)
+                return;
 
-                    // Stop the camera on a background thread to avoid UI freeze
-                    Task.Run(() =>
+            if (videoDevice.IsRunning)
+            {
+                // Unsubscribe before stopping to avoid deadlocks
+                videoDevice.NewFrame -= VideoDevice_NewFrame;
+
+                // Stop the camera on a background thread to avoid UI freeze
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    try
                     {
-                        _videoDevice.SignalToStop();
-                        _videoDevice.WaitForStop();
-                    });
-                }
-                _videoDevice = null;
+                        videoDevice.SignalToStop();
+                        videoDevice.WaitForStop();
+                    }
+                    catch { /* Handle/log errors if needed */ }
+                });
             }
+            _videoDevice = null;
+
             if (ptbCheckOut.InvokeRequired)
             {
-                ptbCheckOut.Invoke(new Action(() => ptbCheckOut.Image = null));
+                ptbCheckOut.BeginInvoke(new Action(() => ptbCheckOut.Image = null));
             }
             else
             {
