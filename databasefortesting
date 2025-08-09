@@ -29,18 +29,19 @@ CREATE TABLE Vehicle (
 -- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
     SessionID INT IDENTITY(1,1) PRIMARY KEY,
-    RegularVehicleID NVARCHAR(10),
-    VehicleType NVARCHAR(50),
-    TimeIn DATETIME,
+    RegularVehicleID NVARCHAR(10)NOT NULL,
+    VehicleType NVARCHAR(50)NOT NULL,
+    TimeIn DATETIME NOT NULL,
     [TimeOut] DATETIME NULL,
     TotalAmount DECIMAL(10,2) NULL,
 	AvailableSlotM INT NOT NULL,
 	AvailableSlotV INT NOT NULL
 );
 
-INSERT INTO ReguRegularParkingSessions (AvailableSlotM, AvailableSlotV)
+INSERT INTO RegularParkingSessions
+(RegularVehicleID, VehicleType, TimeIn, AvailableSlotM, AvailableSlotV)
 VALUES
-(95, 55);
+('RP000000', 'N/A', GETDATE(), 95, 55);
 
 -- Fee Table
 CREATE TABLE Fee (
