@@ -29,14 +29,18 @@ CREATE TABLE Vehicle (
 -- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
     SessionID INT IDENTITY(1,1) PRIMARY KEY,
-    RegularVehicleID NVARCHAR(10) NOT NULL,
-    PlateNumber NVARCHAR(20) NOT NULL,
-    VehicleType NVARCHAR(50) NOT NULL,
-    TimeIn DATETIME NOT NULL,
+    RegularVehicleID NVARCHAR(10),
+    VehicleType NVARCHAR(50),
+    TimeIn DATETIME,
     [TimeOut] DATETIME NULL,
     TotalAmount DECIMAL(10,2) NULL,
-
+	AvailableSlotM INT NOT NULL,
+	AvailableSlotV INT NOT NULL
 );
+
+INSERT INTO ReguRegularParkingSessions (AvailableSlotM, AvailableSlotV)
+VALUES
+(95, 55);
 
 -- Fee Table
 CREATE TABLE Fee (
@@ -77,13 +81,11 @@ CREATE TABLE Parkingslot (
     SlotID INT IDENTITY(1,1) PRIMARY KEY,
     VehicleID NVARCHAR(10) NULL,
     ClientID NVARCHAR(10) NULL,
-    SessionID INT NULL,
     VehicleStatus VARCHAR(50),
     SlotStatus VARCHAR(50) NOT NULL,
     SlotNumber VARCHAR(50) NOT NULL,
     FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
-    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID)
 );
 
 -- Sample data for Parkingslot
@@ -142,7 +144,6 @@ VALUES
 CREATE TABLE RegularParkingTotals (
     TotalID INT IDENTITY(1,1) PRIMARY KEY,
     SessionID int,
-    SlotID int,
 	PlateNumber NVARCHAR(20) NOT NULL,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
@@ -151,5 +152,4 @@ CREATE TABLE RegularParkingTotals (
 	QRCodeImage NVARCHAR(MAX) NOT NULL,
 	Totalamount DECIMAL(10,2) NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
-	FOREIGN KEY (SlotID) REFERENCES ParkingSlot(SlotID),
 );
