@@ -1,10 +1,9 @@
 
 -- Create the database
 CREATE DATABASE ParkingSystem;
-GO
 
 USE ParkingSystem;
-GO
+
 
 -- Client Table
 CREATE TABLE Client (
@@ -26,6 +25,7 @@ CREATE TABLE Vehicle (
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
 );
 
+
 -- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
     SessionID INT IDENTITY(1,1) PRIMARY KEY,
@@ -33,9 +33,9 @@ CREATE TABLE RegularParkingSessions (
     PlateNumber NVARCHAR(20) NOT NULL,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
-    TimeOut DATETIME NULL,
+    [TimeOut] DATETIME NULL,
     TotalAmount DECIMAL(10,2) NULL,
-    QRCodeData NVARCHAR(MAX) NULL
+
 );
 
 -- Fee Table
@@ -137,3 +137,19 @@ VALUES
 ('NotParked', 'available', 'M22'),
 ('NotParked', 'available', 'M23'),
 ('NotParked', 'available', 'M24');
+
+
+CREATE TABLE RegularParkingTotals (
+    TotalID INT IDENTITY(1,1) PRIMARY KEY,
+    SessionID int,
+    SlotID int,
+	PlateNumber NVARCHAR(20) NOT NULL,
+    VehicleType NVARCHAR(50) NOT NULL,
+    TimeIn DATETIME NOT NULL,
+    [TimeOut] DATETIME NULL,
+	SlotNumber VARCHAR(50) NOT NULL,
+	QRCodeImage NVARCHAR(MAX) NOT NULL,
+	Totalamount DECIMAL(10,2) NULL,
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
+	FOREIGN KEY (SlotID) REFERENCES ParkingSlot(SlotID),
+);
