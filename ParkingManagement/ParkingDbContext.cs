@@ -62,7 +62,6 @@ namespace ParkingManagement
             modelBuilder.Entity<RegularParkingSession>().HasKey(rps => rps.SessionID);
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.SessionID).ValueGeneratedOnAdd();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.RegularVehicleID).HasMaxLength(10).IsRequired();
-            modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.PlateNumber).HasMaxLength(20).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.VehicleType).HasMaxLength(50).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeIn).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeOut).IsRequired(false);

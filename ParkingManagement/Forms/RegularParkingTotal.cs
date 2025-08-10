@@ -343,11 +343,9 @@ namespace ParkingManagement.Forms
 
                     var receipt = new StringBuilder();
                     receipt.AppendLine("=== Parking Receipt ===");
-                    receipt.AppendLine($"Plate Number: {total.PlateNumber}");
                     receipt.AppendLine($"Vehicle Type: {total.VehicleType}");
                     receipt.AppendLine($"Time In: {total.TimeIn}");
                     receipt.AppendLine($"Time Out: {total.TimeOut}");
-                    receipt.AppendLine($"Slot: {total.SlotNumber}");
                     var totalHoursDisplay = (total.TimeOut.Value - total.TimeIn).TotalHours;
                     receipt.AppendLine($"Total Hours: {totalHoursDisplay:F2}");
                     receipt.AppendLine($"Total Amount: {total.TotalAmount:N2}");

@@ -10,11 +10,12 @@ namespace ParkingManagement.Models
     {
         public int SessionID { get; set; }
         public string RegularVehicleID { get; set; }
-        public string PlateNumber { get; set; }
         public string VehicleType { get; set; }
         public DateTime TimeIn { get; set; }
         public DateTime? TimeOut { get; set; }
         public decimal? TotalAmount { get; set; }
+        public int AvailableSlotM { get; set; }
+        public int AvailableSlotV { get; set; }
     }
 }
 

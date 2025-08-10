@@ -32,8 +32,19 @@ namespace ParkingManagement.Forms
         {
             using (var db = new ParkingDbContext())
             {
-                var session = db.RegularParkingSessions
-                    .FirstOrDefault(s => s.SessionID == sessionId);
+                // Get the latest session if sessionId is 0, otherwise use the provided sessionId
+                RegularParkingSession session;
+                if (sessionId == 0)
+                {
+                    session = db.RegularParkingSessions
+                        .OrderByDescending(s => s.SessionID)
+                        .FirstOrDefault();
+                }
+                else
+                {
+                    session = db.RegularParkingSessions
+                        .FirstOrDefault(s => s.SessionID == sessionId);
+                }
 
                 if (session == null)
                 {
@@ -41,39 +52,23 @@ namespace ParkingManagement.Forms
                     return;
                 }
 
-                var slot = db.Parkingslot.FirstOrDefault(s => s.SessionID == sessionId);
-
-                if (slot == null || string.IsNullOrEmpty(slot.SlotNumber))
-                {
-                    MessageBox.Show("No slot found for this session. Cannot generate QR code record.");
-                    return;
-                }
-
+                // Build QR data string using only available fields
                 string qrData = $"SessionID: {session.SessionID}\n" +
-                                $"SlotID: {slot.SlotID}\n" +
-                                $"Plate: {session.PlateNumber}\n" +
+                                $"VehicleID: {session.RegularVehicleID}\n" +
                                 $"Type: {session.VehicleType}\n" +
                                 $"Time In: {session.TimeIn}\n" +
                                 $"Time Out: {session.TimeOut}\n" +
-                                $"Total: {session.TotalAmount}\n" +
-                                $"Slot: {slot.SlotNumber}";
+                                $"Total: {session.TotalAmount}";
 
                 using (var qrGenerator = new QRCoder.QRCodeGenerator())
                 using (var qrCodeData = qrGenerator.CreateQrCode(qrData, QRCoder.QRCodeGenerator.ECCLevel.Q))
                 using (var qrCode = new QRCoder.QRCode(qrCodeData))
                 {
-                    // Generate the QR code at a base size
                     Bitmap qrBitmap = qrCode.GetGraphic(20);
-
-                    // Resize the QR code to fit the PictureBox
                     Bitmap resizedBitmap = new Bitmap(qrBitmap, pbQRCode.Width, pbQRCode.Height);
-
-                    // Set PictureBox SizeMode to StretchImage (optional if set in designer)
                     pbQRCode.SizeMode = PictureBoxSizeMode.StretchImage;
-
                     pbQRCode.Image = resizedBitmap;
 
-                    // Save the QR code as a PNG byte array
                     using (var ms = new MemoryStream())
                     {
                         resizedBitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
@@ -81,15 +76,12 @@ namespace ParkingManagement.Forms
 
                         var total = new RegularParkingTotals
                         {
-                            PlateNumber = session.PlateNumber,
                             VehicleType = session.VehicleType,
                             TimeIn = session.TimeIn,
-                            TimeOut = session.TimeOut,
+                            TimeOut = session.TimeOut, // This will be null for new sessions
                             TotalAmount = session.TotalAmount,
-                            SlotNumber = slot.SlotNumber,
-                            SlotID = slot.SlotID,           // Set the foreign key
-                            SessionID = session.SessionID,  // Set the foreign key
-                            QRCodeImage = Convert.ToBase64String(qrBytes) // Save as Base64 string
+                            SessionID = session.SessionID,
+                            QRCodeImage = Convert.ToBase64String(qrBytes)
                         };
 
                         try
@@ -110,7 +102,7 @@ namespace ParkingManagement.Forms
                 }
 
                 var totalRecord = db.RegularParkingTotal
-                    .FirstOrDefault(t => t.SessionID == sessionId);
+                    .FirstOrDefault(t => t.SessionID == session.SessionID);
 
                 if (totalRecord != null && !string.IsNullOrEmpty(totalRecord.QRCodeImage))
                 {

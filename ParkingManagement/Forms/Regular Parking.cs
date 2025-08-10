@@ -32,11 +32,11 @@ namespace ParkingManagement.Forms
 
         private async void Regular_Parking_Load(object sender, EventArgs e)
         {
-
             await GenerateNewRegularVehicleID();
             await LoadActiveParkingSessions();
-
             ClearInputFields();
+            await LoadAvailableSlots(); // Add this line
+            
         }
 
         private void InitializeDbContext()
@@ -108,9 +108,20 @@ namespace ParkingManagement.Forms
             }
         }
 
+        private async Task LoadAvailableSlots()
+        {
+            // Example: Get the latest session or aggregate as needed
+            var latestSession = await _context.RegularParkingSessions
+                .OrderByDescending(s => s.SessionID)
+                .FirstOrDefaultAsync();
+
+            txtAvailableSlotM.Text = latestSession?.AvailableSlotM.ToString() ?? "0";
+            txtAvailableSlotV.Text = latestSession?.AvailableSlotV.ToString() ?? "0";
+        }
+
         private void ClearInputFields()
         {
-            txtPlateNumber.Clear();
+            txtAvailableSlotM.Clear();
 
             // Keep txtVehicleId as it will be auto-generated on load or after save
             // cmbTypeOfVehicle.SelectedIndex is already set on load, can reset if needed: cmbTypeOfVehicle.SelectedIndex = 0;
@@ -118,55 +129,85 @@ namespace ParkingManagement.Forms
 
         private async void btnTimeIn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtPlateNumber.Text))
+            // Get the second-latest session (skip the latest, take the next)
+            var sessions = await _context.RegularParkingSessions
+                .OrderByDescending(s => s.SessionID)
+                .Take(2)
+                .ToListAsync();
+
+            string regularVehicleId;
+            string selectedType;
+
+            if (sessions.Count >= 2)
             {
-                MessageBox.Show("Please enter the Plate Number.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Use the second-latest session's vehicle info
+                var secondLatest = sessions[1];
+                regularVehicleId = secondLatest.RegularVehicleID;
+                selectedType = secondLatest.VehicleType;
+            }
+            else
+            {
+                // Fallback to current UI values if not enough sessions
+                if (cmbTypeOfVehicle.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select the Vehicle Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                regularVehicleId = txtVehicleId.Text;
+                selectedType = cmbTypeOfVehicle.SelectedItem.ToString();
             }
 
-            if (cmbTypeOfVehicle.SelectedItem == null)
-            {
-                MessageBox.Show("Please select the Vehicle Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            // Get the latest session to determine current slot counts
+            var latestSession = sessions.FirstOrDefault();
 
-            var existingSession = await _context.RegularParkingSessions
-                                                .FirstOrDefaultAsync(s => s.PlateNumber == txtPlateNumber.Text && s.TimeOut == null);
-            if (existingSession != null)
+            int availableSlotM = latestSession?.AvailableSlotM ?? 0;
+            int availableSlotV = latestSession?.AvailableSlotV ?? 0;
+
+            // Decrement the appropriate slot count
+            if (selectedType == "2-Wheels")
             {
-                MessageBox.Show($"Vehicle with plate number '{txtPlateNumber.Text}' is already checked in. Session ID: {existingSession.RegularVehicleID}", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (availableSlotM <= 0)
+                {
+                    MessageBox.Show("No available slots for 2-Wheels.", "Slot Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                availableSlotM--;
+            }
+            else if (selectedType == "4-Wheels")
+            {
+                if (availableSlotV <= 0)
+                {
+                    MessageBox.Show("No available slots for 4-Wheels.", "Slot Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                availableSlotV--;
             }
 
             _currentTimeIn = DateTime.Now;
-            string regularVehicleId = txtVehicleId.Text;
 
             RegularParkingSession newSession = new RegularParkingSession
             {
                 RegularVehicleID = regularVehicleId,
-                PlateNumber = txtPlateNumber.Text,
-                VehicleType = cmbTypeOfVehicle.SelectedItem?.ToString() ?? string.Empty,
+                VehicleType = selectedType,
                 TimeIn = _currentTimeIn,
                 TimeOut = null,
                 TotalAmount = null,
+                AvailableSlotM = availableSlotM,
+                AvailableSlotV = availableSlotV
             };
 
             try
             {
                 _context.RegularParkingSessions.Add(newSession);
-                await _context.SaveChangesAsync(); // newSession.SessionID is set here
+                await _context.SaveChangesAsync();
 
                 MessageBox.Show("Vehicle checked in successfully!", "Check In Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 await LoadActiveParkingSessions();
                 ClearInputFields();
                 await GenerateNewRegularVehicleID();
-
-                // Pass the new session's SessionID to RegularParkingSlot
-                await _context.SaveChangesAsync();
+                await LoadAvailableSlots();
                 MessageBox.Show($"New session created with SessionID: {newSession.SessionID}");
-
-
             }
             catch (DbUpdateException dbEx)
             {
@@ -180,8 +221,8 @@ namespace ParkingManagement.Forms
             var homePage = this.ParentForm as HomePage;
             if (homePage != null)
             {
-                var parkSlotForm = new RegularParkingSlot(newSession.SessionID);
-                    homePage.ShowFormInPanel(parkSlotForm);
+                var parkSlotForm = new QRcode();
+                homePage.ShowFormInPanel(parkSlotForm);
             }
         }
 
@@ -194,64 +235,6 @@ namespace ParkingManagement.Forms
             _context?.Dispose();
         }
 
-        private async Task ProcessScannedQRCodeDataAsync(string qrCodeData)
-        {
-            try
-            {
-                var dataLines = qrCodeData.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                var dataDictionary = dataLines.Select(line => line.Split(new[] { ':' }, 2))
-                                              .ToDictionary(parts => parts[0].Trim(), parts => parts[1].Trim());
-
-                if (dataDictionary.TryGetValue("SessionID", out string sessionIdStr) && int.TryParse(sessionIdStr, out int sessionId))
-                {
-                    var session = await _context.RegularParkingSessions.FirstOrDefaultAsync(s => s.SessionID == sessionId && s.TimeOut == null);
-
-                    if (session != null)
-                    {
-                        session.TimeOut = DateTime.Now;
-                        TimeSpan duration = session.TimeOut.Value - session.TimeIn;
-
-                        // Get the fee from the Fee table based on VehicleType
-                        var fee = await _context.Fees.FirstOrDefaultAsync(f => f.VehicleType == session.VehicleType);
-                        decimal hourlyRate = fee?.FixedPrice ?? 0m;
-
-                        session.TotalAmount = (decimal)Math.Ceiling(duration.TotalHours) * hourlyRate;
-
-                        _context.RegularParkingSessions.Update(session);
-                        await _context.SaveChangesAsync();
-
-                        MessageBox.Show(
-                            $"Vehicle with Plate Number '{session.PlateNumber}' checked out successfully!\n" +
-                            $"Time In: {session.TimeIn:MM/dd/yyyy hh:mm:ss tt}\n" +
-                            $"Time Out: {session.TimeOut:MM/dd/yyyy hh:mm:ss tt}\n" +
-                            $"Duration: {duration.TotalHours:F2} hours\n" +
-                            $"Total Amount: {session.TotalAmount:N2} PHP",
-                            "Check Out Success", MessageBoxButtons.OK, MessageBoxIcon.Information
-                        );
-                    }
-                    else
-                    {
-                        MessageBox.Show("No active session found for the scanned QR code.", "QR Code Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Invalid QR code data format. 'SessionID' is missing or not an integer.", "QR Code Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while processing the QR code data: {ex.Message}", "QR Code Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
+      
     }
 }
