@@ -145,11 +145,9 @@ VALUES
 CREATE TABLE RegularParkingTotals (
     TotalID INT IDENTITY(1,1) PRIMARY KEY,
     SessionID int,
-	PlateNumber NVARCHAR(20) NOT NULL,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
     [TimeOut] DATETIME NULL,
-	SlotNumber VARCHAR(50) NOT NULL,
 	QRCodeImage NVARCHAR(MAX) NOT NULL,
 	Totalamount DECIMAL(10,2) NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
