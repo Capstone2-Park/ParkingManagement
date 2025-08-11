@@ -54,7 +54,7 @@ namespace ParkingManagement.Forms
 
             Load += ParkingSlot_Load;
             cbVehicle.SelectedIndexChanged += cbVehicle_SelectedIndexChanged;
-           
+
         }
 
         public ParkingSlot(Client client)
@@ -409,7 +409,7 @@ namespace ParkingManagement.Forms
             }
         }
 
-      
+
         private void SlotPanel_MouseEnter(object sender, EventArgs e)
         {
             var panel = sender as Panel;
@@ -468,7 +468,7 @@ namespace ParkingManagement.Forms
         private void SetSlotPanelRestrictions(string vehicleType)
         {
             // 2-Wheels: disable V slots, 4-Wheels: disable M slots
-            for (int i = 1; i <= 24; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 string vPanelName = $"pnlV{i}";
                 string mPanelName = $"pnlM{i}";
@@ -530,7 +530,7 @@ namespace ParkingManagement.Forms
 
         private void RestoreAllSlotPanels()
         {
-            for (int i = 1; i <= 24; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 string vPanelName = $"pnlV{i}";
                 string mPanelName = $"pnlM{i}";
@@ -553,6 +553,11 @@ namespace ParkingManagement.Forms
                         mPanel.BackColor = slot.SlotStatus == "occupied" ? Color.Red : Color.Green;
                 }
             }
+        }
+
+        private void flpPakingSlot_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

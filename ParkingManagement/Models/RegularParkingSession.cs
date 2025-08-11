@@ -14,8 +14,6 @@ namespace ParkingManagement.Models
         public DateTime TimeIn { get; set; }
         public DateTime? TimeOut { get; set; }
         public decimal? TotalAmount { get; set; }
-        public int AvailableSlotM { get; set; }
-        public int AvailableSlotV { get; set; }
     }
 }
 

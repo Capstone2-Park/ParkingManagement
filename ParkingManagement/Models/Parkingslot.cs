@@ -31,6 +31,9 @@ namespace ParkingManagement.Models
 
         public string SlotStatus { get; set; }
 
+        public int AvailableSlotM { get; set; }
+        public int AvailableSlotV { get; set; }
+
         // Navigation properties
         [ForeignKey("VehicleID")]
         public virtual Vehicle Vehicle { get; set; }

@@ -339,6 +339,22 @@ namespace ParkingManagement.Forms
                     int days = (int)Math.Ceiling(Math.Max(totalHours, 0.01) / 2.0);
                     if (days < 1) days = 1;
                     total.TotalAmount = days * dailyRate;
+
+                    // --- Increment AvailableSlotM or AvailableSlotV in Parkingslot ---
+                    var slot = db.Parkingslot.FirstOrDefault();
+                    if (slot != null)
+                    {
+                        if (vehicleType.Equals("2-Wheels", StringComparison.OrdinalIgnoreCase))
+                        {
+                            slot.AvailableSlotM += 1;
+                        }
+                        else if (vehicleType.Equals("4-Wheels", StringComparison.OrdinalIgnoreCase))
+                        {
+                            slot.AvailableSlotV += 1;
+                        }
+                    }
+                    // --- End increment logic ---
+
                     db.SaveChanges();
 
                     var receipt = new StringBuilder();

@@ -55,7 +55,7 @@
             // 
             // btnOn
             // 
-            btnOn.Location = new Point(141, 516);
+            btnOn.Location = new Point(223, 493);
             btnOn.Name = "btnOn";
             btnOn.Size = new Size(106, 30);
             btnOn.TabIndex = 2;

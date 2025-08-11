@@ -74,10 +74,11 @@ namespace ParkingManagement.Forms
             string newId = "RP000001";
             try
             {
-                var lastSession = await _context.RegularParkingSessions
-                                                .Where(s => s.RegularVehicleID != null && s.RegularVehicleID.StartsWith("RP") && s.RegularVehicleID.Length == 8)
-                                                .OrderByDescending(s => s.RegularVehicleID)
-                                                .FirstOrDefaultAsync();
+                using var context = new ParkingDbContext();
+                var lastSession = await context.RegularParkingSessions
+                    .Where(s => s.RegularVehicleID != null && s.RegularVehicleID.StartsWith("RP") && s.RegularVehicleID.Length == 8)
+                    .OrderByDescending(s => s.RegularVehicleID)
+                    .FirstOrDefaultAsync();
 
                 if (lastSession != null && int.TryParse(lastSession.RegularVehicleID.Substring(2), out int lastNum))
                 {
@@ -110,13 +111,10 @@ namespace ParkingManagement.Forms
 
         private async Task LoadAvailableSlots()
         {
-            // Example: Get the latest session or aggregate as needed
-            var latestSession = await _context.RegularParkingSessions
-                .OrderByDescending(s => s.SessionID)
-                .FirstOrDefaultAsync();
-
-            txtAvailableSlotM.Text = latestSession?.AvailableSlotM.ToString() ?? "0";
-            txtAvailableSlotV.Text = latestSession?.AvailableSlotV.ToString() ?? "0";
+            using var context = new ParkingDbContext();
+            var slot = await context.Parkingslot.FirstOrDefaultAsync();
+            txtAvailableSlotM.Text = slot?.AvailableSlotM.ToString() ?? "0";
+            txtAvailableSlotV.Text = slot?.AvailableSlotV.ToString() ?? "0";
         }
 
         private void ClearInputFields()
@@ -129,61 +127,44 @@ namespace ParkingManagement.Forms
 
         private async void btnTimeIn_Click(object sender, EventArgs e)
         {
-            // Get the second-latest session (skip the latest, take the next)
-            var sessions = await _context.RegularParkingSessions
-                .OrderByDescending(s => s.SessionID)
-                .Take(2)
-                .ToListAsync();
-
-            string regularVehicleId;
-            string selectedType;
-
-            if (sessions.Count >= 2)
+            if (cmbTypeOfVehicle.SelectedItem == null)
             {
-                // Use the second-latest session's vehicle info
-                var secondLatest = sessions[1];
-                regularVehicleId = secondLatest.RegularVehicleID;
-                selectedType = secondLatest.VehicleType;
-            }
-            else
-            {
-                // Fallback to current UI values if not enough sessions
-                if (cmbTypeOfVehicle.SelectedItem == null)
-                {
-                    MessageBox.Show("Please select the Vehicle Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                regularVehicleId = txtVehicleId.Text;
-                selectedType = cmbTypeOfVehicle.SelectedItem.ToString();
+                MessageBox.Show("Please select the Vehicle Type.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            // Get the latest session to determine current slot counts
-            var latestSession = sessions.FirstOrDefault();
+            // Get the Parkingslot record that holds the slot counts
+            var slot = await _context.Parkingslot.FirstOrDefaultAsync();
+            if (slot == null)
+            {
+                MessageBox.Show("Parking slot data not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            int availableSlotM = latestSession?.AvailableSlotM ?? 0;
-            int availableSlotV = latestSession?.AvailableSlotV ?? 0;
+            string selectedType = cmbTypeOfVehicle.SelectedItem.ToString();
 
             // Decrement the appropriate slot count
             if (selectedType == "2-Wheels")
             {
-                if (availableSlotM <= 0)
+                if (slot.AvailableSlotM <= 0)
                 {
                     MessageBox.Show("No available slots for 2-Wheels.", "Slot Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                availableSlotM--;
+                slot.AvailableSlotM--;
             }
             else if (selectedType == "4-Wheels")
             {
-                if (availableSlotV <= 0)
+                if (slot.AvailableSlotV <= 0)
                 {
                     MessageBox.Show("No available slots for 4-Wheels.", "Slot Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                availableSlotV--;
+                slot.AvailableSlotV--;
             }
 
             _currentTimeIn = DateTime.Now;
+            string regularVehicleId = txtVehicleId.Text;
 
             RegularParkingSession newSession = new RegularParkingSession
             {
@@ -191,14 +172,16 @@ namespace ParkingManagement.Forms
                 VehicleType = selectedType,
                 TimeIn = _currentTimeIn,
                 TimeOut = null,
-                TotalAmount = null,
-                AvailableSlotM = availableSlotM,
-                AvailableSlotV = availableSlotV
+                TotalAmount = null
+                // No AvailableSlotM or AvailableSlotV here anymore
             };
 
             try
             {
                 _context.RegularParkingSessions.Add(newSession);
+                await _context.SaveChangesAsync();
+
+                // Save the updated slot counts
                 await _context.SaveChangesAsync();
 
                 MessageBox.Show("Vehicle checked in successfully!", "Check In Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
