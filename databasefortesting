@@ -86,22 +86,24 @@ CREATE TABLE Parkingslot (
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
 	FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
 	AvailableSlotM INT NOT NULL,
-	AvailableSlotV INT NOT NULL
+	AvailableSlotV INT NOT NULL,
+	OccupiedSlotM INT NOT NULL,
+	OccupiedSlotV INT NOT NULL
 );
 
 -- Sample data for Parkingslot
-INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber, AvailableSlotM, AvailableSlotV)
+INSERT INTO Parkingslot (VehicleStatus, SlotStatus, SlotNumber, AvailableSlotM, AvailableSlotV, OccupiedSlotM, OccupiedSlotV)
 VALUES
-('NotParked', 'available', 'V1', 95, 55),
-('NotParked', 'available', 'V2', 95, 55),
-('NotParked', 'available', 'V3', 95, 55),
-('NotParked', 'available', 'V4', 95, 55),
-('NotParked', 'available', 'V5', 95, 55),
-('NotParked', 'available', 'M1', 95, 55),
-('NotParked', 'available', 'M2', 95, 55),
-('NotParked', 'available', 'M3', 95, 55),
-('NotParked', 'available', 'M4', 95, 55),
-('NotParked', 'available', 'M5', 95, 55);
+('NotParked', 'available', 'V1', 95, 55, 0, 0),
+('NotParked', 'available', 'V2', 95, 55, 0, 0),
+('NotParked', 'available', 'V3', 95, 55, 0, 0),
+('NotParked', 'available', 'V4', 95, 55, 0, 0),
+('NotParked', 'available', 'V5', 95, 55, 0, 0),
+('NotParked', 'available', 'M1', 95, 55, 0, 0),
+('NotParked', 'available', 'M2', 95, 55, 0, 0),
+('NotParked', 'available', 'M3', 95, 55, 0, 0),
+('NotParked', 'available', 'M4', 95, 55, 0, 0),
+('NotParked', 'available', 'M5', 95, 55, 0, 0);
 
 
 CREATE TABLE RegularParkingTotals (
