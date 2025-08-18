@@ -115,6 +115,8 @@ namespace ParkingManagement.Forms
             var slot = await context.Parkingslot.FirstOrDefaultAsync();
             txtAvailableSlotM.Text = slot?.AvailableSlotM.ToString() ?? "0";
             txtAvailableSlotV.Text = slot?.AvailableSlotV.ToString() ?? "0";
+            txtOccupiedSlotM.Text = slot?.OccupiedSlotM.ToString() ?? "0";
+            txtOccupiedSlotV.Text = slot?.OccupiedSlotV.ToString() ?? "0";
         }
 
         private void ClearInputFields()
@@ -143,7 +145,7 @@ namespace ParkingManagement.Forms
 
             string selectedType = cmbTypeOfVehicle.SelectedItem.ToString();
 
-            // Decrement the appropriate slot count
+            // Decrement the appropriate slot count and increment occupied slot count
             if (selectedType == "2-Wheels")
             {
                 if (slot.AvailableSlotM <= 0)
@@ -152,6 +154,7 @@ namespace ParkingManagement.Forms
                     return;
                 }
                 slot.AvailableSlotM--;
+                slot.OccupiedSlotM++; // Increment occupied slot for 2-Wheels
             }
             else if (selectedType == "4-Wheels")
             {
@@ -161,6 +164,7 @@ namespace ParkingManagement.Forms
                     return;
                 }
                 slot.AvailableSlotV--;
+                slot.OccupiedSlotV++; // Increment occupied slot for 4-Wheels
             }
 
             _currentTimeIn = DateTime.Now;

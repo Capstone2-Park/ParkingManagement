@@ -10,6 +10,7 @@ using AForge.Video;
 using AForge.Video.DirectShow;
 using System.Text;
 using System.Drawing.Imaging; // Add this namespace for Bitmap to byte[] conversion
+using System.Globalization;
 
 namespace ParkingManagement.Forms
 {
@@ -21,6 +22,7 @@ namespace ParkingManagement.Forms
         private Bitmap _lastFrame; // Store the last frame for capture
         private volatile bool _isProcessingQRCode = false; // Prevent multiple scans in quick succession
         private readonly object _lastFrameLock = new object(); // Lock object for _lastFrame
+        private decimal _totalAmount = 0m; // Store the total amount for change calculation
 
         public RegularParkingTotal()
         {
@@ -165,7 +167,7 @@ namespace ParkingManagement.Forms
                 {
                     _isProcessingQRCode = true;
                     scanFrame = (Bitmap)frame.Clone();
-                    
+
                     ThreadPool.QueueUserWorkItem(_ =>
                     {
                         try
@@ -339,6 +341,7 @@ namespace ParkingManagement.Forms
                     int days = (int)Math.Ceiling(Math.Max(totalHours, 0.01) / 2.0);
                     if (days < 1) days = 1;
                     total.TotalAmount = days * dailyRate;
+                    _totalAmount = total.TotalAmount ?? 0m; // Store for later use
 
                     // --- Increment AvailableSlotM or AvailableSlotV in Parkingslot ---
                     var slot = db.Parkingslot.FirstOrDefault();
@@ -371,6 +374,13 @@ namespace ParkingManagement.Forms
                 lblScanStatus.Visible = false;
                 StopCamera();
                 _isProcessingQRCode = false;
+
+                // Enable controls after successful scan
+                txtCash.Enabled = true;
+                btnConfirm.Enabled = true;
+                rtbChange.Enabled = true;
+                rtbChange.ReadOnly = true;
+                rtbChange.Clear();
             }
             catch (Exception ex)
             {
@@ -383,12 +393,55 @@ namespace ParkingManagement.Forms
         private void RegularParkingTotal_Load(object sender, EventArgs e)
         {
             InitializeQRReader();
+            txtCash.Enabled = false;
+            rtbChange.Enabled = false;
+            rtbChange.ReadOnly = true;
+            btnConfirm.Enabled = false;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             StopCamera();
             base.OnFormClosing(e);
+        }
+
+        private void txtCash_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow only digits, one dot, and control keys
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+            // Only allow one dot
+            if (e.KeyChar == '.' && (txtCash.Text.Contains('.') || txtCash.Text.Length == 0))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtCash_TextChanged(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtCash.Text, out decimal value))
+            {
+                txtCash.TextChanged -= txtCash_TextChanged;
+                txtCash.Text = value.ToString("N2", CultureInfo.InvariantCulture);
+                txtCash.SelectionStart = txtCash.Text.Length;
+                txtCash.TextChanged += txtCash_TextChanged;
+            }
+        }
+
+        private void btnConfirm_Click(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtCash.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal cash))
+            {
+                decimal change = cash - _totalAmount;
+                rtbChange.Font = new Font("Segoe UI", 24, FontStyle.Bold);
+                rtbChange.Text = $"₱ {change:N2}";
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid cash amount.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

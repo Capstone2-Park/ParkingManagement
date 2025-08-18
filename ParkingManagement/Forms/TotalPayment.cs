@@ -27,6 +27,28 @@ namespace ParkingManagement.Forms
 
             // Set smaller font for rtbReceipt
             rtbReceipt.Font = new Font(rtbReceipt.Font.FontFamily, 8.0f);
+
+            // Restrict txtCash input to decimal values
+            txtCash.KeyPress += TxtCash_KeyPress;
+        }
+
+        private void TxtCash_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow control keys, digits, and one decimal separator
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != '.') && (e.KeyChar != ','))
+            {
+                e.Handled = true;
+            }
+
+            // Only allow one decimal separator
+            TextBox txt = sender as TextBox;
+            char separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0];
+            if ((e.KeyChar == '.' || e.KeyChar == ',') &&
+                (txt.Text.Contains('.') || txt.Text.Contains(',')))
+            {
+                e.Handled = true;
+            }
         }
 
         private async void TotalPayment_Load(object sender, EventArgs e)
@@ -124,6 +146,42 @@ namespace ParkingManagement.Forms
                 var clientManagementForm = new ClientManagement();
                 homePage.ShowFormInPanel(clientManagementForm);
             }
+        }
+
+        private async void btnConfirm_Click(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(txtCash.Text, out decimal cash))
+            {
+                MessageBox.Show("Please enter a valid cash amount.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using var db = new ParkingDbContext();
+            var latestClient = await db.Clients
+                .OrderByDescending(c => c.ClientID)
+                .FirstOrDefaultAsync();
+
+            if (latestClient == null)
+            {
+                MessageBox.Show("No clients found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Get all vehicles for the latest client
+            var vehicleIds = await db.Vehicles
+                .Where(v => v.ClientID == latestClient.ClientID)
+                .Select(v => v.VehicleID)
+                .ToListAsync();
+
+            // Sum all TotalAmount from VehicleSessions for these vehicles
+            decimal totalAmount = await db.VehicleSessions
+                .Where(s => vehicleIds.Contains(s.VehicleID))
+                .SumAsync(s => s.TotalAmount);
+
+            decimal change = cash - totalAmount;
+            rtbChange.Text = change >= 0
+                ? $"Change: ₱ {change:N2}"
+                : $"Insufficient cash. Short by ₱ {Math.Abs(change):N2}";
         }
     }
 }

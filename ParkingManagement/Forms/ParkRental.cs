@@ -200,8 +200,7 @@ namespace ParkingManagement.Forms
             switch (durationType)
             {
                 case "Daily":
-                    int hoursPerDay = cbTime.SelectedIndex + 1;
-                    endDate = startDate.AddHours(hoursPerDay);
+                    endDate = startDate.AddDays(1);
                     break;
                 case "Weekly":
                     endDate = startDate.AddDays(7);
@@ -312,8 +311,7 @@ namespace ParkingManagement.Forms
             switch (durationType)
             {
                 case "Daily":
-                    int hoursPerDay = cbTime.SelectedIndex + 1;
-                    endDate = startDate.AddHours(hoursPerDay);
+                    endDate = startDate.AddDays(1);
                     break;
                 case "Weekly":
                     endDate = startDate.AddDays(7);

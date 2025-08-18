@@ -32,6 +32,11 @@
             rtbReceipt = new RichTextBox();
             btnOn = new Button();
             lblScanStatus = new Label();
+            txtCash = new TextBox();
+            label1 = new Label();
+            rtbChange = new RichTextBox();
+            label2 = new Label();
+            btnConfirm = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbCheckOut).BeginInit();
             SuspendLayout();
             // 
@@ -49,7 +54,7 @@
             // 
             rtbReceipt.Location = new Point(565, 121);
             rtbReceipt.Name = "rtbReceipt";
-            rtbReceipt.Size = new Size(351, 367);
+            rtbReceipt.Size = new Size(351, 200);
             rtbReceipt.TabIndex = 1;
             rtbReceipt.Text = "";
             // 
@@ -72,11 +77,59 @@
             lblScanStatus.TabIndex = 4;
             lblScanStatus.Text = "label1";
             // 
+            // txtCash
+            // 
+            txtCash.Location = new Point(741, 348);
+            txtCash.Name = "txtCash";
+            txtCash.Size = new Size(175, 23);
+            txtCash.TabIndex = 5;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(832, 330);
+            label1.Name = "label1";
+            label1.Size = new Size(88, 15);
+            label1.TabIndex = 6;
+            label1.Text = "Caash on Hand";
+            // 
+            // rtbChange
+            // 
+            rtbChange.Location = new Point(626, 442);
+            rtbChange.Name = "rtbChange";
+            rtbChange.Size = new Size(290, 92);
+            rtbChange.TabIndex = 7;
+            rtbChange.Text = "";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(868, 424);
+            label2.Name = "label2";
+            label2.Size = new Size(48, 15);
+            label2.TabIndex = 8;
+            label2.Text = "Change";
+            // 
+            // btnConfirm
+            // 
+            btnConfirm.Location = new Point(827, 377);
+            btnConfirm.Name = "btnConfirm";
+            btnConfirm.Size = new Size(89, 25);
+            btnConfirm.TabIndex = 9;
+            btnConfirm.Text = "Confirm";
+            btnConfirm.UseVisualStyleBackColor = true;
+            btnConfirm.Click += btnConfirm_Click;
+            // 
             // RegularParkingTotal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(967, 720);
+            Controls.Add(btnConfirm);
+            Controls.Add(label2);
+            Controls.Add(rtbChange);
+            Controls.Add(label1);
+            Controls.Add(txtCash);
             Controls.Add(lblScanStatus);
             Controls.Add(btnOn);
             Controls.Add(rtbReceipt);
@@ -95,5 +148,10 @@
         private RichTextBox rtbReceipt;
         private Button btnOn;
         private Label lblScanStatus;
+        private TextBox txtCash;
+        private Label label1;
+        private RichTextBox rtbChange;
+        private Label label2;
+        private Button btnConfirm;
     }
 }

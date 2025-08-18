@@ -31,12 +31,16 @@
             label1 = new Label();
             rtbReceipt = new RichTextBox();
             btnReturn = new Button();
+            btnConfirm = new Button();
+            rtbChange = new RichTextBox();
+            label3 = new Label();
+            txtCash = new TextBox();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(162, 38);
+            label1.Location = new Point(60, 48);
             label1.Name = "label1";
             label1.Size = new Size(62, 15);
             label1.TabIndex = 2;
@@ -46,7 +50,7 @@
             // rtbReceipt
             // 
             rtbReceipt.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rtbReceipt.Location = new Point(162, 68);
+            rtbReceipt.Location = new Point(60, 78);
             rtbReceipt.Name = "rtbReceipt";
             rtbReceipt.Size = new Size(351, 541);
             rtbReceipt.TabIndex = 4;
@@ -62,11 +66,49 @@
             btnReturn.UseVisualStyleBackColor = true;
             btnReturn.Click += btnReturn_Click;
             // 
+            // btnConfirm
+            // 
+            btnConfirm.Location = new Point(678, 142);
+            btnConfirm.Name = "btnConfirm";
+            btnConfirm.Size = new Size(89, 25);
+            btnConfirm.TabIndex = 13;
+            btnConfirm.Text = "Confirm";
+            btnConfirm.UseVisualStyleBackColor = true;
+            btnConfirm.Click += btnConfirm_Click;
+            // 
+            // rtbChange
+            // 
+            rtbChange.Location = new Point(477, 207);
+            rtbChange.Name = "rtbChange";
+            rtbChange.Size = new Size(290, 92);
+            rtbChange.TabIndex = 12;
+            rtbChange.Text = "";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(683, 95);
+            label3.Name = "label3";
+            label3.Size = new Size(88, 15);
+            label3.TabIndex = 11;
+            label3.Text = "Caash on Hand";
+            // 
+            // txtCash
+            // 
+            txtCash.Location = new Point(592, 113);
+            txtCash.Name = "txtCash";
+            txtCash.Size = new Size(175, 23);
+            txtCash.TabIndex = 10;
+            // 
             // TotalPayment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(828, 726);
+            Controls.Add(btnConfirm);
+            Controls.Add(rtbChange);
+            Controls.Add(label3);
+            Controls.Add(txtCash);
             Controls.Add(btnReturn);
             Controls.Add(rtbReceipt);
             Controls.Add(label1);
@@ -83,5 +125,9 @@
         private RichTextBox rtbReceipt;
         private Label label2;
         private Button btnReturn;
+        private Button btnConfirm;
+        private RichTextBox rtbChange;
+        private Label label3;
+        private TextBox txtCash;
     }
 }

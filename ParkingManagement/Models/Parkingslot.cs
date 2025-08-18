@@ -33,6 +33,8 @@ namespace ParkingManagement.Models
 
         public int AvailableSlotM { get; set; }
         public int AvailableSlotV { get; set; }
+        public int OccupiedSlotM { get; set; }
+        public int OccupiedSlotV { get; set; }
 
         // Navigation properties
         [ForeignKey("VehicleID")]

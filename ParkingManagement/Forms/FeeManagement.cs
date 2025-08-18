@@ -70,7 +70,7 @@ namespace ParkingManagement.Forms
             {
                 Name = "FixedPrice",
                 HeaderText = "Fixed Price (₱)",
-                DataPropertyName = "FeePerHour", // Still mapped to FeePerHour in model
+                DataPropertyName = "FixedPrice", // <-- Correct property name
                 ReadOnly = true,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
             });

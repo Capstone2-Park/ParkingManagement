@@ -32,6 +32,9 @@
             panelHome = new Panel();
             ptbLogo = new PictureBox();
             panel1 = new Panel();
+            lblNotif = new Label();
+            pbNotif = new PictureBox();
+            btnSlotNav = new Button();
             button1 = new Button();
             btnRegParkSess = new Button();
             btnFeeM = new Button();
@@ -39,6 +42,7 @@
             btnRental = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbLogo).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbNotif).BeginInit();
             SuspendLayout();
             // 
             // panelHome
@@ -46,6 +50,7 @@
             panelHome.Anchor = AnchorStyles.None;
             panelHome.AutoScroll = true;
             panelHome.BackColor = Color.White;
+            panelHome.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             panelHome.Location = new Point(191, 15);
             panelHome.Name = "panelHome";
             panelHome.Size = new Size(1264, 929);
@@ -63,6 +68,9 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lblNotif);
+            panel1.Controls.Add(pbNotif);
+            panel1.Controls.Add(btnSlotNav);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(btnRegParkSess);
             panel1.Controls.Add(btnFeeM);
@@ -72,6 +80,41 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(161, 711);
             panel1.TabIndex = 0;
+            // 
+            // lblNotif
+            // 
+            lblNotif.AutoSize = true;
+            lblNotif.BackColor = Color.FromArgb(255, 128, 128);
+            lblNotif.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNotif.ForeColor = Color.Red;
+            lblNotif.Location = new Point(89, 300);
+            lblNotif.Name = "lblNotif";
+            lblNotif.Size = new Size(0, 21);
+            lblNotif.TabIndex = 12;
+            // 
+            // pbNotif
+            // 
+            pbNotif.BackColor = Color.FromArgb(255, 128, 128);
+            pbNotif.Image = Properties.Resources.hi;
+            pbNotif.Location = new Point(60, 300);
+            pbNotif.Name = "pbNotif";
+            pbNotif.Size = new Size(39, 38);
+            pbNotif.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbNotif.TabIndex = 11;
+            pbNotif.TabStop = false;
+            pbNotif.Click += pbNotif_Click;
+            // 
+            // btnSlotNav
+            // 
+            btnSlotNav.BackColor = Color.FromArgb(255, 128, 128);
+            btnSlotNav.Dock = DockStyle.Top;
+            btnSlotNav.Location = new Point(0, 225);
+            btnSlotNav.Name = "btnSlotNav";
+            btnSlotNav.Size = new Size(161, 45);
+            btnSlotNav.TabIndex = 10;
+            btnSlotNav.Text = "Slot Management";
+            btnSlotNav.UseVisualStyleBackColor = false;
+            btnSlotNav.Click += btnSlotNav_Click;
             // 
             // button1
             // 
@@ -148,6 +191,8 @@
             Load += HomePage_Load;
             ((System.ComponentModel.ISupportInitialize)ptbLogo).EndInit();
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbNotif).EndInit();
             ResumeLayout(false);
         }
 
@@ -161,5 +206,8 @@
         private Button btnFeeM;
         private Button btnRegParkSess;
         private Button button1;
+        private Button btnSlotNav;
+        private PictureBox pbNotif;
+        private Label lblNotif;
     }
 }
