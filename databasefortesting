@@ -7,7 +7,7 @@ USE ParkingSystem;
 
 -- Client Table
 CREATE TABLE Client (
-    ClientID NVARCHAR(10) PRIMARY KEY,
+    ClientID NVARCHAR(10) AUTO_INCREMENT PRIMARY KEY,
     Name NVARCHAR(100) NOT NULL,
     Address NVARCHAR(255),
     CpNumber NVARCHAR(20),
@@ -16,10 +16,10 @@ CREATE TABLE Client (
 
 -- Vehicle Table
 CREATE TABLE Vehicle (
-    VehicleID NVARCHAR(10) PRIMARY KEY,
+    VehicleID NVARCHAR(10) AUTO_INCREMENT PRIMARY KEY,
     Brand NVARCHAR(50),
     Color NVARCHAR(50),
-    PlateNumber NVARCHAR(20) NOT NULL,
+    PlateNumber NVARCHAR(20) UNIQUE NOT NULL,
     ClientID NVARCHAR(10) NOT NULL,
     VehicleType NVARCHAR(50),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
@@ -28,7 +28,7 @@ CREATE TABLE Vehicle (
 
 -- RegularParkingSessions Table (create this BEFORE Fee!)
 CREATE TABLE RegularParkingSessions (
-    SessionID INT IDENTITY(1,1) PRIMARY KEY,
+    SessionID INT IDENTITY(1,1) AUTO_INCREMENT PRIMARY KEY,
     RegularVehicleID NVARCHAR(10)NOT NULL,
     VehicleType NVARCHAR(50)NOT NULL,
     TimeIn DATETIME NOT NULL,
@@ -41,14 +41,14 @@ CREATE TABLE RegularParkingSessions (
 
 -- Fee Table
 CREATE TABLE Fee (
-    FeeID INT PRIMARY KEY IDENTITY(1,1),
+    FeeID INT AUTO_INCREMENT PRIMARY KEY IDENTITY(1,1),
     ClientID NVARCHAR(10) NULL,
     SessionID INT NULL,
     VehicleType NVARCHAR(50),
     DurationType NVARCHAR(50),
     FixedPrice DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
-    FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID) ON DELETE CASCADE,
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
 );
 
 -- Insert initial data into Fee table
@@ -65,7 +65,7 @@ VALUES
 
 -- VehicleSessions Table (now includes 'Daily' in the CHECK constraint)
 CREATE TABLE VehicleSessions (
-    SessionID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    SessionID INT AUTO_INCREMENT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     VehicleID VARCHAR(50) NOT NULL,
     DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Daily', 'Weekly', 'Monthly', 'Yearly')),
     StartDate DATE NOT NULL,
@@ -75,16 +75,16 @@ CREATE TABLE VehicleSessions (
 
 -- Parkingslot Table
 CREATE TABLE Parkingslot (
-    SlotID INT IDENTITY(1,1) PRIMARY KEY,
+    SlotID INT AUTO_INCREMENT IDENTITY(1,1) PRIMARY KEY,
     VehicleID NVARCHAR(10) NULL,
     ClientID NVARCHAR(10) NULL,
 	SessionID int NULL,
     VehicleStatus VARCHAR(50),
     SlotStatus VARCHAR(50) NOT NULL,
     SlotNumber VARCHAR(50) NOT NULL,
-    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
-    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
-	FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
+    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID) ON DELETE CASCADE,
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE ,
+	FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID) ON DELETE CASCADE,
 	AvailableSlotM INT NOT NULL,
 	AvailableSlotV INT NOT NULL,
 	OccupiedSlotM INT NOT NULL,
@@ -107,12 +107,12 @@ VALUES
 
 
 CREATE TABLE RegularParkingTotals (
-    TotalID INT IDENTITY(1,1) PRIMARY KEY,
+    TotalID INT AUTO_INCREMENT IDENTITY(1,1) PRIMARY KEY,
     SessionID int,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
     [TimeOut] DATETIME NULL,
 	QRCodeImage NVARCHAR(MAX) NOT NULL,
 	Totalamount DECIMAL(10,2) NULL,
-    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID) ON DELETE CASCADE,
 );
