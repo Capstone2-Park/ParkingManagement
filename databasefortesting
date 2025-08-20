@@ -116,3 +116,18 @@ CREATE TABLE RegularParkingTotals (
 	Totalamount DECIMAL(10,2) NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID) ON DELETE CASCADE,
 );
+CREATE TABLE Report (
+    ReportID INT AUTO_INCREMENT IDENTITY(1,1) PRIMARY KEY,
+    ReportType NVARCHAR(50) NOT NULL CHECK (ReportType IN ('Daily', 'Weekly', 'Monthly')),
+    GeneratedDate DATETIME NOT NULL DEFAULT GETDATE(),
+    UsageCount INT DEFAULT 0, -- total vehicles counted
+    PeakHour NVARCHAR(50) NULL, -- peak hour info
+    TotalRevenue DECIMAL(12,2) DEFAULT 0, -- total earnings in period
+    AvailableSlots INT DEFAULT 0, -- available slots at report generation
+    OccupiedSlots INT DEFAULT 0, -- occupied slots at report generation
+    SessionID INT NULL,
+    FeeID INT NULL,
+    FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID) ON DELETE SET NULL,
+    FOREIGN KEY (FeeID) REFERENCES Fee(FeeID) ON DELETE SET NULL
+);
+
