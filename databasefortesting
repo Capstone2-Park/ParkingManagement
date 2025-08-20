@@ -131,3 +131,45 @@ CREATE TABLE Report (
     FOREIGN KEY (FeeID) REFERENCES Fee(FeeID) ON DELETE SET NULL
 );
 
+
+
+
+FOR THE SEPERATE REPORT DAILY AND RENT 
+
+
+/* ===============================
+   REPORT MANAGEMENT MODULE
+   =============================== */
+
+-- DAILY REPORT TABLE
+CREATE TABLE DailyReport (
+    DailyReportID INT AUTO_INCREMENT IDENTITY(1,1) PRIMARY KEY,
+    ReportDate DATE NOT NULL DEFAULT GETDATE(),
+    UsageCount INT DEFAULT 0,              -- number of vehicles for the day
+    PeakHour NVARCHAR(50) NULL,            -- busiest hour
+    TotalRevenue DECIMAL(12,2) DEFAULT 0,  -- total daily revenue
+    AvailableSlots INT DEFAULT 0,
+    OccupiedSlots INT DEFAULT 0
+);
+
+-- RENTAL REPORT TABLE
+CREATE TABLE RentalReport (
+    RentalReportID INT AUTO_INCREMENT IDENTITY(1,1) PRIMARY KEY,
+    ReportDate DATE NOT NULL DEFAULT GETDATE(),
+    ClientID NVARCHAR(10) NOT NULL,
+    SlotID INT NOT NULL,
+    StartDate DATE NOT NULL,
+    EndDate DATE NOT NULL,
+    RentalFee DECIMAL(12,2) NOT NULL,
+    PaymentStatus NVARCHAR(20) DEFAULT 'Unpaid',
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE,
+    FOREIGN KEY (SlotID) REFERENCES Parkingslot(SlotID) ON DELETE CASCADE
+);
+
+-- Example Insert for Daily Report
+INSERT INTO DailyReport (UsageCount, PeakHour, TotalRevenue, AvailableSlots, OccupiedSlots)
+VALUES (120, '2PM-4PM', 2500.00, 150, 50);
+
+-- Example Insert for Rental Report
+INSERT INTO RentalReport (ClientID, SlotID, StartDate, EndDate, RentalFee, PaymentStatus)
+VALUES ('C001', 5, '2025-08-01', '2025-08-31', 1500.00, 'Paid');
