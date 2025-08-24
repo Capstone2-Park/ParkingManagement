@@ -13,9 +13,6 @@ namespace ParkingManagement.Models
     {
         [Key]
         public int SlotID { get; set; }
-
-
-
       
         [StringLength(50)]
         public string VehicleStatus { get; set; }
@@ -23,7 +20,6 @@ namespace ParkingManagement.Models
        
         public string VehicleID { get; set; }
 
-        public int? SessionID { get; set; }
 
         public string ClientID { get; set; }
 
@@ -31,10 +27,7 @@ namespace ParkingManagement.Models
 
         public string SlotStatus { get; set; }
 
-        public int AvailableSlotM { get; set; }
-        public int AvailableSlotV { get; set; }
-        public int OccupiedSlotM { get; set; }
-        public int OccupiedSlotV { get; set; }
+
 
         // Navigation properties
         [ForeignKey("VehicleID")]
@@ -43,7 +36,5 @@ namespace ParkingManagement.Models
         [ForeignKey("ClientID")]
         public virtual Client Client { get; set; }
 
-        [ForeignKey("SessionID")]
-        public virtual required RegularParkingSession Session { get; set; }
     }
 }

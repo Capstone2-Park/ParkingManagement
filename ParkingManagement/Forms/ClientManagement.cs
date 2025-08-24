@@ -40,10 +40,9 @@ namespace ParkingManagement
             InitializeCamera();
             InitializeVehicleDataTable(); // Sets up the DataTable for current session vehicles
             InitializeNewClient(); // This will initialize currentClient and call SetCurrentSessionVehiclesToDGV()
-
-            // Set PictureBox SizeMode programmatically for camera feed
-            pcbIDPic.SizeMode = PictureBoxSizeMode.Zoom;
-
+            SetupDiscountComboBox();
+           // Set PictureBox SizeMode programmatically for camera feed
+           pcbIDPic.SizeMode = PictureBoxSizeMode.Zoom;
             // Ensure dgvInformation starts by showing current session vehicles (empty initially)
             // This is handled by InitializeNewClient, but explicitly calling it here ensures initial state
             SetCurrentSessionVehiclesToDGV();
@@ -388,6 +387,7 @@ namespace ParkingManagement
             currentClient.Name = txtName.Text;
             currentClient.Address = txtAddress.Text;
             currentClient.CpNumber = txtContactNo.Text;
+            currentClient.Discount = cbDiscount.SelectedItem?.ToString() ?? "No Discount"; // Use "No Discount" as fallback
 
             if (string.IsNullOrWhiteSpace(currentClient.Name) ||
                 string.IsNullOrWhiteSpace(currentClient.Address) ||
@@ -611,6 +611,14 @@ namespace ParkingManagement
         private async Task UpdateNextButtonStateAsync()
         {
             int clientCount = await _context.Clients.CountAsync();
+        }
+
+        private void SetupDiscountComboBox()
+        {
+            cbDiscount.Items.Clear();
+            cbDiscount.Items.Add("PWD/Senior Citizen");
+            cbDiscount.Items.Add("No Discount");
+            cbDiscount.SelectedIndex = 1; // Set "No Discount" as default
         }
     }
 }

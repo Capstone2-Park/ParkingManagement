@@ -26,6 +26,7 @@ namespace ParkingManagement.Forms
             InitializeDbContext();
             InitializeDataGridView();
             SetupVehicleTypeComboBox();
+            SetupDiscountComboBox(); // <-- Add this line
             _searchCancellationTokenSource = new CancellationTokenSource();
             _qrScanCancellationTokenSource = new CancellationTokenSource();
         }
@@ -67,6 +68,14 @@ namespace ParkingManagement.Forms
             cmbTypeOfVehicle.Items.Add("2-Wheels");
             cmbTypeOfVehicle.Items.Add("4-Wheels");
             cmbTypeOfVehicle.SelectedIndex = 0;
+        }
+
+        private void SetupDiscountComboBox()
+        {
+            cbDiscount.Items.Clear();
+            cbDiscount.Items.Add("PWD/Senior Citizen");
+            cbDiscount.Items.Add("No Discount");
+            cbDiscount.SelectedIndex = 1; // Set "No Discount" as default
         }
 
         private async Task GenerateNewRegularVehicleID()
@@ -112,11 +121,11 @@ namespace ParkingManagement.Forms
         private async Task LoadAvailableSlots()
         {
             using var context = new ParkingDbContext();
-            var slot = await context.Parkingslot.FirstOrDefaultAsync();
-            txtAvailableSlotM.Text = slot?.AvailableSlotM.ToString() ?? "0";
-            txtAvailableSlotV.Text = slot?.AvailableSlotV.ToString() ?? "0";
-            txtOccupiedSlotM.Text = slot?.OccupiedSlotM.ToString() ?? "0";
-            txtOccupiedSlotV.Text = slot?.OccupiedSlotV.ToString() ?? "0";
+            var regSlot = await context.Set<RegularSlot>().FirstOrDefaultAsync();
+            txtAvailableSlotM.Text = regSlot?.AvailableSlotM.ToString() ?? "0";
+            txtAvailableSlotV.Text = regSlot?.AvailableSlotV.ToString() ?? "0";
+            txtOccupiedSlotM.Text = regSlot?.OccupiedSlotM.ToString() ?? "0";
+            txtOccupiedSlotV.Text = regSlot?.OccupiedSlotV.ToString() ?? "0";
         }
 
         private void ClearInputFields()
@@ -135,36 +144,37 @@ namespace ParkingManagement.Forms
                 return;
             }
 
-            // Get the Parkingslot record that holds the slot counts
-            var slot = await _context.Parkingslot.FirstOrDefaultAsync();
-            if (slot == null)
+            // Get the RegularSlot record that holds the slot counts
+            var regSlot = await _context.Set<RegularSlot>().FirstOrDefaultAsync();
+            if (regSlot == null)
             {
-                MessageBox.Show("Parking slot data not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Regular slot data not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             string selectedType = cmbTypeOfVehicle.SelectedItem.ToString();
+            string selectedDiscount = cbDiscount.SelectedItem?.ToString() ?? "No Discount"; // Updated fallback
 
             // Decrement the appropriate slot count and increment occupied slot count
             if (selectedType == "2-Wheels")
             {
-                if (slot.AvailableSlotM <= 0)
+                if (regSlot.AvailableSlotM <= 0)
                 {
                     MessageBox.Show("No available slots for 2-Wheels.", "Slot Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                slot.AvailableSlotM--;
-                slot.OccupiedSlotM++; // Increment occupied slot for 2-Wheels
+                regSlot.AvailableSlotM--;
+                regSlot.OccupiedSlotM++;
             }
             else if (selectedType == "4-Wheels")
             {
-                if (slot.AvailableSlotV <= 0)
+                if (regSlot.AvailableSlotV <= 0)
                 {
                     MessageBox.Show("No available slots for 4-Wheels.", "Slot Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                slot.AvailableSlotV--;
-                slot.OccupiedSlotV++; // Increment occupied slot for 4-Wheels
+                regSlot.AvailableSlotV--;
+                regSlot.OccupiedSlotV++;
             }
 
             _currentTimeIn = DateTime.Now;
@@ -176,8 +186,8 @@ namespace ParkingManagement.Forms
                 VehicleType = selectedType,
                 TimeIn = _currentTimeIn,
                 TimeOut = null,
-                TotalAmount = null
-                // No AvailableSlotM or AvailableSlotV here anymore
+                TotalAmount = null,
+                Discount = selectedDiscount // <-- Save the discount
             };
 
             try

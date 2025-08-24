@@ -242,10 +242,6 @@ namespace ParkingManagement.Forms
                     {
                         panel.BackColor = Color.Red; // Rented
                     }
-                    else if (slot.SessionID != null)
-                    {
-                        panel.BackColor = Color.Red; // Occupied
-                    }
                     else
                     {
                         panel.BackColor = Color.Green; // Available
@@ -264,10 +260,6 @@ namespace ParkingManagement.Forms
                     if (!string.IsNullOrEmpty(slot.ClientID))
                     {
                         label.Text = "Rented";
-                    }
-                    else if (slot.SessionID != null)
-                    {
-                        label.Text = "Occupied";
                     }
                     else
                     {
@@ -433,10 +425,6 @@ namespace ParkingManagement.Forms
                     if (!string.IsNullOrEmpty(slot.ClientID))
                     {
                         panel.BackColor = Color.Red; // Rented
-                    }
-                    else if (slot.SessionID != null)
-                    {
-                        panel.BackColor = Color.Red; // Occupied
                     }
                     else
                     {

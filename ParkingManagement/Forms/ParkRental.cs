@@ -242,7 +242,17 @@ namespace ParkingManagement.Forms
             if (percentage > 1) percentage = 1;
 
             _calculatedEndDateTime = endDate;
-            _calculatedTotalAmount = fee.FixedPrice * (decimal)percentage;
+            decimal baseAmount = fee.FixedPrice * (decimal)percentage;
+
+            // Apply 30% discount if client is PWD/Senior Citizen
+            if (_currentClient != null && _currentClient.Discount == "PWD/Senior Citizen")
+            {
+                _calculatedTotalAmount = baseAmount * 0.7m; // 30% off
+            }
+            else
+            {
+                _calculatedTotalAmount = baseAmount;
+            }
 
             return true;
         }
@@ -426,7 +436,7 @@ namespace ParkingManagement.Forms
                 .Join(_context.Vehicles, vs => vs.VehicleID, v => v.VehicleID, (vs, v) => new { vs, v })
                 .Join(_context.Clients, temp => temp.v.ClientID, c => c.ClientID, (temp, c) => new
                 {
-                    ClientID = c.ClientID,
+                    ClientID = c.ClientID, 
                     ClientName = c.Name,
                     Vehicle = temp.v.Brand + " " + temp.v.PlateNumber,
                     PlateNumber = temp.v.PlateNumber, // <-- Add this line

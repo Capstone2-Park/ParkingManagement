@@ -44,7 +44,8 @@
             txtOccupiedSlotV = new TextBox();
             label8 = new Label();
             txtOccupiedSlotM = new TextBox();
-            button1 = new Button();
+            label9 = new Label();
+            cbDiscount = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvTimeInTimeOutData).BeginInit();
             SuspendLayout();
             // 
@@ -59,7 +60,7 @@
             // cmbTypeOfVehicle
             // 
             cmbTypeOfVehicle.FormattingEnabled = true;
-            cmbTypeOfVehicle.Location = new Point(271, 256);
+            cmbTypeOfVehicle.Location = new Point(271, 248);
             cmbTypeOfVehicle.Name = "cmbTypeOfVehicle";
             cmbTypeOfVehicle.Size = new Size(203, 23);
             cmbTypeOfVehicle.TabIndex = 2;
@@ -104,7 +105,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(127, 264);
+            label3.Location = new Point(127, 256);
             label3.Name = "label3";
             label3.Size = new Size(85, 15);
             label3.TabIndex = 9;
@@ -188,21 +189,30 @@
             txtOccupiedSlotM.Size = new Size(57, 23);
             txtOccupiedSlotM.TabIndex = 13;
             // 
-            // button1
+            // label9
             // 
-            button1.Location = new Point(883, 247);
-            button1.Name = "button1";
-            button1.Size = new Size(95, 39);
-            button1.TabIndex = 18;
-            button1.Text = "Time in";
-            button1.UseVisualStyleBackColor = true;
+            label9.AutoSize = true;
+            label9.Location = new Point(127, 320);
+            label9.Name = "label9";
+            label9.Size = new Size(54, 15);
+            label9.TabIndex = 19;
+            label9.Text = "Discount";
+            // 
+            // cbDiscount
+            // 
+            cbDiscount.FormattingEnabled = true;
+            cbDiscount.Location = new Point(271, 312);
+            cbDiscount.Name = "cbDiscount";
+            cbDiscount.Size = new Size(203, 23);
+            cbDiscount.TabIndex = 18;
             // 
             // Regular_Parking
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1138, 734);
-            Controls.Add(button1);
+            Controls.Add(label9);
+            Controls.Add(cbDiscount);
             Controls.Add(label6);
             Controls.Add(label7);
             Controls.Add(txtOccupiedSlotV);
@@ -246,6 +256,7 @@
         private TextBox txtOccupiedSlotV;
         private Label label8;
         private TextBox txtOccupiedSlotM;
-        private Button button1;
+        private Label label9;
+        private ComboBox cbDiscount;
     }
 }

@@ -8,7 +8,7 @@ namespace ParkingManagement.Forms
 {
     public partial class SlotEdit : Form
     {
-        private Parkingslot slot;
+        private RegularSlot regSlot;
         private ParkingDbContext db;
 
         public SlotEdit()
@@ -27,15 +27,15 @@ namespace ParkingManagement.Forms
 
         private void SlotEdit_Load(object sender, EventArgs e)
         {
-            slot = db.Parkingslot.FirstOrDefault();
-            if (slot != null)
+            regSlot = db.Set<RegularSlot>().FirstOrDefault();
+            if (regSlot != null)
             {
-                txtMotorcycle.Text = slot.AvailableSlotM.ToString();
-                txtVehicle.Text = slot.AvailableSlotV.ToString();
+                txtMotorcycle.Text = regSlot.AvailableSlotM.ToString();
+                txtVehicle.Text = regSlot.AvailableSlotV.ToString();
             }
             else
             {
-                MessageBox.Show("No Parkingslot record found in the database.");
+                MessageBox.Show("No RegularSlot record found in the database.");
             }
         }
 
@@ -48,13 +48,13 @@ namespace ParkingManagement.Forms
 
         private void SaveSlots()
         {
-            if (slot != null)
+            if (regSlot != null)
             {
                 // Parse and save values
                 if (int.TryParse(txtMotorcycle.Text, out int m))
-                    slot.AvailableSlotM = m;
+                    regSlot.AvailableSlotM = m;
                 if (int.TryParse(txtVehicle.Text, out int v))
-                    slot.AvailableSlotV = v;
+                    regSlot.AvailableSlotV = v;
 
                 db.SaveChanges();
             }
@@ -62,40 +62,40 @@ namespace ParkingManagement.Forms
 
         private void btnSlotAddM_Click(object sender, EventArgs e)
         {
-            if (slot != null)
+            if (regSlot != null)
             {
-                slot.AvailableSlotM++;
-                txtMotorcycle.Text = slot.AvailableSlotM.ToString();
+                regSlot.AvailableSlotM++;
+                txtMotorcycle.Text = regSlot.AvailableSlotM.ToString();
                 db.SaveChanges();
             }
         }
 
         private void btnSlotRemoveM_Click(object sender, EventArgs e)
         {
-            if (slot != null && slot.AvailableSlotM > 0)
+            if (regSlot != null && regSlot.AvailableSlotM > 0)
             {
-                slot.AvailableSlotM--;
-                txtMotorcycle.Text = slot.AvailableSlotM.ToString();
+                regSlot.AvailableSlotM--;
+                txtMotorcycle.Text = regSlot.AvailableSlotM.ToString();
                 db.SaveChanges();
             }
         }
 
         private void btnSlotAddV_Click(object sender, EventArgs e)
         {
-            if (slot != null)
+            if (regSlot != null)
             {
-                slot.AvailableSlotV++;
-                txtVehicle.Text = slot.AvailableSlotV.ToString();
+                regSlot.AvailableSlotV++;
+                txtVehicle.Text = regSlot.AvailableSlotV.ToString();
                 db.SaveChanges();
             }
         }
 
         private void btnSlotRemoveV_Click(object sender, EventArgs e)
         {
-            if (slot != null && slot.AvailableSlotV > 0)
+            if (regSlot != null && regSlot.AvailableSlotV > 0)
             {
-                slot.AvailableSlotV--;
-                txtVehicle.Text = slot.AvailableSlotV.ToString();
+                regSlot.AvailableSlotV--;
+                txtVehicle.Text = regSlot.AvailableSlotV.ToString();
                 db.SaveChanges();
             }
         }
@@ -113,15 +113,15 @@ namespace ParkingManagement.Forms
 
         private void SlotEdit_Load_1(object sender, EventArgs e)
         {
-            slot = db.Parkingslot.FirstOrDefault();
-            if (slot != null)
+            regSlot = db.Set<RegularSlot>().FirstOrDefault();
+            if (regSlot != null)
             {
-                txtMotorcycle.Text = slot.AvailableSlotM.ToString();
-                txtVehicle.Text = slot.AvailableSlotV.ToString();
+                txtMotorcycle.Text = regSlot.AvailableSlotM.ToString();
+                txtVehicle.Text = regSlot.AvailableSlotV.ToString();
             }
             else
             {
-                MessageBox.Show("No Parkingslot record found in the database.");
+                MessageBox.Show("No RegularSlot record found in the database.");
             }
         }
     }

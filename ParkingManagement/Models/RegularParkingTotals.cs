@@ -16,6 +16,7 @@ namespace ParkingManagement.Models
         public DateTime? TimeOut { get; set; }
         public decimal? TotalAmount { get; set; }
         public string QRCodeImage { get; set; }
+        public string Discount { get; set; }
         public int SessionID { get; set; }
 
         [ForeignKey("SessionID")]

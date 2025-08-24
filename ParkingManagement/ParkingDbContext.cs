@@ -19,6 +19,13 @@ namespace ParkingManagement
         public DbSet<Parkingslot> Parkingslot { get; set; }
         public DbSet<RegularParkingTotals> RegularParkingTotal { get; set; }
 
+        public DbSet<RegularSlot> RegularSlot { get; set; }
+
+        public DbSet<DailyReport> DailyReport { get; set; }
+        public DbSet<DailyFinanceSum> DailyFinanceSums { get; set; }
+        public DbSet<WeeklyFinanceSum> WeeklyFinanceSums { get; set; }
+        public DbSet<MonthlyFinanceSum> MonthlyFinanceSums { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=CECILE030103\\SQLEXPRESS;Initial Catalog=ParkingSystem;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
@@ -89,16 +96,25 @@ namespace ParkingManagement
                 .HasForeignKey(ps => ps.ClientID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Parkingslot>()
-                .HasOne(ps => ps.Session)
-                .WithMany()
-                .HasForeignKey(ps => ps.SessionID)
-                .OnDelete(DeleteBehavior.SetNull);
+
 
 
 
             modelBuilder.Entity<RegularParkingTotals>().ToTable("RegularParkingTotals");
             modelBuilder.Entity<RegularParkingTotals>().HasKey(rpt => rpt.TotalID);
+
+            modelBuilder.Entity<RegularSlot>().ToTable("RegularSlot");
+            modelBuilder.Entity<RegularSlot>().HasKey(rs => rs.RegSlotID);
+
+            modelBuilder.Entity<DailyFinanceSum>().ToTable("DailyFinanceSum");
+            modelBuilder.Entity<DailyFinanceSum>().HasKey(dfs => dfs.DailyFinanceID);
+
+            modelBuilder.Entity<WeeklyFinanceSum>().ToTable("WeeklyFinanceSum");
+            modelBuilder.Entity<WeeklyFinanceSum>().HasKey(wfs => wfs.WeeklyFinanceID);
+
+            modelBuilder.Entity<MonthlyFinanceSum>().ToTable("MonthlyFinanceSum");
+            modelBuilder.Entity<MonthlyFinanceSum>().HasKey(mfs => mfs.MonthlyFinanceID);
+
         }
     }
 }

@@ -332,28 +332,54 @@ namespace ParkingManagement.Forms
                     var timeIn = total.TimeIn;
                     var timeOut = total.TimeOut.Value;
                     var totalHours = (timeOut - timeIn).TotalHours;
-                    if (totalHours > 0 && totalHours < 2)
-                        totalHours = 2;
+
+                    // Get Discount property
+                    string discount = total.Discount?.Trim() ?? "No Discount";
+
                     string vehicleType = total.VehicleType?.Trim() ?? "";
                     string durationType = "Daily";
                     var fee = db.Fees.FirstOrDefault(f => f.VehicleType.Trim().ToLower() == vehicleType.ToLower() && f.DurationType == durationType);
                     decimal dailyRate = fee?.FixedPrice ?? 0;
-                    int days = (int)Math.Ceiling(Math.Max(totalHours, 0.01) / 2.0);
-                    if (days < 1) days = 1;
-                    total.TotalAmount = days * dailyRate;
+
+                    decimal amountToPay = 0m;
+
+                    if (discount == "PWD/Senior Citizen")
+                    {
+                        // First 3 hours are free
+                        double chargeableHours = totalHours - 3;
+                        if (chargeableHours < 0) chargeableHours = 0;
+
+                        // Apply minimum chargeable time if needed (e.g., minimum 2 hours after discount)
+                        if (chargeableHours > 0 && chargeableHours < 2)
+                            chargeableHours = 2;
+
+                        int days = (int)Math.Ceiling(Math.Max(chargeableHours, 0.01) / 2.0);
+                        if (days < 1 && chargeableHours > 0) days = 1;
+                        amountToPay = days * dailyRate;
+                    }
+                    else // No Discount
+                    {
+                        if (totalHours > 0 && totalHours < 2)
+                            totalHours = 2;
+                        int days = (int)Math.Ceiling(Math.Max(totalHours, 0.01) / 2.0);
+                        if (days < 1) days = 1;
+                        amountToPay = days * dailyRate;
+                    }
+
+                    total.TotalAmount = amountToPay;
                     _totalAmount = total.TotalAmount ?? 0m; // Store for later use
 
-                    // --- Increment AvailableSlotM or AvailableSlotV in Parkingslot ---
-                    var slot = db.Parkingslot.FirstOrDefault();
-                    if (slot != null)
+                    // --- Increment AvailableSlotM or AvailableSlotV in RegularSlot ---
+                    var regSlot = db.RegularSlot.FirstOrDefault(s => s.SessionID == sessionId);
+                    if (regSlot != null)
                     {
                         if (vehicleType.Equals("2-Wheels", StringComparison.OrdinalIgnoreCase))
                         {
-                            slot.AvailableSlotM += 1;
+                            regSlot.AvailableSlotM += 1;
                         }
                         else if (vehicleType.Equals("4-Wheels", StringComparison.OrdinalIgnoreCase))
                         {
-                            slot.AvailableSlotV += 1;
+                            regSlot.AvailableSlotV += 1;
                         }
                     }
                     // --- End increment logic ---
@@ -367,6 +393,7 @@ namespace ParkingManagement.Forms
                     receipt.AppendLine($"Time Out: {total.TimeOut}");
                     var totalHoursDisplay = (total.TimeOut.Value - total.TimeIn).TotalHours;
                     receipt.AppendLine($"Total Hours: {totalHoursDisplay:F2}");
+                    receipt.AppendLine($"Discount: {discount}");
                     receipt.AppendLine($"Total Amount: {total.TotalAmount:N2}");
                     rtbReceipt.Text = receipt.ToString();
                 }

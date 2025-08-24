@@ -57,6 +57,8 @@
             btnSave = new Button();
             btnCancel = new Button();
             flowLayoutPanel1 = new FlowLayoutPanel();
+            label10 = new Label();
+            cbDiscount = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
             flowLayoutPanel1.SuspendLayout();
@@ -129,7 +131,7 @@
             // pcbIDPic
             // 
             pcbIDPic.BackColor = SystemColors.ActiveCaption;
-            pcbIDPic.Location = new Point(701, 82);
+            pcbIDPic.Location = new Point(702, 57);
             pcbIDPic.Name = "pcbIDPic";
             pcbIDPic.Size = new Size(327, 193);
             pcbIDPic.TabIndex = 8;
@@ -137,7 +139,7 @@
             // 
             // btnStartCamera
             // 
-            btnStartCamera.Location = new Point(1072, 95);
+            btnStartCamera.Location = new Point(1073, 70);
             btnStartCamera.Name = "btnStartCamera";
             btnStartCamera.Size = new Size(100, 23);
             btnStartCamera.TabIndex = 9;
@@ -147,7 +149,7 @@
             // 
             // btnCaptureImage
             // 
-            btnCaptureImage.Location = new Point(1072, 149);
+            btnCaptureImage.Location = new Point(1073, 124);
             btnCaptureImage.Name = "btnCaptureImage";
             btnCaptureImage.Size = new Size(100, 23);
             btnCaptureImage.TabIndex = 10;
@@ -157,7 +159,7 @@
             // 
             // btnRetakeImage
             // 
-            btnRetakeImage.Location = new Point(1072, 188);
+            btnRetakeImage.Location = new Point(1073, 163);
             btnRetakeImage.Name = "btnRetakeImage";
             btnRetakeImage.Size = new Size(100, 23);
             btnRetakeImage.TabIndex = 11;
@@ -317,12 +319,32 @@
             flowLayoutPanel1.Size = new Size(779, 291);
             flowLayoutPanel1.TabIndex = 28;
             // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(760, 287);
+            label10.Name = "label10";
+            label10.Size = new Size(54, 15);
+            label10.TabIndex = 30;
+            label10.Text = "Discount";
+            // 
+            // cbDiscount
+            // 
+            cbDiscount.FormattingEnabled = true;
+            cbDiscount.Items.AddRange(new object[] { "2-Wheels", "4-Wheels" });
+            cbDiscount.Location = new Point(838, 284);
+            cbDiscount.Name = "cbDiscount";
+            cbDiscount.Size = new Size(191, 23);
+            cbDiscount.TabIndex = 31;
+            // 
             // ClientManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1266, 749);
+            Controls.Add(cbDiscount);
+            Controls.Add(label10);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(btnRemoveVehicle);
             Controls.Add(btnAddVehicle);
@@ -391,5 +413,7 @@
         private Button btnSave;
         private Button btnCancel;
         private FlowLayoutPanel flowLayoutPanel1;
+        private Label label10;
+        private ComboBox cbDiscount;
     }
 }

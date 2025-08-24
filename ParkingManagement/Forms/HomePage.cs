@@ -54,12 +54,11 @@ namespace ParkingManagement
         {
             FeeManagement FeeList = new FeeManagement();
             FeeList.Show();
-            btnClientM.Visible = false;
         }
 
         private void HomePage_Load(object sender, EventArgs e)
         {
-            btnClientM.Visible = false;
+
         }
 
         private void btnRegularParking_Click(object sender, EventArgs e)
@@ -132,6 +131,29 @@ namespace ParkingManagement
 
             lblNotif.Text = ""; // Hide the notification count immediately
             ShowFormInPanel(new Notification());
+        }
+
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new ReportManagement());
+            btnReports.Visible = true;  
+            btnFinance.Visible = true;
+            btnRecords.Visible = true;
+        }
+
+        private void btnReports_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new ReportManagement());
+        }
+
+        private void btnFinance_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new FinanceSum());
+        }
+
+        private void btnRecords_Click(object sender, EventArgs e)
+        {
+            ShowFormInPanel(new HistoricalRecords());
         }
     }
 }

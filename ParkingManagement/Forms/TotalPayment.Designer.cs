@@ -68,7 +68,7 @@
             // 
             // btnConfirm
             // 
-            btnConfirm.Location = new Point(678, 142);
+            btnConfirm.Location = new Point(683, 238);
             btnConfirm.Name = "btnConfirm";
             btnConfirm.Size = new Size(89, 25);
             btnConfirm.TabIndex = 13;
@@ -78,7 +78,7 @@
             // 
             // rtbChange
             // 
-            rtbChange.Location = new Point(477, 207);
+            rtbChange.Location = new Point(481, 281);
             rtbChange.Name = "rtbChange";
             rtbChange.Size = new Size(290, 92);
             rtbChange.TabIndex = 12;
@@ -87,7 +87,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(683, 95);
+            label3.Location = new Point(688, 91);
             label3.Name = "label3";
             label3.Size = new Size(88, 15);
             label3.TabIndex = 11;
@@ -95,7 +95,7 @@
             // 
             // txtCash
             // 
-            txtCash.Location = new Point(592, 113);
+            txtCash.Location = new Point(597, 109);
             txtCash.Name = "txtCash";
             txtCash.Size = new Size(175, 23);
             txtCash.TabIndex = 10;

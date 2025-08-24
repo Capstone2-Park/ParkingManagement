@@ -52,13 +52,14 @@ namespace ParkingManagement.Forms
                     return;
                 }
 
-                // Build QR data string using only available fields
+                // Build QR data string including Discount
                 string qrData = $"SessionID: {session.SessionID}\n" +
                                 $"VehicleID: {session.RegularVehicleID}\n" +
                                 $"Type: {session.VehicleType}\n" +
                                 $"Time In: {session.TimeIn}\n" +
                                 $"Time Out: {session.TimeOut}\n" +
-                                $"Total: {session.TotalAmount}";
+                                $"Total: {session.TotalAmount}\n" +
+                                $"Discount: {session.Discount}";
 
                 using (var qrGenerator = new QRCoder.QRCodeGenerator())
                 using (var qrCodeData = qrGenerator.CreateQrCode(qrData, QRCoder.QRCodeGenerator.ECCLevel.Q))
@@ -74,29 +75,35 @@ namespace ParkingManagement.Forms
                         resizedBitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                         byte[] qrBytes = ms.ToArray();
 
-                        var total = new RegularParkingTotals
+                        // Check if a record already exists for this session
+                        var existingTotal = db.RegularParkingTotal.FirstOrDefault(t => t.SessionID == session.SessionID);
+                        if (existingTotal == null)
                         {
-                            VehicleType = session.VehicleType,
-                            TimeIn = session.TimeIn,
-                            TimeOut = session.TimeOut, // This will be null for new sessions
-                            TotalAmount = session.TotalAmount,
-                            SessionID = session.SessionID,
-                            QRCodeImage = Convert.ToBase64String(qrBytes)
-                        };
+                            var total = new RegularParkingTotals
+                            {
+                                VehicleType = session.VehicleType,
+                                TimeIn = session.TimeIn,
+                                TimeOut = session.TimeOut, // This will be null for new sessions
+                                TotalAmount = session.TotalAmount,
+                                SessionID = session.SessionID,
+                                QRCodeImage = Convert.ToBase64String(qrBytes),
+                                Discount = session.Discount // <-- Save Discount
+                            };
 
-                        try
-                        {
-                            db.RegularParkingTotal.Add(total);
-                            db.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(
-                                $"Error saving RegularParkingTotal:\n{ex.Message}\n{ex.InnerException?.Message}",
-                                "Database Save Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
+                            try
+                            {
+                                db.RegularParkingTotal.Add(total);
+                                db.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(
+                                    $"Error saving RegularParkingTotal:\n{ex.Message}\n{ex.InnerException?.Message}",
+                                    "Database Save Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error
+                                );
+                            }
                         }
                     }
                 }
