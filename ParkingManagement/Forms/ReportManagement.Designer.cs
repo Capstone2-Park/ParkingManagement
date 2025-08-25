@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel2 = new Panel();
             rtbAvailSlot = new RichTextBox();
             rtbTotalRevenue = new RichTextBox();
             panelChart = new Panel();
@@ -37,29 +36,21 @@
             label3 = new Label();
             rtbParkUse = new RichTextBox();
             panel1 = new Panel();
-            panel2.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // panel2
-            // 
-            panel2.Controls.Add(rtbAvailSlot);
-            panel2.Location = new Point(517, 397);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(226, 102);
-            panel2.TabIndex = 1;
-            // 
             // rtbAvailSlot
             // 
-            rtbAvailSlot.Location = new Point(0, 0);
+            rtbAvailSlot.Location = new Point(629, 56);
             rtbAvailSlot.Name = "rtbAvailSlot";
             rtbAvailSlot.Size = new Size(226, 99);
             rtbAvailSlot.TabIndex = 1;
             rtbAvailSlot.Text = "";
+            rtbAvailSlot.TextChanged += rtbAvailSlot_TextChanged;
             // 
             // rtbTotalRevenue
             // 
-            rtbTotalRevenue.Location = new Point(299, 604);
+            rtbTotalRevenue.Location = new Point(340, 206);
             rtbTotalRevenue.Name = "rtbTotalRevenue";
             rtbTotalRevenue.Size = new Size(270, 74);
             rtbTotalRevenue.TabIndex = 2;
@@ -77,7 +68,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(186, 362);
+            label1.Location = new Point(163, 25);
             label1.Name = "label1";
             label1.Size = new Size(124, 15);
             label1.TabIndex = 4;
@@ -86,16 +77,17 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(575, 362);
+            label2.Location = new Point(689, 28);
             label2.Name = "label2";
             label2.Size = new Size(120, 15);
             label2.TabIndex = 5;
             label2.Text = "Today's Available Slot";
+            label2.Click += label2_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(411, 586);
+            label3.Location = new Point(452, 188);
             label3.Name = "label3";
             label3.Size = new Size(52, 15);
             label3.TabIndex = 6;
@@ -103,7 +95,7 @@
             // 
             // rtbParkUse
             // 
-            rtbParkUse.Location = new Point(0, 0);
+            rtbParkUse.Location = new Point(118, 53);
             rtbParkUse.Name = "rtbParkUse";
             rtbParkUse.Size = new Size(207, 102);
             rtbParkUse.TabIndex = 0;
@@ -112,10 +104,16 @@
             // 
             // panel1
             // 
+            panel1.BackColor = SystemColors.ActiveCaption;
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(rtbAvailSlot);
             panel1.Controls.Add(rtbParkUse);
-            panel1.Location = new Point(142, 397);
+            panel1.Controls.Add(rtbTotalRevenue);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(label2);
+            panel1.Location = new Point(49, 355);
             panel1.Name = "panel1";
-            panel1.Size = new Size(210, 105);
+            panel1.Size = new Size(966, 310);
             panel1.TabIndex = 0;
             // 
             // ReportManagement
@@ -123,24 +121,17 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1090, 702);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(panelChart);
-            Controls.Add(rtbTotalRevenue);
-            Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "ReportManagement";
             Text = "ReportManagement";
             Load += ReportManagement_Load;
-            panel2.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-        private Panel panel2;
         private RichTextBox rtbAvailSlot;
         private RichTextBox rtbTotalRevenue;
         private Panel panelChart;

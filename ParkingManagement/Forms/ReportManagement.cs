@@ -79,13 +79,14 @@ namespace ParkingManagement.Forms
 
             decimal totalRevenue = vehicleSessionRevenue + regularParkingSessionRevenue;
 
-            string revenueText = $"Total Revenue for {today:MM/dd/yyyy}:\n" +
-                         $"- Vehicle Sessions: ₱{vehicleSessionRevenue:F2}\n" +
-                         $"- Regular Parking Sessions: ₱{regularParkingSessionRevenue:F2}\n" +
-                         $"-----------------------------\n" +
-                         $"Total Revenue: ₱{totalRevenue:F2}";
+            // Only display the overall total revenue, large and bold
+            rtbTotalRevenue.Text = $"₱{totalRevenue:N2}";
+            rtbTotalRevenue.Font = new Font("Segoe UI", 32, FontStyle.Bold);
+            rtbTotalRevenue.ReadOnly = true;
 
-            rtbTotalRevenue.Text = revenueText;
+            // Set rtbParkUse and rtbAvailSlot as read-only
+            rtbParkUse.ReadOnly = true;
+            rtbAvailSlot.ReadOnly = true;
 
             // --- Save to DailyReport ---
             var dailyReport = await db.Set<DailyReport>()
@@ -122,7 +123,7 @@ namespace ParkingManagement.Forms
 
         private void rtbParkUse_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private async Task<Dictionary<int, int>> CalculatePeakHoursAsync()
@@ -177,6 +178,16 @@ namespace ParkingManagement.Forms
             cartesianChart.Dock = DockStyle.Fill;
             panelChart.Controls.Clear();
             panelChart.Controls.Add(cartesianChart);
+        }
+
+        private void rtbAvailSlot_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

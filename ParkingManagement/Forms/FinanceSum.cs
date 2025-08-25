@@ -23,6 +23,11 @@ namespace ParkingManagement.Forms
                 await UpdateWeeklyFinanceSumAsync();
                 await UpdateMonthlyFinanceSumAsync();
             };
+
+            // Make DataGridViews read-only
+            dgvDailyRep.ReadOnly = true;
+            dgvWeeklyRep.ReadOnly = true;
+            dgvMonthlyRep.ReadOnly = true;
         }
 
         private async void FinanceSum_Load(object sender, EventArgs e)
