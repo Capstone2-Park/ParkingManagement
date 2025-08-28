@@ -34,6 +34,8 @@
             btnSaveFee = new Button();
             cmbTypeOfVehicle = new ComboBox();
             txtInputFee = new TextBox();
+            cbDuration = new ComboBox();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvFeeList).BeginInit();
             SuspendLayout();
             // 
@@ -51,7 +53,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(74, 61);
             label1.Name = "label1";
-            label1.Size = new Size(88, 15);
+            label1.Size = new Size(87, 15);
             label1.TabIndex = 1;
             label1.Text = "Type Of Vehicle";
             // 
@@ -89,11 +91,30 @@
             txtInputFee.Size = new Size(121, 23);
             txtInputFee.TabIndex = 5;
             // 
+            // cbDuration
+            // 
+            cbDuration.FormattingEnabled = true;
+            cbDuration.Location = new Point(458, 55);
+            cbDuration.Name = "cbDuration";
+            cbDuration.Size = new Size(121, 23);
+            cbDuration.TabIndex = 7;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(344, 58);
+            label3.Name = "label3";
+            label3.Size = new Size(96, 15);
+            label3.TabIndex = 6;
+            label3.Text = "Type Of Duration";
+            // 
             // FeeManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(737, 450);
+            Controls.Add(cbDuration);
+            Controls.Add(label3);
             Controls.Add(txtInputFee);
             Controls.Add(cmbTypeOfVehicle);
             Controls.Add(btnSaveFee);
@@ -117,5 +138,7 @@
         private Button btnSaveFee;
         private ComboBox cmbTypeOfVehicle;
         private TextBox txtInputFee;
+        private ComboBox cbDuration;
+        private Label label3;
     }
 }

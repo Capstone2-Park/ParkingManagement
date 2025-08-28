@@ -208,6 +208,7 @@
             cmbVehicleType.Name = "cmbVehicleType";
             cmbVehicleType.Size = new Size(191, 23);
             cmbVehicleType.TabIndex = 17;
+            cmbVehicleType.SelectedIndexChanged += cmbVehicleType_SelectedIndexChanged;
             // 
             // label5
             // 

@@ -36,6 +36,7 @@
             btnFeeM = new Button();
             btnClientM = new Button();
             btnRental = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbLogo).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -62,6 +63,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(button1);
             panel1.Controls.Add(btnRegularParking);
             panel1.Controls.Add(btnFeeM);
             panel1.Controls.Add(btnClientM);
@@ -119,6 +121,18 @@
             btnRental.UseVisualStyleBackColor = false;
             btnRental.Click += btnRental_Click;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.FromArgb(255, 128, 128);
+            button1.Dock = DockStyle.Top;
+            button1.Location = new Point(0, 180);
+            button1.Name = "button1";
+            button1.Size = new Size(161, 45);
+            button1.TabIndex = 8;
+            button1.Text = "Regular Parking";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
             // HomePage
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -146,5 +160,6 @@
         private Button btnClientM;
         private Button btnFeeM;
         private Button btnRegularParking;
+        private Button button1;
     }
 }

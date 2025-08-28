@@ -35,6 +35,9 @@
             cmbDurationType = new ComboBox();
             label3 = new Label();
             btnSave = new Button();
+            btnSetSched = new Button();
+            btnCancel = new Button();
+            lstScheduled = new ListBox();
             ((System.ComponentModel.ISupportInitialize)dgvVehicles).BeginInit();
             SuspendLayout();
             // 
@@ -84,13 +87,13 @@
             label3.AutoSize = true;
             label3.Location = new Point(197, 257);
             label3.Name = "label3";
-            label3.Size = new Size(81, 15);
+            label3.Size = new Size(80, 15);
             label3.TabIndex = 7;
             label3.Text = "Duration Type";
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(935, 640);
+            btnSave.Location = new Point(836, 644);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 8;
@@ -98,11 +101,43 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // btnSetSched
+            // 
+            btnSetSched.Location = new Point(819, 226);
+            btnSetSched.Name = "btnSetSched";
+            btnSetSched.Size = new Size(92, 23);
+            btnSetSched.TabIndex = 9;
+            btnSetSched.Text = "Set Schedule";
+            btnSetSched.UseVisualStyleBackColor = true;
+            btnSetSched.Click += btnSetSched_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(935, 644);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 23);
+            btnCancel.TabIndex = 10;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // lstScheduled
+            // 
+            lstScheduled.FormattingEnabled = true;
+            lstScheduled.ItemHeight = 15;
+            lstScheduled.Location = new Point(585, 226);
+            lstScheduled.Name = "lstScheduled";
+            lstScheduled.Size = new Size(221, 199);
+            lstScheduled.TabIndex = 11;
+            // 
             // ParkRental
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1248, 890);
+            ClientSize = new Size(1248, 749);
+            Controls.Add(lstScheduled);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSetSched);
             Controls.Add(btnSave);
             Controls.Add(label3);
             Controls.Add(cmbDurationType);
@@ -127,5 +162,8 @@
         private ComboBox cmbDurationType;
         private Label label3;
         private Button btnSave;
+        private Button btnSetSched;
+        private Button btnCancel;
+        private ListBox lstScheduled;
     }
 }

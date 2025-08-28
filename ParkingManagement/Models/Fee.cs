@@ -13,6 +13,7 @@ namespace ParkingManagement.Model
     {
         public int FeeID { get; set; }
         public string VehicleType { get; set; }
-        public decimal FeePerHour { get; set; }
+        public decimal FixedPrice { get; set; }
+        public string DurationType { get; set; }
     }
 }

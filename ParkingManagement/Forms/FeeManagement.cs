@@ -25,6 +25,7 @@ namespace ParkingManagement.Forms
             InitializeDbContext();
             InitializeDataGridView();
             SetupVehicleTypeComboBox();
+            SetupDurationComboBox();
         }
 
         private async void FeeManagement_Load(object sender, EventArgs e)
@@ -40,15 +41,16 @@ namespace ParkingManagement.Forms
 
         private void InitializeDataGridView()
         {
-            dgvFeeList.AutoGenerateColumns = false; // We'll manually add columns
+            dgvFeeList.AutoGenerateColumns = false;
 
+            dgvFeeList.Columns.Clear();
             dgvFeeList.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FeeID",
                 HeaderText = "Fee ID",
                 DataPropertyName = "FeeID",
                 ReadOnly = true,
-                Visible = false // Often hide ID columns unless debugging
+                Visible = false
             });
             dgvFeeList.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -59,11 +61,18 @@ namespace ParkingManagement.Forms
             });
             dgvFeeList.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "FeePerHour",
-                HeaderText = "Fee Per Hour (₱)",
-                DataPropertyName = "FeePerHour",
+                Name = "DurationType",
+                HeaderText = "Duration Type",
+                DataPropertyName = "DurationType",
+                ReadOnly = true
+            });
+            dgvFeeList.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "FixedPrice",
+                HeaderText = "Fixed Price (₱)",
+                DataPropertyName = "FeePerHour", // Still mapped to FeePerHour in model
                 ReadOnly = true,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" } // Format as currency
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
             });
 
             dgvFeeList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -78,6 +87,16 @@ namespace ParkingManagement.Forms
             // Add any other types if they are consistently used
             // cmbVehicleType.Items.Add("6-Wheels"); // Example
             cmbTypeOfVehicle.SelectedIndex = -1; // No default selection on start
+        }
+
+        private void SetupDurationComboBox()
+        {
+            cbDuration.Items.Clear();
+            cbDuration.Items.Add("Daily");
+            cbDuration.Items.Add("Weekly");
+            cbDuration.Items.Add("Monthly");
+            cbDuration.Items.Add("Yearly");
+            cbDuration.SelectedIndex = -1; // No default selection
         }
 
         private async Task LoadFeesToDataGridView()
@@ -126,7 +145,7 @@ namespace ParkingManagement.Forms
                 if (feeToSave != null)
                 {
                     // If an existing fee for this VehicleType is found, UPDATE it
-                    feeToSave.FeePerHour = feeValue;
+                    feeToSave.FixedPrice = feeValue;
                     // EF Core automatically tracks changes to 'feeToSave' because it was fetched from the context
                     MessageBox.Show($"Fee for '{selectedType}' has been updated successfully!", "Update Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -136,7 +155,7 @@ namespace ParkingManagement.Forms
                     feeToSave = new Fee
                     {
                         VehicleType = selectedType,
-                        FeePerHour = feeValue
+                        FixedPrice = feeValue
                     };
                     _context.Fees.Add(feeToSave);
                     MessageBox.Show($"New fee for '{selectedType}' saved successfully!", "Save Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -166,9 +185,9 @@ namespace ParkingManagement.Forms
                 {
                     _selectedFee = fee; // Store the selected Fee object
                     cmbTypeOfVehicle.SelectedItem = _selectedFee.VehicleType;
-                    txtInputFee.Text = _selectedFee.FeePerHour.ToString("N2");
+                    txtInputFee.Text = _selectedFee.FixedPrice.ToString("N2");
 
-                 
+                    
                     cmbTypeOfVehicle.Enabled = false;
                 }
             }
