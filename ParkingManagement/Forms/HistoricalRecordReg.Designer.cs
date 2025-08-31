@@ -1,6 +1,6 @@
 ﻿namespace ParkingManagement.Forms
 {
-    partial class FinanceSum
+    partial class HistoricalRecordReg
     {
         /// <summary>
         /// Required designer variable.
@@ -28,47 +28,71 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dgvDailyRep = new DataGridView();
-            label1 = new Label();
+            panel1 = new Panel();
+            btnReg = new Button();
+            dgvRegRecord = new DataGridView();
+            label6 = new Label();
             panel2 = new Panel();
             label5 = new Label();
             dtpFrom = new DateTimePicker();
             label4 = new Label();
             dtpTo = new DateTimePicker();
-            btnMonthlySums = new Button();
-            btnWeeklysums = new Button();
-            ((System.ComponentModel.ISupportInitialize)dgvDailyRep).BeginInit();
+            label3 = new Label();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvRegRecord).BeginInit();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
-            // dgvDailyRep
+            // panel1
             // 
-            dgvDailyRep.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDailyRep.Location = new Point(65, 180);
-            dgvDailyRep.Name = "dgvDailyRep";
-            dgvDailyRep.Size = new Size(821, 439);
-            dgvDailyRep.TabIndex = 0;
+            panel1.BackColor = SystemColors.ActiveCaption;
+            panel1.Controls.Add(btnReg);
+            panel1.Controls.Add(dgvRegRecord);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(panel2);
+            panel1.Controls.Add(label3);
+            panel1.Location = new Point(35, 38);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(896, 673);
+            panel1.TabIndex = 6;
             // 
-            // label1
+            // btnReg
             // 
-            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(374, 118);
-            label1.Name = "label1";
-            label1.Size = new Size(246, 44);
-            label1.TabIndex = 3;
-            label1.Text = "Daily Financial Summaries";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            btnReg.Location = new Point(50, 574);
+            btnReg.Name = "btnReg";
+            btnReg.Size = new Size(131, 33);
+            btnReg.TabIndex = 18;
+            btnReg.Text = "Rental Records";
+            btnReg.UseVisualStyleBackColor = true;
+            btnReg.Click += btnReg_Click;
+            // 
+            // dgvRegRecord
+            // 
+            dgvRegRecord.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvRegRecord.Location = new Point(33, 194);
+            dgvRegRecord.Name = "dgvRegRecord";
+            dgvRegRecord.ReadOnly = true;
+            dgvRegRecord.Size = new Size(805, 365);
+            dgvRegRecord.TabIndex = 10;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(422, 51);
+            label6.Name = "label6";
+            label6.Size = new Size(67, 15);
+            label6.TabIndex = 9;
+            label6.Text = "Date Range";
             // 
             // panel2
             // 
-            panel2.AccessibleRole = AccessibleRole.None;
             panel2.Controls.Add(label5);
             panel2.Controls.Add(dtpFrom);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(dtpTo);
-            panel2.Location = new Point(65, 57);
+            panel2.Location = new Point(33, 69);
             panel2.Name = "panel2";
-            panel2.Size = new Size(883, 48);
+            panel2.Size = new Size(860, 48);
             panel2.TabIndex = 8;
             // 
             // label5
@@ -82,7 +106,7 @@
             // 
             // dtpFrom
             // 
-            dtpFrom.Location = new Point(200, 11);
+            dtpFrom.Location = new Point(186, 11);
             dtpFrom.Name = "dtpFrom";
             dtpFrom.Size = new Size(200, 23);
             dtpFrom.TabIndex = 0;
@@ -91,7 +115,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(122, 17);
+            label4.Location = new Point(108, 17);
             label4.Name = "label4";
             label4.Size = new Size(60, 15);
             label4.TabIndex = 5;
@@ -105,40 +129,28 @@
             dtpTo.TabIndex = 4;
             dtpTo.ValueChanged += dtpTo_ValueChanged;
             // 
-            // btnMonthlySums
+            // label3
             // 
-            btnMonthlySums.Location = new Point(226, 651);
-            btnMonthlySums.Name = "btnMonthlySums";
-            btnMonthlySums.Size = new Size(131, 33);
-            btnMonthlySums.TabIndex = 13;
-            btnMonthlySums.Text = "Monthly Summaries";
-            btnMonthlySums.UseVisualStyleBackColor = true;
-            btnMonthlySums.Click += btnMonthlySums_Click;
+            label3.AutoSize = true;
+            label3.BackColor = SystemColors.ActiveCaption;
+            label3.Location = new Point(50, 143);
+            label3.Name = "label3";
+            label3.Size = new Size(118, 15);
+            label3.TabIndex = 4;
+            label3.Text = "Regular Park Records";
             // 
-            // btnWeeklysums
-            // 
-            btnWeeklysums.Location = new Point(65, 651);
-            btnWeeklysums.Name = "btnWeeklysums";
-            btnWeeklysums.Size = new Size(131, 33);
-            btnWeeklysums.TabIndex = 12;
-            btnWeeklysums.Text = "Weekly Summaries";
-            btnWeeklysums.UseVisualStyleBackColor = true;
-            btnWeeklysums.Click += btnWeeklysums_Click;
-            // 
-            // FinanceSum
+            // HistoricalRecordReg
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(960, 749);
-            Controls.Add(btnMonthlySums);
-            Controls.Add(btnWeeklysums);
-            Controls.Add(panel2);
-            Controls.Add(label1);
-            Controls.Add(dgvDailyRep);
-            Name = "FinanceSum";
-            Text = "FinanceSum";
-            Load += FinanceSum_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvDailyRep).EndInit();
+            ClientSize = new Size(966, 749);
+            Controls.Add(panel1);
+            Name = "HistoricalRecordReg";
+            Text = "HistoricalRecordReg";
+            Load += HistoricalRecordReg_Load;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvRegRecord).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ResumeLayout(false);
@@ -146,14 +158,15 @@
 
         #endregion
 
-        private DataGridView dgvDailyRep;
-        private Label label1;
+        private Panel panel1;
+        private Label label6;
         private Panel panel2;
         private Label label5;
         private DateTimePicker dtpFrom;
         private Label label4;
         private DateTimePicker dtpTo;
-        private Button btnMonthlySums;
-        private Button btnWeeklysums;
+        private Label label3;
+        private DataGridView dgvRegRecord;
+        private Button btnReg;
     }
 }

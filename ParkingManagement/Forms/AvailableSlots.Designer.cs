@@ -1,6 +1,6 @@
 ﻿namespace ParkingManagement.Forms
 {
-    partial class FinanceSum
+    partial class AvailableSlots
     {
         /// <summary>
         /// Required designer variable.
@@ -28,48 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dgvDailyRep = new DataGridView();
-            label1 = new Label();
+            label6 = new Label();
             panel2 = new Panel();
             label5 = new Label();
             dtpFrom = new DateTimePicker();
             label4 = new Label();
             dtpTo = new DateTimePicker();
-            btnMonthlySums = new Button();
-            btnWeeklysums = new Button();
-            ((System.ComponentModel.ISupportInitialize)dgvDailyRep).BeginInit();
+            pnlAvailSlot = new Panel();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
-            // dgvDailyRep
+            // label6
             // 
-            dgvDailyRep.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDailyRep.Location = new Point(65, 180);
-            dgvDailyRep.Name = "dgvDailyRep";
-            dgvDailyRep.Size = new Size(821, 439);
-            dgvDailyRep.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(374, 118);
-            label1.Name = "label1";
-            label1.Size = new Size(246, 44);
-            label1.TabIndex = 3;
-            label1.Text = "Daily Financial Summaries";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            label6.AutoSize = true;
+            label6.Location = new Point(478, 75);
+            label6.Name = "label6";
+            label6.Size = new Size(67, 15);
+            label6.TabIndex = 10;
+            label6.Text = "Date Range";
             // 
             // panel2
             // 
-            panel2.AccessibleRole = AccessibleRole.None;
             panel2.Controls.Add(label5);
             panel2.Controls.Add(dtpFrom);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(dtpTo);
-            panel2.Location = new Point(65, 57);
+            panel2.Location = new Point(69, 93);
             panel2.Name = "panel2";
             panel2.Size = new Size(883, 48);
-            panel2.TabIndex = 8;
+            panel2.TabIndex = 9;
             // 
             // label5
             // 
@@ -86,7 +73,7 @@
             dtpFrom.Name = "dtpFrom";
             dtpFrom.Size = new Size(200, 23);
             dtpFrom.TabIndex = 0;
-            dtpFrom.ValueChanged += dtpFrom_ValueChanged;
+            dtpFrom.ValueChanged += dtpFrom_ValueChanged_1;
             // 
             // label4
             // 
@@ -103,57 +90,41 @@
             dtpTo.Name = "dtpTo";
             dtpTo.Size = new Size(200, 23);
             dtpTo.TabIndex = 4;
-            dtpTo.ValueChanged += dtpTo_ValueChanged;
+            dtpTo.ValueChanged += dtpTo_ValueChanged_1;
             // 
-            // btnMonthlySums
+            // pnlAvailSlot
             // 
-            btnMonthlySums.Location = new Point(226, 651);
-            btnMonthlySums.Name = "btnMonthlySums";
-            btnMonthlySums.Size = new Size(131, 33);
-            btnMonthlySums.TabIndex = 13;
-            btnMonthlySums.Text = "Monthly Summaries";
-            btnMonthlySums.UseVisualStyleBackColor = true;
-            btnMonthlySums.Click += btnMonthlySums_Click;
+            pnlAvailSlot.BackColor = SystemColors.ActiveCaption;
+            pnlAvailSlot.Location = new Point(78, 147);
+            pnlAvailSlot.Name = "pnlAvailSlot";
+            pnlAvailSlot.Size = new Size(883, 483);
+            pnlAvailSlot.TabIndex = 8;
             // 
-            // btnWeeklysums
-            // 
-            btnWeeklysums.Location = new Point(65, 651);
-            btnWeeklysums.Name = "btnWeeklysums";
-            btnWeeklysums.Size = new Size(131, 33);
-            btnWeeklysums.TabIndex = 12;
-            btnWeeklysums.Text = "Weekly Summaries";
-            btnWeeklysums.UseVisualStyleBackColor = true;
-            btnWeeklysums.Click += btnWeeklysums_Click;
-            // 
-            // FinanceSum
+            // AvailableSlots
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(960, 749);
-            Controls.Add(btnMonthlySums);
-            Controls.Add(btnWeeklysums);
+            ClientSize = new Size(1166, 588);
+            Controls.Add(label6);
             Controls.Add(panel2);
-            Controls.Add(label1);
-            Controls.Add(dgvDailyRep);
-            Name = "FinanceSum";
-            Text = "FinanceSum";
-            Load += FinanceSum_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvDailyRep).EndInit();
+            Controls.Add(pnlAvailSlot);
+            Name = "AvailableSlots";
+            Text = "AvailableSlots";
+            Load += AvailableSlots_Load;
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private DataGridView dgvDailyRep;
-        private Label label1;
+        private Label label6;
         private Panel panel2;
         private Label label5;
         private DateTimePicker dtpFrom;
         private Label label4;
         private DateTimePicker dtpTo;
-        private Button btnMonthlySums;
-        private Button btnWeeklysums;
+        private Panel pnlAvailSlot;
     }
 }

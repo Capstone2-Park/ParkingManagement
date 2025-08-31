@@ -9,7 +9,8 @@ namespace ParkingManagement.Models
     internal class DailyReport
     {
         public int DailyReportID { get; set; }
-        public DateTime ReportDate { get; set; }
+        public DateTime ReportDateFrom { get; set; }
+        public DateTime ReportDateTo { get; set; }
         public string ParkingUsage { get; set; }
         public string AvailableSlots { get; set; }
         public decimal TotalRevenue { get; set; }

@@ -11,6 +11,7 @@ namespace ParkingManagement.Models
     public class RegularParkingTotals
     {
         public int TotalID { get; set; }
+        public int RegSlotID { get; set; }
         public string VehicleType { get; set; }
         public DateTime TimeIn { get; set; }
         public DateTime? TimeOut { get; set; }
@@ -21,5 +22,8 @@ namespace ParkingManagement.Models
 
         [ForeignKey("SessionID")]
         public virtual RegularParkingSession Session { get; set; }
+
+        [ForeignKey("RegSlotID")]
+        public virtual RegularSlot RegularSlot { get; set; }
     }
 }

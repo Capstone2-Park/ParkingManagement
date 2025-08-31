@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ParkingManagement.Models
 {
-    internal class RegularSlot
+    public class RegularSlot
     {
         public int RegSlotID { get; set; }
         public int? SessionID { get; set; }

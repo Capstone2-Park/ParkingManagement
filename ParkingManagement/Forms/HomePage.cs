@@ -18,6 +18,9 @@ namespace ParkingManagement
         private System.Windows.Forms.Timer notifTimer;
         private HashSet<int> acknowledgedDueSessions = new HashSet<int>();
 
+        private System.Windows.Forms.Timer slotHistoryTimer;
+        private bool slotHistoryCreatedToday = false;
+
         public HomePage()
         {
             InitializeComponent();
@@ -28,6 +31,12 @@ namespace ParkingManagement
             notifTimer.Interval = 10000; // 10 seconds, adjust as needed
             notifTimer.Tick += NotifTimer_Tick;
             notifTimer.Start();
+
+            // Set up the timer to check every minute
+            slotHistoryTimer = new System.Windows.Forms.Timer();
+            slotHistoryTimer.Interval = 60000; // 1 minute
+            slotHistoryTimer.Tick += SlotHistoryTimer_Tick;
+            slotHistoryTimer.Start();
         }
 
         public void ShowFormInPanel(Form childForm)
@@ -58,7 +67,27 @@ namespace ParkingManagement
 
         private void HomePage_Load(object sender, EventArgs e)
         {
+            using (var db = new ParkingDbContext())
+            {
+                var today = DateTime.Today;
+                if (!db.Set<SlotHistory>().Any(h => h.Date == today))
+                {
+                    int availableSlotM = db.RegularSlot.Sum(rs => rs.AvailableSlotM);
+                    int availableSlotV = db.RegularSlot.Sum(rs => rs.AvailableSlotV);
+                    int availableParkingSlots = db.Parkingslot.Count(ps => ps.SlotStatus == "Available");
 
+                    var history = new SlotHistory
+                    {
+                        Date = today,
+                        AvailableSlotM = availableSlotM,
+                        AvailableSlotV = availableSlotV,
+                        AvailableParkingSlots = availableParkingSlots
+                    };
+
+                    db.Set<SlotHistory>().Add(history);
+                    db.SaveChanges();
+                }
+            }
         }
 
         private void btnRegularParking_Click(object sender, EventArgs e)
@@ -135,8 +164,8 @@ namespace ParkingManagement
 
         private void btnReport_Click(object sender, EventArgs e)
         {
-            ShowFormInPanel(new ReportManagement());
-            btnReports.Visible = true;  
+
+            btnReports.Visible = true;
             btnFinance.Visible = true;
             btnRecords.Visible = true;
         }
@@ -154,6 +183,52 @@ namespace ParkingManagement
         private void btnRecords_Click(object sender, EventArgs e)
         {
             ShowFormInPanel(new HistoricalRecords());
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void SlotHistoryTimer_Tick(object sender, EventArgs e)
+        {
+            var now = DateTime.Now;
+            // Check if it's 11:59 PM and we haven't created the record yet today
+            if (now.Hour == 23 && now.Minute == 59 && !slotHistoryCreatedToday)
+            {
+                CreateSlotHistoryForToday();
+                slotHistoryCreatedToday = true;
+            }
+            // Reset the flag at midnight
+            if (now.Hour == 0 && now.Minute == 0)
+            {
+                slotHistoryCreatedToday = false;
+            }
+        }
+
+        private void CreateSlotHistoryForToday()
+        {
+            using (var db = new ParkingDbContext())
+            {
+                var today = DateTime.Today;
+                if (!db.Set<SlotHistory>().Any(h => h.Date == today))
+                {
+                    int availableSlotM = db.RegularSlot.Sum(rs => rs.AvailableSlotM);
+                    int availableSlotV = db.RegularSlot.Sum(rs => rs.AvailableSlotV);
+                    int availableParkingSlots = db.Parkingslot.Count(ps => ps.SlotStatus == "Available");
+
+                    var history = new SlotHistory
+                    {
+                        Date = today,
+                        AvailableSlotM = availableSlotM,
+                        AvailableSlotV = availableSlotV,
+                        AvailableParkingSlots = availableParkingSlots
+                    };
+
+                    db.Set<SlotHistory>().Add(history);
+                    db.SaveChanges();
+                }
+            }
         }
     }
 }

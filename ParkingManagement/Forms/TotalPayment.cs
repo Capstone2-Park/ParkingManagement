@@ -173,7 +173,18 @@ namespace ParkingManagement.Forms
                 .Select(v => v.VehicleID)
                 .ToListAsync();
 
-            // Sum all TotalAmount from VehicleSessions for these vehicles
+            // Get the latest session for these vehicles
+            var latestSession = await db.VehicleSessions
+                .Where(s => vehicleIds.Contains(s.VehicleID))
+                .OrderByDescending(s => s.EndDateTime)
+                .FirstOrDefaultAsync();
+
+            if (latestSession == null)
+            {
+                MessageBox.Show("No vehicle session found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             decimal totalAmount = await db.VehicleSessions
                 .Where(s => vehicleIds.Contains(s.VehicleID))
                 .SumAsync(s => s.TotalAmount);
@@ -182,6 +193,21 @@ namespace ParkingManagement.Forms
             rtbChange.Text = change >= 0
                 ? $"Change: ₱ {change:N2}"
                 : $"Insufficient cash. Short by ₱ {Math.Abs(change):N2}";
+
+            // Parse change value from rtbChange
+            int changeValue = (int)Math.Round(change);
+
+            // Save transaction
+            var transaction = new ParkingManagement.Models.TransactionsRent
+            {
+                CashInHand = (int)Math.Round(cash),
+                Change = changeValue,
+                SessionID = latestSession.SessionID
+                // TransactionDate is set by default
+            };
+
+            db.TransactionsRent.Add(transaction);
+            await db.SaveChangesAsync();
         }
     }
 }

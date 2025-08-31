@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ParkingManagement.Models; // Add this for model access
-using Microsoft.EntityFrameworkCore; // For async/EF methods
-using System.Text.Json; // For JSON serialization
+using ParkingManagement.Models;
+using Microsoft.EntityFrameworkCore;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.WinForms;
@@ -21,148 +19,81 @@ namespace ParkingManagement.Forms
         public ReportManagement()
         {
             InitializeComponent();
-        }
-
-        private void richTextBox5_TextChanged(object sender, EventArgs e)
-        {
-
+            dtpFrom.ValueChanged += DateRangeChanged;
+            dtpTo.ValueChanged += DateRangeChanged;
         }
 
         private async void ReportManagement_Load(object sender, EventArgs e)
         {
+            dtpFrom.Value = DateTime.Today;
+            dtpTo.Value = DateTime.Today;
+            await LoadReportDataAsync();
+        }
+
+        private async void DateRangeChanged(object sender, EventArgs e)
+        {
+            await LoadReportDataAsync();
+        }
+
+        private async Task LoadReportDataAsync()
+        {
             using var db = new ParkingDbContext();
-            DateTime today = DateTime.Today;
+            DateTime from = dtpFrom.Value.Date;
+            DateTime to = dtpTo.Value.Date;
 
-            // Count VehicleSessions that started today
-            int vehicleSessionCount = await db.VehicleSessions
-                .CountAsync(vs => vs.StartDate == today);
+            await ShowPeakHoursChart(from, to);
+        }
 
-            // Count RegularParkingSessions that started today
-            int regularParkingSessionCount = await db.RegularParkingSessions
-                .CountAsync(rps => rps.TimeIn.Date == today);
+        private async Task<Dictionary<string, int>> CalculatePeakHoursAsync(DateTime from, DateTime to)
+        {
+            using var db = new ParkingDbContext();
 
-            int totalParked = vehicleSessionCount + regularParkingSessionCount;
+            // Get all sessions in range
+            var vehicleSessions = await db.VehicleSessions
+                .Where(vs => vs.StartDate >= from && vs.StartDate <= to && vs.EndDateTime != null)
+                .Select(vs => vs.EndDateTime)
+                .ToListAsync();
 
-            string parkUseText = $"Total vehicles parked today: {totalParked}\n" +
-                                 $"- Vehicle Sessions: {vehicleSessionCount}\n" +
-                                 $"- Regular Parking Sessions: {regularParkingSessionCount}";
+            var regularSessions = await db.RegularParkingSessions
+                .Where(rps => rps.TimeIn.Date >= from && rps.TimeIn.Date <= to)
+                .Select(rps => rps.TimeIn)
+                .ToListAsync();
 
-            rtbParkUse.Text = parkUseText;
+            // Combine all datetimes
+            var allTimes = vehicleSessions.Concat(regularSessions);
 
-            // --- Available Slots Section ---
-            var regSlot = await db.Set<RegularSlot>().FirstOrDefaultAsync();
-            int availableSlotM = regSlot?.AvailableSlotM ?? 0;
-            int availableSlotV = regSlot?.AvailableSlotV ?? 0;
-
-            int availableParkingSlots = await db.Parkingslot
-                .CountAsync(ps => ps.SlotStatus == "Available");
-
-            int totalAvailable = availableSlotM + availableSlotV + availableParkingSlots;
-
-            string availSlotText = $"Available Regular Slots:\n" +
-                                 $"- Motorcycle (2-Wheels): {availableSlotM}\n" +
-                                 $"- Vehicle (4-Wheels): {availableSlotV}\n" +
-                                 $"Other Available Parking Slots: {availableParkingSlots}\n" +
-                                 $"-----------------------------\n" +
-                                 $"Total Available Slots: {totalAvailable}";
-
-            rtbAvailSlot.Text = availSlotText;
-
-            // --- Total Revenue Section ---
-            decimal vehicleSessionRevenue = await db.VehicleSessions
-                .Where(vs => vs.StartDate == today)
-                .SumAsync(vs => (decimal?)vs.TotalAmount ?? 0);
-
-            decimal regularParkingSessionRevenue = await db.RegularParkingSessions
-                .Where(rps => rps.TimeIn.Date == today && rps.TotalAmount != null)
-                .SumAsync(rps => (decimal?)rps.TotalAmount ?? 0);
-
-            decimal totalRevenue = vehicleSessionRevenue + regularParkingSessionRevenue;
-
-            // Only display the overall total revenue, large and bold
-            rtbTotalRevenue.Text = $"₱{totalRevenue:N2}";
-            rtbTotalRevenue.Font = new Font("Segoe UI", 32, FontStyle.Bold);
-            rtbTotalRevenue.ReadOnly = true;
-
-            // Set rtbParkUse and rtbAvailSlot as read-only
-            rtbParkUse.ReadOnly = true;
-            rtbAvailSlot.ReadOnly = true;
-
-            // --- Save to DailyReport ---
-            var dailyReport = await db.Set<DailyReport>()
-                .FirstOrDefaultAsync(dr => dr.ReportDate == today);
-
-            if (dailyReport == null)
+            // Prepare all possible day-hour slots in the range
+            var allSlots = new List<string>();
+            for (var date = from.Date; date <= to.Date; date = date.AddDays(1))
             {
-                dailyReport = new DailyReport
+                for (int hour = 0; hour < 24; hour++)
                 {
-                    ReportDate = today,
-                    ParkingUsage = parkUseText,
-                    AvailableSlots = availSlotText,
-                    TotalRevenue = Math.Round(totalRevenue, 2)
-                };
-                db.Set<DailyReport>().Add(dailyReport);
-            }
-            else
-            {
-                dailyReport.ParkingUsage = parkUseText;
-                dailyReport.AvailableSlots = availSlotText;
-                dailyReport.TotalRevenue = Math.Round(totalRevenue, 2);
+                    allSlots.Add($"{date:yyyy-MM-dd} {hour:D2}:00");
+                }
             }
 
-            var peakHours = await CalculatePeakHoursAsync();
-            string peakHoursJson = JsonSerializer.Serialize(peakHours);
+            // Count occurrences per slot
+            var counts = allSlots.ToDictionary(
+                slot => slot,
+                slot =>
+                {
+                    var parts = slot.Split(' ');
+                    var day = DateTime.Parse(parts[0]);
+                    var hour = int.Parse(parts[1].Substring(0, 2));
+                    return allTimes.Count(dt => dt.Date == day && dt.Hour == hour);
+                });
 
-            // Save to DailyReport
-            dailyReport.PeakHoursJson = peakHoursJson;
-
-            await db.SaveChangesAsync();
-
-            ShowPeakHoursChart(); // Make sure this is called
+            return counts;
         }
 
-        private void rtbParkUse_TextChanged(object sender, EventArgs e)
+        private async Task ShowPeakHoursChart(DateTime from, DateTime to)
         {
-
-        }
-
-        private async Task<Dictionary<int, int>> CalculatePeakHoursAsync()
-        {
-            using var db = new ParkingDbContext();
-            DateTime today = DateTime.Today;
-            DateTime tomorrow = today.AddDays(1);
-
-            // Get all relevant times for today
-            var vehicleSessionHours = await db.VehicleSessions
-                .Where(vs => vs.StartDate == today)
-                .Select(vs => vs.EndDateTime.Hour)
-                .ToListAsync();
-
-            var regularParkingSessionHours = await db.RegularParkingSessions
-                .Where(rps => rps.TimeIn.Date == today)
-                .Select(rps => rps.TimeIn.Hour)
-                .ToListAsync();
-
-            // Combine and count per hour
-            var allHours = vehicleSessionHours.Concat(regularParkingSessionHours);
-
-            var hourlyCounts = Enumerable.Range(0, 24)
-                .ToDictionary(
-                    hour => hour,
-                    hour => allHours.Count(h => h == hour)
-                );
-
-            return hourlyCounts;
-        }
-
-        private async void ShowPeakHoursChart()
-        {
-            var peakHours = await CalculatePeakHoursAsync();
+            var peakHours = await CalculatePeakHoursAsync(from, to);
 
             var values = peakHours.OrderBy(kvp => kvp.Key).Select(kvp => (double)kvp.Value).ToArray();
-            var hours = peakHours.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key.ToString("D2") + ":00").ToArray();
+            var hours = peakHours.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key).ToArray();
 
-            var lineSeries = new LineSeries<double>
+            var barSeries = new ColumnSeries<double>
             {
                 Values = values,
                 Name = "Vehicles Parked"
@@ -170,24 +101,62 @@ namespace ParkingManagement.Forms
 
             var cartesianChart = new CartesianChart
             {
-                Series = new ISeries[] { lineSeries },
-                XAxes = new[] { new Axis { Labels = hours, Name = "Hour" } },
+                Series = new ISeries[] { barSeries },
+                XAxes = new[] { new Axis { Labels = hours, Name = "Date Hour", LabelsRotation = 90 } },
                 YAxes = new[] { new Axis { Name = "Count" } }
             };
 
-            cartesianChart.Dock = DockStyle.Fill;
+            // Set chart width based on number of slots (e.g., 60px per slot, min 800px)
+            int slotWidth = 60;
+            int minWidth = 800;
+            int chartWidth = Math.Max(minWidth, slotWidth * hours.Length);
+            cartesianChart.Width = chartWidth;
+            cartesianChart.Height = panelChart.Height;
+
+            // Enable horizontal scrolling on the panel
+            panelChart.AutoScroll = true;
             panelChart.Controls.Clear();
             panelChart.Controls.Add(cartesianChart);
         }
 
-        private void rtbAvailSlot_TextChanged(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
+            using var db = new ParkingDbContext();
+            DateTime from = dtpFrom.Value.Date;
+            DateTime to = dtpTo.Value.Date;
 
+            // Save only the overall values
+            var dailyReport = new DailyReport
+            {
+                ReportDateFrom = from,
+                ReportDateTo = to,
+                PeakHoursJson = JsonSerializer.Serialize(await CalculatePeakHoursAsync(from, to))
+            };
+
+            db.Set<DailyReport>().Add(dailyReport);
+            await db.SaveChangesAsync();
+
+            MessageBox.Show("Report saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void btnParkUse_Click(object sender, EventArgs e)
         {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var parkUsageForm = new ParkUsage();
+                homePage.ShowFormInPanel(parkUsageForm);
+            }
+        }
 
+        private void btnAvailSlot_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var AvailableSlotsForm = new AvailableSlots();
+                homePage.ShowFormInPanel(AvailableSlotsForm);
+            }
         }
     }
 }

@@ -28,117 +28,139 @@
         /// </summary>
         private void InitializeComponent()
         {
-            rtbAvailSlot = new RichTextBox();
-            rtbTotalRevenue = new RichTextBox();
             panelChart = new Panel();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            rtbParkUse = new RichTextBox();
-            panel1 = new Panel();
-            panel1.SuspendLayout();
+            btnSave = new Button();
+            dtpFrom = new DateTimePicker();
+            dtpTo = new DateTimePicker();
+            label4 = new Label();
+            label5 = new Label();
+            panel2 = new Panel();
+            label6 = new Label();
+            btnParkUse = new Button();
+            btnAvailSlot = new Button();
+            panel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // rtbAvailSlot
-            // 
-            rtbAvailSlot.Location = new Point(629, 56);
-            rtbAvailSlot.Name = "rtbAvailSlot";
-            rtbAvailSlot.Size = new Size(226, 99);
-            rtbAvailSlot.TabIndex = 1;
-            rtbAvailSlot.Text = "";
-            rtbAvailSlot.TextChanged += rtbAvailSlot_TextChanged;
-            // 
-            // rtbTotalRevenue
-            // 
-            rtbTotalRevenue.Location = new Point(340, 206);
-            rtbTotalRevenue.Name = "rtbTotalRevenue";
-            rtbTotalRevenue.Size = new Size(270, 74);
-            rtbTotalRevenue.TabIndex = 2;
-            rtbTotalRevenue.Text = "";
-            rtbTotalRevenue.TextChanged += richTextBox5_TextChanged;
             // 
             // panelChart
             // 
             panelChart.BackColor = SystemColors.ActiveCaption;
-            panelChart.Location = new Point(29, 39);
+            panelChart.Location = new Point(65, 139);
             panelChart.Name = "panelChart";
-            panelChart.Size = new Size(1006, 272);
+            panelChart.Size = new Size(883, 483);
             panelChart.TabIndex = 3;
             // 
-            // label1
+            // btnSave
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(163, 25);
-            label1.Name = "label1";
-            label1.Size = new Size(124, 15);
-            label1.TabIndex = 4;
-            label1.Text = "Today's Parking Usage";
+            btnSave.Location = new Point(1000, 543);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(131, 33);
+            btnSave.TabIndex = 9;
+            btnSave.Text = "Save Report";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
-            // label2
+            // dtpFrom
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(689, 28);
-            label2.Name = "label2";
-            label2.Size = new Size(120, 15);
-            label2.TabIndex = 5;
-            label2.Text = "Today's Available Slot";
-            label2.Click += label2_Click;
+            dtpFrom.Location = new Point(200, 11);
+            dtpFrom.Name = "dtpFrom";
+            dtpFrom.Size = new Size(200, 23);
+            dtpFrom.TabIndex = 0;
             // 
-            // label3
+            // dtpTo
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(452, 188);
-            label3.Name = "label3";
-            label3.Size = new Size(52, 15);
-            label3.TabIndex = 6;
-            label3.Text = "Revenue";
+            dtpTo.Location = new Point(516, 11);
+            dtpTo.Name = "dtpTo";
+            dtpTo.Size = new Size(200, 23);
+            dtpTo.TabIndex = 4;
             // 
-            // rtbParkUse
+            // label4
             // 
-            rtbParkUse.Location = new Point(118, 53);
-            rtbParkUse.Name = "rtbParkUse";
-            rtbParkUse.Size = new Size(207, 102);
-            rtbParkUse.TabIndex = 0;
-            rtbParkUse.Text = "";
-            rtbParkUse.TextChanged += rtbParkUse_TextChanged;
+            label4.AutoSize = true;
+            label4.Location = new Point(122, 17);
+            label4.Name = "label4";
+            label4.Size = new Size(60, 15);
+            label4.TabIndex = 5;
+            label4.Text = "Date from";
             // 
-            // panel1
+            // label5
             // 
-            panel1.BackColor = SystemColors.ActiveCaption;
-            panel1.Controls.Add(label3);
-            panel1.Controls.Add(rtbAvailSlot);
-            panel1.Controls.Add(rtbParkUse);
-            panel1.Controls.Add(rtbTotalRevenue);
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(label2);
-            panel1.Location = new Point(49, 355);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(966, 310);
-            panel1.TabIndex = 0;
+            label5.AutoSize = true;
+            label5.Location = new Point(479, 17);
+            label5.Name = "label5";
+            label5.Size = new Size(19, 15);
+            label5.TabIndex = 6;
+            label5.Text = "To";
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(label5);
+            panel2.Controls.Add(dtpFrom);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(dtpTo);
+            panel2.Location = new Point(65, 70);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(883, 48);
+            panel2.TabIndex = 0;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(474, 52);
+            label6.Name = "label6";
+            label6.Size = new Size(67, 15);
+            label6.TabIndex = 5;
+            label6.Text = "Date Range";
+            // 
+            // btnParkUse
+            // 
+            btnParkUse.Location = new Point(1000, 436);
+            btnParkUse.Name = "btnParkUse";
+            btnParkUse.Size = new Size(131, 33);
+            btnParkUse.TabIndex = 10;
+            btnParkUse.Text = "Parking Usage";
+            btnParkUse.UseVisualStyleBackColor = true;
+            btnParkUse.Click += btnParkUse_Click;
+            // 
+            // btnAvailSlot
+            // 
+            btnAvailSlot.Location = new Point(1000, 487);
+            btnAvailSlot.Name = "btnAvailSlot";
+            btnAvailSlot.Size = new Size(131, 33);
+            btnAvailSlot.TabIndex = 11;
+            btnAvailSlot.Text = "AvailableSlot";
+            btnAvailSlot.UseVisualStyleBackColor = true;
+            btnAvailSlot.Click += btnAvailSlot_Click;
             // 
             // ReportManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1090, 702);
+            ClientSize = new Size(1166, 588);
+            Controls.Add(btnSave);
+            Controls.Add(btnAvailSlot);
+            Controls.Add(btnParkUse);
+            Controls.Add(label6);
+            Controls.Add(panel2);
             Controls.Add(panelChart);
-            Controls.Add(panel1);
             Name = "ReportManagement";
             Text = "ReportManagement";
             Load += ReportManagement_Load;
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-        private RichTextBox rtbAvailSlot;
-        private RichTextBox rtbTotalRevenue;
         private Panel panelChart;
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private RichTextBox rtbParkUse;
-        private Panel panel1;
+        private DateTimePicker dtpFrom;
+        private DateTimePicker dtpTo;
+        private Label label4;
+        private Label label5;
+        private Panel panel2;
+        private Label label6;
+        private Button btnSave;
+        private Button btnParkUse;
+        private Button btnAvailSlot;
     }
 }

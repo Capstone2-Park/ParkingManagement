@@ -86,10 +86,11 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(161, 711);
             panel1.TabIndex = 0;
+            panel1.Paint += panel1_Paint;
             // 
             // btnRecords
             // 
-            btnRecords.BackColor = Color.FromArgb(255, 128, 128);
+            btnRecords.BackColor = Color.DarkSalmon;
             btnRecords.Dock = DockStyle.Top;
             btnRecords.Location = new Point(0, 360);
             btnRecords.Name = "btnRecords";
@@ -102,7 +103,7 @@
             // 
             // btnFinance
             // 
-            btnFinance.BackColor = Color.FromArgb(255, 128, 128);
+            btnFinance.BackColor = Color.DarkSalmon;
             btnFinance.Dock = DockStyle.Top;
             btnFinance.Location = new Point(0, 315);
             btnFinance.Name = "btnFinance";
@@ -115,7 +116,7 @@
             // 
             // btnReports
             // 
-            btnReports.BackColor = Color.FromArgb(255, 128, 128);
+            btnReports.BackColor = Color.DarkSalmon;
             btnReports.Dock = DockStyle.Top;
             btnReports.Location = new Point(0, 270);
             btnReports.Name = "btnReports";
@@ -144,7 +145,7 @@
             lblNotif.BackColor = Color.FromArgb(255, 128, 128);
             lblNotif.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblNotif.ForeColor = Color.Red;
-            lblNotif.Location = new Point(89, 413);
+            lblNotif.Location = new Point(102, 478);
             lblNotif.Name = "lblNotif";
             lblNotif.Size = new Size(0, 21);
             lblNotif.TabIndex = 12;
@@ -153,7 +154,7 @@
             // 
             pbNotif.BackColor = Color.FromArgb(255, 128, 128);
             pbNotif.Image = Properties.Resources.hi;
-            pbNotif.Location = new Point(50, 413);
+            pbNotif.Location = new Point(63, 478);
             pbNotif.Name = "pbNotif";
             pbNotif.Size = new Size(39, 38);
             pbNotif.SizeMode = PictureBoxSizeMode.StretchImage;

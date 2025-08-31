@@ -20,180 +20,83 @@ namespace ParkingManagement.Forms
             _updateTimer.Tick += async (s, e) =>
             {
                 await UpdateDailyFinanceSumAsync();
-                await UpdateWeeklyFinanceSumAsync();
-                await UpdateMonthlyFinanceSumAsync();
             };
 
             // Make DataGridViews read-only
             dgvDailyRep.ReadOnly = true;
-            dgvWeeklyRep.ReadOnly = true;
-            dgvMonthlyRep.ReadOnly = true;
         }
 
         private async void FinanceSum_Load(object sender, EventArgs e)
         {
             await UpdateDailyFinanceSumAsync();
-            await UpdateWeeklyFinanceSumAsync();
-            await UpdateMonthlyFinanceSumAsync();
             _updateTimer.Start();
         }
 
         private async Task UpdateDailyFinanceSumAsync()
         {
             using var db = new ParkingDbContext();
-            DateTime today = DateTime.Today;
+            DateTime fromDate = dtpFrom.Value.Date;
+            DateTime toDate = dtpTo.Value.Date;
 
-            // Count transactions
-            int totalRegTransaction = await db.RegularParkingSessions.CountAsync(rps => rps.TimeIn.Date == today);
-            int totalRentTransaction = await db.VehicleSessions.CountAsync(vs => vs.StartDate == today);
-            int totalTransaction = totalRegTransaction + totalRentTransaction;
+            var dailySums = await db.DailyFinanceSums
+                .Where(d => d.ReportDateSum >= fromDate && d.ReportDateSum <= toDate)
+                .ToListAsync();
 
-            // Calculate revenues
-            decimal totalRegRevenue = await db.RegularParkingSessions
-                .Where(rps => rps.TimeIn.Date == today)
-                .SumAsync(rps => (decimal?)rps.TotalAmount ?? 0);
+            var resultList = new List<DailyFinanceSum>();
 
-            decimal totalRentRevenue = await db.VehicleSessions
-                .Where(vs => vs.StartDate == today)
-                .SumAsync(vs => (decimal?)vs.TotalAmount ?? 0);
-
-            decimal totalRevenue = totalRegRevenue + totalRentRevenue;
-
-            // Find or create today's report
-            var dailySum = await db.DailyFinanceSums.FirstOrDefaultAsync(d => d.ReportDateSum == today);
-            if (dailySum == null)
+            for (var date = fromDate; date <= toDate; date = date.AddDays(1))
             {
-                dailySum = new DailyFinanceSum
+                var dailySum = dailySums.FirstOrDefault(d => d.ReportDateSum == date);
+                if (dailySum == null)
                 {
-                    ReportDateSum = today
-                };
-                db.DailyFinanceSums.Add(dailySum);
+                    // If no record, create a zeroed summary for this date
+                    dailySum = new DailyFinanceSum
+                    {
+                        ReportDateSum = date,
+                        TotalTransaction = 0,
+                        TotalRentTransaction = 0,
+                        TotalRegTransaction = 0,
+                        TotalRentRevenue = 0,
+                        TotalRegRevenue = 0,
+                        TotalRevenue = 0
+                    };
+                }
+                resultList.Add(dailySum);
             }
 
-            // Update values
-            dailySum.TotalTransaction = totalTransaction;
-            dailySum.TotalRentTransaction = totalRentTransaction;
-            dailySum.TotalRegTransaction = totalRegTransaction;
-            dailySum.TotalRentRevenue = totalRentRevenue;
-            dailySum.TotalRegRevenue = totalRegRevenue;
-            dailySum.TotalRevenue = totalRevenue;
-
-            await db.SaveChangesAsync();
-
-            // Display all reports in DataGridView
-            var allReports = await db.DailyFinanceSums.OrderByDescending(d => d.ReportDateSum).ToListAsync();
-            dgvDailyRep.DataSource = allReports;
+            // Sort by date descending (latest first)
+            dgvDailyRep.DataSource = resultList.OrderByDescending(d => d.ReportDateSum).ToList();
         }
 
-        private async Task UpdateWeeklyFinanceSumAsync()
+
+        private async void dtpFrom_ValueChanged(object sender, EventArgs e)
         {
-            using var db = new ParkingDbContext();
-            DateTime today = DateTime.Today;
-
-            // Calculate start (Monday) and end (Sunday) of the current week
-            int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
-            DateTime weekStart = today.AddDays(-1 * diff).Date;
-            DateTime weekEnd = weekStart.AddDays(6).Date;
-
-            // Count transactions
-            int totalRegTransaction = await db.RegularParkingSessions
-                .CountAsync(rps => rps.TimeIn.Date >= weekStart && rps.TimeIn.Date <= weekEnd);
-            int totalRentTransaction = await db.VehicleSessions
-                .CountAsync(vs => vs.StartDate >= weekStart && vs.StartDate <= weekEnd);
-            int totalTransaction = totalRegTransaction + totalRentTransaction;
-
-            // Calculate revenues
-            decimal totalRegRevenue = await db.RegularParkingSessions
-                .Where(rps => rps.TimeIn.Date >= weekStart && rps.TimeIn.Date <= weekEnd)
-                .SumAsync(rps => (decimal?)rps.TotalAmount ?? 0);
-
-            decimal totalRentRevenue = await db.VehicleSessions
-                .Where(vs => vs.StartDate >= weekStart && vs.StartDate <= weekEnd)
-                .SumAsync(vs => (decimal?)vs.TotalAmount ?? 0);
-
-            decimal totalRevenue = totalRegRevenue + totalRentRevenue;
-
-            // Find or create this week's report
-            var weeklySum = await db.WeeklyFinanceSums
-                .FirstOrDefaultAsync(w => w.WeekStart == weekStart && w.WeekEnd == weekEnd);
-            if (weeklySum == null)
-            {
-                weeklySum = new WeeklyFinanceSum
-                {
-                    WeekStart = weekStart,
-                    WeekEnd = weekEnd
-                };
-                db.WeeklyFinanceSums.Add(weeklySum);
-            }
-
-            // Update values
-            weeklySum.TotalTransaction = totalTransaction;
-            weeklySum.TotalRentTransaction = totalRentTransaction;
-            weeklySum.TotalRegTransaction = totalRegTransaction;
-            weeklySum.TotalRentRevenue = totalRentRevenue;
-            weeklySum.TotalRegRevenue = totalRegRevenue;
-            weeklySum.TotalRevenue = totalRevenue;
-
-            await db.SaveChangesAsync();
-
-            // Display all weekly reports in DataGridView
-            var allWeeklyReports = await db.WeeklyFinanceSums.OrderByDescending(w => w.WeekStart).ToListAsync();
-            dgvWeeklyRep.DataSource = allWeeklyReports;
+            await UpdateDailyFinanceSumAsync();
         }
 
-        private async Task UpdateMonthlyFinanceSumAsync()
+        private async void dtpTo_ValueChanged(object sender, EventArgs e)
         {
-            using var db = new ParkingDbContext();
-            DateTime today = DateTime.Today;
+            await UpdateDailyFinanceSumAsync();
+        }
 
-            // Get first and last day of the current month
-            DateTime monthStart = new DateTime(today.Year, today.Month, 1);
-            DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
-
-            // Count transactions
-            int totalRegTransaction = await db.RegularParkingSessions
-                .CountAsync(rps => rps.TimeIn.Date >= monthStart && rps.TimeIn.Date <= monthEnd);
-            int totalRentTransaction = await db.VehicleSessions
-                .CountAsync(vs => vs.StartDate >= monthStart && vs.StartDate <= monthEnd);
-            int totalTransaction = totalRegTransaction + totalRentTransaction;
-
-            // Calculate revenues
-            decimal totalRegRevenue = await db.RegularParkingSessions
-                .Where(rps => rps.TimeIn.Date >= monthStart && rps.TimeIn.Date <= monthEnd)
-                .SumAsync(rps => (decimal?)rps.TotalAmount ?? 0);
-
-            decimal totalRentRevenue = await db.VehicleSessions
-                .Where(vs => vs.StartDate >= monthStart && vs.StartDate <= monthEnd)
-                .SumAsync(vs => (decimal?)vs.TotalAmount ?? 0);
-
-            decimal totalRevenue = totalRegRevenue + totalRentRevenue;
-
-            // Find or create this month's report
-            var monthlySum = await db.MonthlyFinanceSums
-                .FirstOrDefaultAsync(m => m.MonthStart == monthStart && m.MonthEnd == monthEnd);
-            if (monthlySum == null)
+        private void btnWeeklysums_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
             {
-                monthlySum = new MonthlyFinanceSum
-                {
-                    MonthStart = monthStart,
-                    MonthEnd = monthEnd
-                };
-                db.MonthlyFinanceSums.Add(monthlySum);
+                var weekly = new WeeklySum();
+                homePage.ShowFormInPanel(weekly);
             }
+        }
 
-            // Update values
-            monthlySum.TotalTransaction = totalTransaction;
-            monthlySum.TotalRentTransaction = totalRentTransaction;
-            monthlySum.TotalRegTransaction = totalRegTransaction;
-            monthlySum.TotalRentRevenue = totalRentRevenue;
-            monthlySum.TotalRegRevenue = totalRegRevenue;
-            monthlySum.TotalRevenue = totalRevenue;
-
-            await db.SaveChangesAsync();
-
-            // Display all monthly reports in DataGridView
-            var allMonthlyReports = await db.MonthlyFinanceSums.OrderByDescending(m => m.MonthStart).ToListAsync();
-            dgvMonthlyRep.DataSource = allMonthlyReports;
+        private void btnMonthlySums_Click(object sender, EventArgs e)
+        {
+            var homePage = this.ParentForm as HomePage;
+            if (homePage != null)
+            {
+                var monthly = new MonthlySum();
+                homePage.ShowFormInPanel(monthly);
+            }
         }
     }
 }

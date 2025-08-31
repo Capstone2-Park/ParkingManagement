@@ -25,6 +25,10 @@ namespace ParkingManagement
         public DbSet<DailyFinanceSum> DailyFinanceSums { get; set; }
         public DbSet<WeeklyFinanceSum> WeeklyFinanceSums { get; set; }
         public DbSet<MonthlyFinanceSum> MonthlyFinanceSums { get; set; }
+        public DbSet<SlotHistory> SlotHistories { get; set; }
+
+        public DbSet<TransactionsRent> TransactionsRent { get; set; }
+        public DbSet<TransactionsReg> TransactionsReg { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -115,6 +119,14 @@ namespace ParkingManagement
             modelBuilder.Entity<MonthlyFinanceSum>().ToTable("MonthlyFinanceSum");
             modelBuilder.Entity<MonthlyFinanceSum>().HasKey(mfs => mfs.MonthlyFinanceID);
 
+            modelBuilder.Entity<SlotHistory>().ToTable("SlotHistory");
+            modelBuilder.Entity<SlotHistory>().HasKey(mfs => mfs.SlotHistoryID);
+
+            modelBuilder.Entity<TransactionsRent>().ToTable("TransactionsRent");
+            modelBuilder.Entity<TransactionsRent>().HasKey(tr => tr.TransactionID);
+
+            modelBuilder.Entity<TransactionsReg>().ToTable("TransactionsReg");
+            modelBuilder.Entity<TransactionsReg>().HasKey(trr => trr.TransactionID);
         }
     }
 }

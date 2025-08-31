@@ -464,6 +464,37 @@ namespace ParkingManagement.Forms
                 decimal change = cash - _totalAmount;
                 rtbChange.Font = new Font("Segoe UI", 24, FontStyle.Bold);
                 rtbChange.Text = $"₱ {change:N2}";
+
+                // --- Save TransactionReg ---
+                using (var db = new ParkingDbContext())
+                {
+                    // Get the latest RegularParkingTotals record (or the one just processed)
+                    // You may want to store TotalID in a field when you process the QR code
+                    var total = db.RegularParkingTotal
+                        .OrderByDescending(t => t.TotalID)
+                        .FirstOrDefault();
+
+                    if (total == null)
+                    {
+                        MessageBox.Show("No RegularParkingTotal record found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Parse change value from rtbChange
+                    decimal changeValue = change;
+
+                    var transaction = new ParkingManagement.Models.TransactionsReg
+                    {
+                        CashInHand = cash,
+                        Change = changeValue,
+                        TotalID = total.TotalID
+                        // TransactionDate is set by default
+                    };
+
+                    db.TransactionsReg.Add(transaction);
+                    db.SaveChanges();
+                }
+                // --- End Save TransactionReg ---
             }
             else
             {
