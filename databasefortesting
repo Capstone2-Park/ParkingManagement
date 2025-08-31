@@ -93,12 +93,14 @@ VALUES
 -- VehicleSessions Table (now includes 'Daily' in the CHECK constraint)
 CREATE TABLE VehicleSessions (
     SessionID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	SlotID INT UNIQUE,
     VehicleID NVARCHAR(10) NULL,
     DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Daily', 'Weekly', 'Monthly', 'Yearly')),
     StartDate DATE NOT NULL,
     EndDateTime DATETIME NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL
 	FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID),
+	FOREIGN KEY (SlotID) REFERENCES Parkingslot(SlotID),
 );
 
 CREATE TABLE RegularSlot (
@@ -118,6 +120,7 @@ VALUES
 
 CREATE TABLE RegularParkingTotals (
     TotalID INT IDENTITY(1,1) PRIMARY KEY,
+	RegSlotID INT NULL UNIQUE,
     SessionID int UNIQUE,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
@@ -126,12 +129,14 @@ CREATE TABLE RegularParkingTotals (
 	Totalamount DECIMAL(10,2) NULL,
 	Discount NVARCHAR (50) NOT NULL,
     FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
+	FOREIGN KEY (RegSlotID) REFERENCES RegularSlot(RegSlotID),
 );
 
 
 CREATE TABLE DailyReport (
     DailyReportID INT IDENTITY(1,1) PRIMARY KEY,
-    ReportDate DATE NOT NULL DEFAULT GETDATE(),
+    ReportDateFrom DATE NOT NULL DEFAULT GETDATE(),
+	ReportDateTo DATE NOT NULL DEFAULT GETDATE(),
     ParkingUsage NVARCHAR (MAX),              -- number of vehicles for the day
     TotalRevenue DECIMAL(12,2) DEFAULT 0,  -- total daily revenue
     AvailableSlots NVARCHAR (MAX),
@@ -174,4 +179,37 @@ CREATE TABLE MonthlyFinanceSum (
 	TotalRentRevenue DECIMAL(12,2) DEFAULT 0,
 	TotalRegRevenue DECIMAL(12,2) DEFAULT 0,
 	TotalRevenue DECIMAL(12,2) DEFAULT 0,
+);
+
+CREATE TABLE SlotHistory (
+	SlotHistoryID INT IDENTITY(1,1) PRIMARY KEY,
+    [Date] DATE NOT NULL DEFAULT GETDATE(),
+	AvailableSlotM INT NOT NULL,
+	AvailableSlotV INT NOT NULL,
+	AvailableParkingSlots INT NOT NULL,
+);
+
+CREATE TABLE TransactionsReg (
+	TransactionID INT IDENTITY(1,1) PRIMARY KEY,
+    TransactionDate DATE NOT NULL DEFAULT GETDATE(),
+	CashInHand DECIMAL NOT NULL,
+	[Change] DECIMAL NOT NULL,
+	TotalID INT,
+	FOREIGN KEY (TotalID) REFERENCES RegularParkingTotals(TotalID)
+);
+
+CREATE TABLE TransactionsRent (
+	TransactionID INT IDENTITY(1,1) PRIMARY KEY,
+    TransactionDate DATE NOT NULL DEFAULT GETDATE(),
+	CashInHand DECIMAL NOT NULL,
+	[Change] DECIMAL NOT NULL,
+	SessionID INT,
+	FOREIGN KEY (SessionID) REFERENCES VehicleSessions(SessionID)
+);
+
+CREATE TABLE EnterLogRent (
+    LogID NVARCHAR(10) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+	PlateNumber NVARCHAR(20) NOT NULL,
+    VehicleType NVARCHAR(50)NOT NULL,
 );
