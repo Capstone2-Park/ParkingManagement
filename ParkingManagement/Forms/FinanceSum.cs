@@ -38,31 +38,65 @@ namespace ParkingManagement.Forms
             DateTime fromDate = dtpFrom.Value.Date;
             DateTime toDate = dtpTo.Value.Date;
 
-            var dailySums = await db.DailyFinanceSums
-                .Where(d => d.ReportDateSum >= fromDate && d.ReportDateSum <= toDate)
-                .ToListAsync();
-
             var resultList = new List<DailyFinanceSum>();
 
             for (var date = fromDate; date <= toDate; date = date.AddDays(1))
             {
-                var dailySum = dailySums.FirstOrDefault(d => d.ReportDateSum == date);
+                // Calculate counts and sums for VehicleSession (Rent)
+                var rentSessions = await db.VehicleSessions
+                    .Where(vs => vs.StartDate.Date == date)
+                    .ToListAsync();
+                int totalRentTransaction = rentSessions.Count;
+                decimal totalRentRevenue = rentSessions.Sum(vs => vs.TotalAmount);
+
+                // Calculate counts for RegularParkingSession
+                var regSessions = await db.RegularParkingSessions
+                    .Where(rps => rps.TimeIn.Date == date)
+                    .ToListAsync();
+                int totalRegTransaction = regSessions.Count;
+
+                // Calculate revenue for RegularParkingTotal
+                var regTotals = await db.RegularParkingTotal
+                    .Where(rpt => rpt.TimeIn.Date == date)
+                    .ToListAsync();
+                decimal totalRegRevenue = regTotals.Sum(rpt => rpt.TotalAmount ?? 0);
+
+                // Total transactions and revenue
+                int totalTransaction = totalRentTransaction + totalRegTransaction;
+                decimal totalRevenue = totalRentRevenue + totalRegRevenue;
+
+                // Try to get existing DailyFinanceSum
+                var dailySum = await db.DailyFinanceSums.FirstOrDefaultAsync(d => d.ReportDateSum == date);
+
                 if (dailySum == null)
                 {
-                    // If no record, create a zeroed summary for this date
                     dailySum = new DailyFinanceSum
                     {
                         ReportDateSum = date,
-                        TotalTransaction = 0,
-                        TotalRentTransaction = 0,
-                        TotalRegTransaction = 0,
-                        TotalRentRevenue = 0,
-                        TotalRegRevenue = 0,
-                        TotalRevenue = 0
+                        TotalTransaction = totalTransaction,
+                        TotalRentTransaction = totalRentTransaction,
+                        TotalRegTransaction = totalRegTransaction,
+                        TotalRentRevenue = totalRentRevenue,
+                        TotalRegRevenue = totalRegRevenue,
+                        TotalRevenue = totalRevenue
                     };
+                    db.DailyFinanceSums.Add(dailySum);
                 }
+                else
+                {
+                    dailySum.TotalTransaction = totalTransaction;
+                    dailySum.TotalRentTransaction = totalRentTransaction;
+                    dailySum.TotalRegTransaction = totalRegTransaction;
+                    dailySum.TotalRentRevenue = totalRentRevenue;
+                    dailySum.TotalRegRevenue = totalRegRevenue;
+                    dailySum.TotalRevenue = totalRevenue;
+                    db.DailyFinanceSums.Update(dailySum);
+                }
+
                 resultList.Add(dailySum);
             }
+
+            await db.SaveChangesAsync();
 
             // Sort by date descending (latest first)
             dgvDailyRep.DataSource = resultList.OrderByDescending(d => d.ReportDateSum).ToList();

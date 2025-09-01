@@ -47,11 +47,6 @@ namespace ParkingManagement.Forms
             DateTime fromDate = new DateTime(dtpFrom.Value.Year, dtpFrom.Value.Month, 1);
             DateTime toDate = new DateTime(dtpTo.Value.Year, dtpTo.Value.Month, 1);
 
-            // Get all monthly summaries in the range
-            var monthlySums = await db.MonthlyFinanceSums
-                .Where(m => m.MonthStart >= fromDate && m.MonthStart <= toDate)
-                .ToListAsync();
-
             var resultList = new List<MonthlyFinanceSum>();
 
             for (var month = fromDate; month <= toDate; month = month.AddMonths(1))
@@ -59,46 +54,52 @@ namespace ParkingManagement.Forms
                 DateTime monthStart = new DateTime(month.Year, month.Month, 1);
                 DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
 
-                // Try to find an existing summary
-                var monthlySum = await db.MonthlyFinanceSums
-                    .FirstOrDefaultAsync(m => m.MonthStart == monthStart && m.MonthEnd == monthEnd);
-
-                // Calculate values for this month
-                int totalRegTransaction = await db.RegularParkingSessions
-                    .CountAsync(rps => rps.TimeIn.Date >= monthStart && rps.TimeIn.Date <= monthEnd);
                 int totalRentTransaction = await db.VehicleSessions
-                    .CountAsync(vs => vs.StartDate >= monthStart && vs.StartDate <= monthEnd);
-                int totalTransaction = totalRegTransaction + totalRentTransaction;
-
-                decimal totalRegRevenue = await db.RegularParkingSessions
-                    .Where(rps => rps.TimeIn.Date >= monthStart && rps.TimeIn.Date <= monthEnd)
-                    .SumAsync(rps => (decimal?)rps.TotalAmount ?? 0);
-
+                    .CountAsync(vs => vs.StartDate.Date >= monthStart && vs.StartDate.Date <= monthEnd);
                 decimal totalRentRevenue = await db.VehicleSessions
-                    .Where(vs => vs.StartDate >= monthStart && vs.StartDate <= monthEnd)
+                    .Where(vs => vs.StartDate.Date >= monthStart && vs.StartDate.Date <= monthEnd)
                     .SumAsync(vs => (decimal?)vs.TotalAmount ?? 0);
 
-                decimal totalRevenue = totalRegRevenue + totalRentRevenue;
+                int totalRegTransaction = await db.RegularParkingSessions
+                    .CountAsync(rps => rps.TimeIn.Date >= monthStart && rps.TimeIn.Date <= monthEnd);
+
+                decimal totalRegRevenue = await db.RegularParkingTotal
+                    .Where(rpt => rpt.TimeIn.Date >= monthStart && rpt.TimeIn.Date <= monthEnd)
+                    .SumAsync(rpt => (decimal?)rpt.TotalAmount ?? 0);
+
+                int totalTransaction = totalRentTransaction + totalRegTransaction;
+                decimal totalRevenue = totalRentRevenue + totalRegRevenue;
+
+                var monthlySum = await db.MonthlyFinanceSums
+                    .FirstOrDefaultAsync(m => m.MonthStart == monthStart && m.MonthEnd == monthEnd);
 
                 if (monthlySum == null)
                 {
                     monthlySum = new MonthlyFinanceSum
                     {
                         MonthStart = monthStart,
-                        MonthEnd = monthEnd
+                        MonthEnd = monthEnd,
+                        TotalTransaction = totalTransaction,
+                        TotalRentTransaction = totalRentTransaction,
+                        TotalRegTransaction = totalRegTransaction,
+                        TotalRentRevenue = totalRentRevenue,
+                        TotalRegRevenue = totalRegRevenue,
+                        TotalRevenue = totalRevenue
                     };
                     db.MonthlyFinanceSums.Add(monthlySum);
                 }
-
-                // Update values
-                monthlySum.TotalTransaction = totalTransaction;
-                monthlySum.TotalRentTransaction = totalRentTransaction;
-                monthlySum.TotalRegTransaction = totalRegTransaction;
-                monthlySum.TotalRentRevenue = totalRentRevenue;
-                monthlySum.TotalRegRevenue = totalRegRevenue;
-                monthlySum.TotalRevenue = totalRevenue;
+                else
+                {
+                    monthlySum.TotalTransaction = totalTransaction;
+                    monthlySum.TotalRentTransaction = totalRentTransaction;
+                    monthlySum.TotalRegTransaction = totalRegTransaction;
+                    monthlySum.TotalRentRevenue = totalRentRevenue;
+                    monthlySum.TotalRegRevenue = totalRegRevenue;
+                    monthlySum.TotalRevenue = totalRevenue;
+                }
 
                 await db.SaveChangesAsync();
+                resultList.Add(monthlySum);
             }
 
             dgvMonthlyRep.DataSource = resultList.OrderByDescending(m => m.MonthStart).ToList();
@@ -136,17 +137,13 @@ namespace ParkingManagement.Forms
 
         private void dtpFrom_ValueChanged_1(object sender, EventArgs e)
         {
-            var firstOfMonth = new DateTime(dtpFrom.Value.Year, dtpFrom.Value.Month, 1);
-            if (dtpFrom.Value != firstOfMonth)
-                dtpFrom.Value = firstOfMonth;
+
             _ = UpdateMonthlyFinanceSumAsync();
         }
 
         private void dtpTo_ValueChanged_1(object sender, EventArgs e)
         {
-            var firstOfMonth = new DateTime(dtpTo.Value.Year, dtpTo.Value.Month, 1);
-            if (dtpTo.Value != firstOfMonth)
-                dtpTo.Value = firstOfMonth;
+      
             _ = UpdateMonthlyFinanceSumAsync();
         }
     }

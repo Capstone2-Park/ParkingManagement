@@ -149,6 +149,7 @@ namespace ParkingManagement.Forms
                     StartDate = sched.startDate,
                     EndDateTime = sched.endDateTime,
                     TotalAmount = sched.totalAmount
+                    // Do NOT set SessionID
                 };
                 _context.VehicleSessions.Add(newSession);
             }

@@ -36,13 +36,14 @@ namespace ParkingManagement.Forms
             using var db = new ParkingDbContext();
 
             DateTime fromDate = dtpFrom.Value.Date;
-            DateTime toDate = dtpTo.Value.Date.AddDays(1).AddTicks(-1); // Include the whole end day
+            DateTime toDate = dtpTo.Value.Date;
 
+            // Get all records in the range
             var records = (from tr in db.TransactionsRent
                            join vs in db.VehicleSessions on tr.SessionID equals vs.SessionID
                            join v in db.Vehicles on vs.VehicleID equals v.VehicleID
                            join c in db.Clients on v.ClientID equals c.ClientID
-                           where tr.TransactionDate >= fromDate && tr.TransactionDate <= toDate
+                           where tr.TransactionDate >= fromDate && tr.TransactionDate <= toDate.AddDays(1).AddTicks(-1)
                            select new
                            {
                                tr.TransactionDate,
@@ -67,19 +68,42 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("CashInHand", typeof(int));
             dt.Columns.Add("Change", typeof(int));
 
-            foreach (var r in records)
+            // Build a set of all dates in the range
+            for (var date = fromDate; date <= toDate; date = date.AddDays(1))
             {
-                dt.Rows.Add(
-                    r.TransactionDate,
-                    r.TransactionID,
-                    r.Name,
-                    r.PlateNumber,
-                    r.VehicleType,
-                    r.DurationType,
-                    r.TotalAmount,
-                    r.CashInHand,
-                    r.Change
-                );
+                var dayRecords = records.Where(r => r.TransactionDate.Date == date).ToList();
+                if (dayRecords.Count > 0)
+                {
+                    foreach (var r in dayRecords)
+                    {
+                        dt.Rows.Add(
+                            r.TransactionDate,
+                            r.TransactionID,
+                            r.Name,
+                            r.PlateNumber,
+                            r.VehicleType,
+                            r.DurationType,
+                            r.TotalAmount,
+                            r.CashInHand,
+                            r.Change
+                        );
+                    }
+                }
+                else
+                {
+                    // Add a default row for this date
+                    dt.Rows.Add(
+                        date,
+                        DBNull.Value, // TransactionID
+                        "",           // Name
+                        "",           // PlateNumber
+                        "",           // VehicleType
+                        "",           // DurationType
+                        0m,           // TotalAmount
+                        0,            // CashInHand
+                        0             // Change
+                    );
+                }
             }
 
             dgvRentRecord.DataSource = dt;
@@ -93,6 +117,11 @@ namespace ParkingManagement.Forms
                 var historicalRecord = new HistoricalRecordReg();
                 homePage.ShowFormInPanel(historicalRecord);
             }
+        }
+
+        private void dtpFrom_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

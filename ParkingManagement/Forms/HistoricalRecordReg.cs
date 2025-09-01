@@ -34,12 +34,13 @@ namespace ParkingManagement.Forms
             using var db = new ParkingDbContext();
 
             DateTime fromDate = dtpFrom.Value.Date;
-            DateTime toDate = dtpTo.Value.Date.AddDays(1).AddTicks(-1); // Include the whole end day
+            DateTime toDate = dtpTo.Value.Date;
 
+            // Get all records in the range
             var records = (from tr in db.TransactionsReg
                            join rpt in db.RegularParkingTotal on tr.TotalID equals rpt.TotalID
                            join rps in db.RegularParkingSessions on rpt.SessionID equals rps.SessionID
-                           where tr.TransactionDate >= fromDate && tr.TransactionDate <= toDate
+                           where tr.TransactionDate >= fromDate && tr.TransactionDate <= toDate.AddDays(1).AddTicks(-1)
                            select new
                            {
                                tr.TransactionDate,
@@ -60,17 +61,38 @@ namespace ParkingManagement.Forms
             dt.Columns.Add("CashInHand", typeof(decimal));
             dt.Columns.Add("Change", typeof(decimal));
 
-            foreach (var r in records)
+            // Build a set of all dates in the range
+            for (var date = fromDate; date <= toDate; date = date.AddDays(1))
             {
-                dt.Rows.Add(
-                    r.TransactionDate,
-                    r.TransactionID,
-                    r.SessionID,
-                    r.VehicleType,
-                    r.TotalAmount,
-                    r.CashInHand,
-                    r.Change
-                );
+                var dayRecords = records.Where(r => r.TransactionDate.Date == date).ToList();
+                if (dayRecords.Count > 0)
+                {
+                    foreach (var r in dayRecords)
+                    {
+                        dt.Rows.Add(
+                            r.TransactionDate,
+                            r.TransactionID,
+                            r.SessionID,
+                            r.VehicleType,
+                            r.TotalAmount,
+                            r.CashInHand,
+                            r.Change
+                        );
+                    }
+                }
+                else
+                {
+                    // Add a default row for this date
+                    dt.Rows.Add(
+                        date,
+                        DBNull.Value, // TransactionID
+                        DBNull.Value, // SessionID
+                        "",           // VehicleType
+                        0m,           // TotalAmount
+                        0m,           // CashInHand
+                        0m            // Change
+                    );
+                }
             }
 
             dgvRegRecord.DataSource = dt;

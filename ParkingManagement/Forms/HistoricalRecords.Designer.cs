@@ -119,6 +119,7 @@
             dtpFrom.Name = "dtpFrom";
             dtpFrom.Size = new Size(200, 23);
             dtpFrom.TabIndex = 0;
+            dtpFrom.ValueChanged += dtpFrom_ValueChanged;
             // 
             // label4
             // 

@@ -1,6 +1,7 @@
 ﻿using ParkingManagement.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace ParkingManagement.Models
 {
     public class VehicleSession
     {
+        [Key]
         public int SessionID { get; set; } // INT PRIMARY KEY IDENTITY
         public int? SlotID { get; set; } // INT FOREIGN KEY REFERENCES ParkingSlot(SlotID)
         public string VehicleID { get; set; }

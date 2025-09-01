@@ -49,48 +49,55 @@ namespace ParkingManagement.Forms
                 DateTime weekEnd = weekStart.AddDays(6);
                 if (weekEnd > toDate) weekEnd = toDate;
 
-                // Try to find an existing summary
-                var weeklySum = await db.WeeklyFinanceSums
-                    .FirstOrDefaultAsync(w => w.WeekStart == weekStart && w.WeekEnd == weekEnd);
-
                 // Calculate values for this week
-                int totalRegTransaction = await db.RegularParkingSessions
-                    .CountAsync(rps => rps.TimeIn.Date >= weekStart && rps.TimeIn.Date <= weekEnd);
                 int totalRentTransaction = await db.VehicleSessions
-                    .CountAsync(vs => vs.StartDate >= weekStart && vs.StartDate <= weekEnd);
-                int totalTransaction = totalRegTransaction + totalRentTransaction;
-
-                decimal totalRegRevenue = await db.RegularParkingSessions
-                    .Where(rps => rps.TimeIn.Date >= weekStart && rps.TimeIn.Date <= weekEnd)
-                    .SumAsync(rps => (decimal?)rps.TotalAmount ?? 0);
-
+                    .CountAsync(vs => vs.StartDate.Date >= weekStart && vs.StartDate.Date <= weekEnd);
                 decimal totalRentRevenue = await db.VehicleSessions
-                    .Where(vs => vs.StartDate >= weekStart && vs.StartDate <= weekEnd)
+                    .Where(vs => vs.StartDate.Date >= weekStart && vs.StartDate.Date <= weekEnd)
                     .SumAsync(vs => (decimal?)vs.TotalAmount ?? 0);
 
-                decimal totalRevenue = totalRegRevenue + totalRentRevenue;
+                int totalRegTransaction = await db.RegularParkingSessions
+                    .CountAsync(rps => rps.TimeIn.Date >= weekStart && rps.TimeIn.Date <= weekEnd);
+
+                decimal totalRegRevenue = await db.RegularParkingTotal
+                    .Where(rpt => rpt.TimeIn.Date >= weekStart && rpt.TimeIn.Date <= weekEnd)
+                    .SumAsync(rpt => (decimal?)rpt.TotalAmount ?? 0);
+
+                int totalTransaction = totalRentTransaction + totalRegTransaction;
+                decimal totalRevenue = totalRentRevenue + totalRegRevenue;
+
+                // Always upsert (update or insert) the record for every week
+                var weeklySum = await db.WeeklyFinanceSums
+                    .FirstOrDefaultAsync(w => w.WeekStart == weekStart && w.WeekEnd == weekEnd);
 
                 if (weeklySum == null)
                 {
                     weeklySum = new WeeklyFinanceSum
                     {
                         WeekStart = weekStart,
-                        WeekEnd = weekEnd
+                        WeekEnd = weekEnd,
+                        TotalTransaction = totalTransaction,
+                        TotalRentTransaction = totalRentTransaction,
+                        TotalRegTransaction = totalRegTransaction,
+                        TotalRentRevenue = totalRentRevenue,
+                        TotalRegRevenue = totalRegRevenue,
+                        TotalRevenue = totalRevenue
                     };
                     db.WeeklyFinanceSums.Add(weeklySum);
                 }
-
-                // Update values
-                weeklySum.TotalTransaction = totalTransaction;
-                weeklySum.TotalRentTransaction = totalRentTransaction;
-                weeklySum.TotalRegTransaction = totalRegTransaction;
-                weeklySum.TotalRentRevenue = totalRentRevenue;
-                weeklySum.TotalRegRevenue = totalRegRevenue;
-                weeklySum.TotalRevenue = totalRevenue;
+                else
+                {
+                    weeklySum.TotalTransaction = totalTransaction;
+                    weeklySum.TotalRentTransaction = totalRentTransaction;
+                    weeklySum.TotalRegTransaction = totalRegTransaction;
+                    weeklySum.TotalRentRevenue = totalRentRevenue;
+                    weeklySum.TotalRegRevenue = totalRegRevenue;
+                    weeklySum.TotalRevenue = totalRevenue;
+                }
 
                 await db.SaveChangesAsync();
-
                 resultList.Add(weeklySum);
+
                 weekStart = weekStart.AddDays(7);
             }
 
@@ -119,40 +126,17 @@ namespace ParkingManagement.Forms
 
         private void dtpFrom_ValueChanged_1(object sender, EventArgs e)
         {
-            if (_suppressEvents) return;
-            _suppressEvents = true;
-
-            // Snap to Monday
-            var monday = dtpFrom.Value.StartOfWeek(DayOfWeek.Monday);
-            if (dtpFrom.Value != monday)
-                dtpFrom.Value = monday;
-
-            // Ensure dtpTo is at least the same week
-            var sunday = monday.AddDays(6);
-            if (dtpTo.Value < monday || dtpTo.Value > sunday)
-                dtpTo.Value = sunday;
-
-            _suppressEvents = false;
             _ = UpdateWeeklyFinanceSumAsync();
         }
 
         private void dtpTo_ValueChanged_1(object sender, EventArgs e)
         {
-            if (_suppressEvents) return;
-            _suppressEvents = true;
-
-            // Snap to Sunday
-            var sunday = dtpTo.Value.StartOfWeek(DayOfWeek.Monday).AddDays(6);
-            if (dtpTo.Value != sunday)
-                dtpTo.Value = sunday;
-
-            // Ensure dtpFrom is at most the same week
-            var monday = sunday.AddDays(-6);
-            if (dtpFrom.Value > sunday || dtpFrom.Value < monday)
-                dtpFrom.Value = monday;
-
-            _suppressEvents = false;
             _ = UpdateWeeklyFinanceSumAsync();
+        }
+
+        private void dgvWeeklyRep_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 

@@ -209,5 +209,10 @@ namespace ParkingManagement.Forms
             db.TransactionsRent.Add(transaction);
             await db.SaveChangesAsync();
         }
+
+        private void TotalPayment_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

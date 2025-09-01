@@ -79,15 +79,36 @@ namespace ParkingManagement.Forms
                         var existingTotal = db.RegularParkingTotal.FirstOrDefault(t => t.SessionID == session.SessionID);
                         if (existingTotal == null)
                         {
+                            var slot = db.RegularSlot
+                                .Where(s => (session.VehicleType == "2-Wheels" && s.AvailableSlotM > 0)
+                                         || (session.VehicleType == "4-Wheels" && s.AvailableSlotV > 0))
+                                .FirstOrDefault();
+
+                            if (slot != null)
+                            {
+                                if (session.VehicleType == "2-Wheels")
+                                    slot.AvailableSlotM = Math.Max(0, slot.AvailableSlotM - 1);
+                                else if (session.VehicleType == "4-Wheels")
+                                    slot.AvailableSlotV = Math.Max(0, slot.AvailableSlotV - 1);
+
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                MessageBox.Show("No available RegularSlot found for this vehicle type.", "Slot Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
                             var total = new RegularParkingTotals
                             {
                                 VehicleType = session.VehicleType,
                                 TimeIn = session.TimeIn,
-                                TimeOut = session.TimeOut, // This will be null for new sessions
+                                TimeOut = session.TimeOut,
                                 TotalAmount = session.TotalAmount,
                                 SessionID = session.SessionID,
                                 QRCodeImage = Convert.ToBase64String(qrBytes),
-                                Discount = session.Discount // <-- Save Discount
+                                Discount = session.Discount,
+                                RegSlotID = slot.RegSlotID // <-- Set the foreign key here
                             };
 
                             try

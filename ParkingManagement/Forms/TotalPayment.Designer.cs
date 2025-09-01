@@ -114,6 +114,7 @@
             Controls.Add(label1);
             Name = "TotalPayment";
             Text = "TotalPayment";
+            Load += TotalPayment_Load_1;
             ResumeLayout(false);
             PerformLayout();
         }

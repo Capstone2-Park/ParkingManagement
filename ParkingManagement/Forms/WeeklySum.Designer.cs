@@ -59,6 +59,7 @@
             dgvWeeklyRep.Name = "dgvWeeklyRep";
             dgvWeeklyRep.Size = new Size(840, 435);
             dgvWeeklyRep.TabIndex = 7;
+            dgvWeeklyRep.CellContentClick += dgvWeeklyRep_CellContentClick;
             // 
             // label6
             // 
