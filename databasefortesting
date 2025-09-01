@@ -93,7 +93,7 @@ VALUES
 -- VehicleSessions Table (now includes 'Daily' in the CHECK constraint)
 CREATE TABLE VehicleSessions (
     SessionID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	SlotID INT UNIQUE,
+	SlotID INT,
     VehicleID NVARCHAR(10) NULL,
     DurationType NVARCHAR(50) NOT NULL CHECK (DurationType IN ('Daily', 'Weekly', 'Monthly', 'Yearly')),
     StartDate DATE NOT NULL,
