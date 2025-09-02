@@ -24,6 +24,7 @@ namespace ParkingManagement.Forms
 
         private void AvailableSlots_Load(object sender, EventArgs e)
         {
+            
             DisplayAvailableSlotsChart();
         }
 
@@ -43,7 +44,7 @@ namespace ParkingManagement.Forms
             using (var db = new ParkingDbContext())
             {
                 // Get all SlotHistory records in the range
-                var histories = db.Set<SlotHistory>()
+                var histories = db.SlotHistories
                     .Where(h => h.Date >= fromDate && h.Date <= toDate)
                     .ToList();
 
@@ -51,11 +52,36 @@ namespace ParkingManagement.Forms
                 {
                     var history = histories.FirstOrDefault(h => h.Date.Date == date);
                     int totalAvailable = 0;
+
                     if (history != null)
                     {
-                        totalAvailable = history.AvailableSlotM + history.AvailableSlotV + history.AvailableParkingSlots;
+                        // If record exists, update it if it's today
+                        if (date == DateTime.Today)
+                        {
+                            // Get current slot counts from RegSlot and Parkingslot
+                            int availableSlotM = db.RegularSlot.Sum(rs => rs.AvailableSlotM);
+                            int availableSlotV = db.RegularSlot.Sum(rs => rs.AvailableSlotV);
+                            int availableParkingSlots = db.Parkingslot.Count(ps => ps.SlotStatus == "Available");
+
+                            history.AvailableSlotM = availableSlotM;
+                            history.AvailableSlotV = availableSlotV;
+                            history.AvailableParkingSlots = availableParkingSlots;
+                            db.SaveChanges();
+
+                            totalAvailable = availableSlotM + availableSlotV + availableParkingSlots;
+                        }
+                        else
+                        {
+                            // Use stored value for past dates
+                            totalAvailable = history.AvailableSlotM + history.AvailableSlotV + history.AvailableParkingSlots;
+                        }
                     }
-                    // If no history, totalAvailable remains 0 (or set to another default if you wish)
+                    else
+                    {
+                        // No record: show default value (e.g., 0), but do not save to DB
+                        totalAvailable = 0;
+                    }
+
                     dateLabels.Add(date.ToString("yyyy-MM-dd"));
                     dailyAvailableCounts.Add(totalAvailable);
                 }

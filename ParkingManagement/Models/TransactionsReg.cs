@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ParkingManagement.Models
 {
@@ -17,7 +18,8 @@ namespace ParkingManagement.Models
         // Foreign Key
         public int? TotalID { get; set; }      // Nullable because FK may not always be set
 
+        [ForeignKey("TotalID")]
         // Navigation property (if using ORM like EF Core)
-        public RegularParkingTotals RegularParkingTotals { get; set; }
+        public RegularParkingTotals RegularParkingTotal { get; set; }
     }
 }
