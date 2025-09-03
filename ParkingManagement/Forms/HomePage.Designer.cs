@@ -32,6 +32,7 @@
             panelHome = new Panel();
             ptbLogo = new PictureBox();
             panel1 = new Panel();
+            pbUser = new PictureBox();
             btnRecords = new Button();
             btnFinance = new Button();
             btnReports = new Button();
@@ -45,6 +46,7 @@
             btnClientM = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbLogo).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbUser).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbNotif).BeginInit();
             SuspendLayout();
             // 
@@ -71,6 +73,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(pbUser);
             panel1.Controls.Add(btnRecords);
             panel1.Controls.Add(btnFinance);
             panel1.Controls.Add(btnReports);
@@ -87,6 +90,17 @@
             panel1.Size = new Size(161, 711);
             panel1.TabIndex = 0;
             panel1.Paint += panel1_Paint;
+            // 
+            // pbUser
+            // 
+            pbUser.BackColor = Color.FromArgb(255, 128, 128);
+            pbUser.Location = new Point(102, 510);
+            pbUser.Name = "pbUser";
+            pbUser.Size = new Size(39, 38);
+            pbUser.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbUser.TabIndex = 18;
+            pbUser.TabStop = false;
+            pbUser.Click += pbUser_Click;
             // 
             // btnRecords
             // 
@@ -154,7 +168,7 @@
             // 
             pbNotif.BackColor = Color.FromArgb(255, 128, 128);
             pbNotif.Image = Properties.Resources.hi;
-            pbNotif.Location = new Point(63, 478);
+            pbNotif.Location = new Point(26, 510);
             pbNotif.Name = "pbNotif";
             pbNotif.Size = new Size(39, 38);
             pbNotif.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -238,6 +252,7 @@
             ((System.ComponentModel.ISupportInitialize)ptbLogo).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbUser).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbNotif).EndInit();
             ResumeLayout(false);
         }
@@ -258,5 +273,6 @@
         private Button btnRecords;
         private Button btnFinance;
         private Button btnReports;
+        private PictureBox pbUser;
     }
 }

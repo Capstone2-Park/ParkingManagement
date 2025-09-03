@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.ApplicationServices;
+using ParkingManagement.Forms;
 using ParkingManagement.Model;
 using ParkingManagement.Models;
 using System;
@@ -29,6 +31,8 @@ namespace ParkingManagement
 
         public DbSet<TransactionsRent> TransactionsRent { get; set; }
         public DbSet<TransactionsReg> TransactionsReg { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<CurrentUser> CurrentUser { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -130,6 +134,12 @@ namespace ParkingManagement
 
             modelBuilder.Entity<TransactionsReg>().ToTable("TransactionsReg");
             modelBuilder.Entity<TransactionsReg>().HasKey(trr => trr.TransactionID);
+
+            modelBuilder.Entity<Users>().ToTable("Users");
+            modelBuilder.Entity<Users>().HasKey(u => u.UserID);
+
+            modelBuilder.Entity<CurrentUser>().ToTable("CurrentUser");
+            modelBuilder.Entity<CurrentUser>().HasKey(cu => cu.CurrentUserID);
         }
     }
 }

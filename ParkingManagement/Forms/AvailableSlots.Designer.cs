@@ -35,6 +35,7 @@
             label4 = new Label();
             dtpTo = new DateTimePicker();
             pnlAvailSlot = new Panel();
+            label1 = new Label();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
@@ -100,11 +101,22 @@
             pnlAvailSlot.Size = new Size(883, 483);
             pnlAvailSlot.TabIndex = 8;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(439, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(140, 25);
+            label1.TabIndex = 13;
+            label1.Text = "Available Slots";
+            // 
             // AvailableSlots
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1166, 588);
+            Controls.Add(label1);
             Controls.Add(label6);
             Controls.Add(panel2);
             Controls.Add(pnlAvailSlot);
@@ -126,5 +138,6 @@
         private Label label4;
         private DateTimePicker dtpTo;
         private Panel pnlAvailSlot;
+        private Label label1;
     }
 }

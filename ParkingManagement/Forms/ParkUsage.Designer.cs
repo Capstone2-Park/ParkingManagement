@@ -37,6 +37,7 @@
             dtpTo = new DateTimePicker();
             btnAvailSlot = new Button();
             btnPeakHours = new Button();
+            label1 = new Label();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
@@ -123,11 +124,22 @@
             btnPeakHours.UseVisualStyleBackColor = true;
             btnPeakHours.Click += btnPeakHours_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(429, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(141, 25);
+            label1.TabIndex = 14;
+            label1.Text = "Parking Usage";
+            // 
             // ParkUsage
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1166, 588);
+            Controls.Add(label1);
             Controls.Add(btnAvailSlot);
             Controls.Add(label6);
             Controls.Add(btnPeakHours);
@@ -153,5 +165,6 @@
         private DateTimePicker dtpTo;
         private Button btnAvailSlot;
         private Button btnPeakHours;
+        private Label label1;
     }
 }

@@ -38,6 +38,7 @@
             label6 = new Label();
             btnParkUse = new Button();
             btnAvailSlot = new Button();
+            label1 = new Label();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
@@ -131,11 +132,22 @@
             btnAvailSlot.UseVisualStyleBackColor = true;
             btnAvailSlot.Click += btnAvailSlot_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(449, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(114, 25);
+            label1.TabIndex = 12;
+            label1.Text = "Peak Hours";
+            // 
             // ReportManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1166, 588);
+            Controls.Add(label1);
             Controls.Add(btnSave);
             Controls.Add(btnAvailSlot);
             Controls.Add(btnParkUse);
@@ -162,5 +174,6 @@
         private Button btnSave;
         private Button btnParkUse;
         private Button btnAvailSlot;
+        private Label label1;
     }
 }

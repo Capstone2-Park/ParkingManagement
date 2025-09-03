@@ -69,6 +69,18 @@ namespace ParkingManagement
         {
             using (var db = new ParkingDbContext())
             {
+                // Get the latest CurrentUser record
+                var currentUser = db.Set<CurrentUser>()
+                    .OrderByDescending(u => u.CurrentUserID)
+                    .FirstOrDefault();
+
+                if (currentUser != null && currentUser.Role == "Staff")
+                {
+                    btnFeeM.Visible = false;
+                    btnSlotNav.Visible = false;
+                    btnReport.Visible = false;
+                }
+                // Existing SlotHistory logic...
                 var today = DateTime.Today;
                 if (!db.Set<SlotHistory>().Any(h => h.Date == today))
                 {
@@ -229,6 +241,12 @@ namespace ParkingManagement
                     db.SaveChanges();
                 }
             }
+        }
+
+        private void pbUser_Click(object sender, EventArgs e)
+        {
+            UserManagement UserForm = new UserManagement();
+            UserForm.Show();
         }
     }
 }
