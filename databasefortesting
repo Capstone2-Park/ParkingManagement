@@ -120,8 +120,8 @@ VALUES
 
 CREATE TABLE RegularParkingTotals (
     TotalID INT IDENTITY(1,1) PRIMARY KEY,
-	RegSlotID INT NULL UNIQUE,
-    SessionID int UNIQUE,
+	RegSlotID INT NULL,
+    SessionID int,
     VehicleType NVARCHAR(50) NOT NULL,
     TimeIn DATETIME NOT NULL,
     [TimeOut] DATETIME NULL,
