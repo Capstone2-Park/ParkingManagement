@@ -15,6 +15,11 @@ namespace ParkingManagement.Forms
 {
     public partial class TotalPayment : Form
     {
+        // Add these fields to your form class
+        private PrintDialog printDialog = new PrintDialog();
+        private System.Drawing.Printing.PrintDocument printDocument = new System.Drawing.Printing.PrintDocument();
+        private string printContent = "";
+
         public TotalPayment()
         {
             InitializeComponent();
@@ -30,6 +35,9 @@ namespace ParkingManagement.Forms
 
             // Restrict txtCash input to decimal values
             txtCash.KeyPress += TxtCash_KeyPress;
+
+            printDocument.PrintPage += PrintDocument_PrintPage;
+            btnPrint.Enabled = false; // Disable print button initially
         }
 
         private void TxtCash_KeyPress(object sender, KeyPressEventArgs e)
@@ -208,11 +216,36 @@ namespace ParkingManagement.Forms
 
             db.TransactionsRent.Add(transaction);
             await db.SaveChangesAsync();
+
+            btnPrint.Enabled = true;
         }
 
         private void TotalPayment_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        // Print button click handler
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            // Prepare content to print
+            printContent = rtbReceipt.Text +
+                Environment.NewLine +
+                $"Cash: ₱ {txtCash.Text}" +
+                Environment.NewLine +
+                rtbChange.Text;
+
+            printDialog.Document = printDocument;
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                printDocument.Print();
+            }
+        }
+
+        // PrintPage event handler
+        private void PrintDocument_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString(printContent, rtbReceipt.Font, Brushes.Black, e.MarginBounds.Left, e.MarginBounds.Top);
         }
     }
 }

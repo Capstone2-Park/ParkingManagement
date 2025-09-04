@@ -11,9 +11,6 @@ namespace ParkingManagement.Models
         public int DailyReportID { get; set; }
         public DateTime ReportDateFrom { get; set; }
         public DateTime ReportDateTo { get; set; }
-        public string ParkingUsage { get; set; }
-        public string AvailableSlots { get; set; }
-        public decimal TotalRevenue { get; set; }
         public string PeakHoursJson { get; set; } // JSON serialized dictionary: hour -> count
 
     }

@@ -113,10 +113,15 @@ namespace ParkingManagement.Forms
         private void btnRegister_Click(object sender, EventArgs e)
         {
             // Close UserManagement and HomePage, open Register form
-            foreach (Form frm in Application.OpenForms)
+            // To avoid modifying the collection while enumerating, copy the forms to a list first
+            var formsToClose = Application.OpenForms
+                .OfType<Form>()
+                .Where(frm => frm is HomePage || frm is UserManagement)
+                .ToList();
+
+            foreach (Form frm in formsToClose)
             {
-                if (frm is HomePage || frm is UserManagement)
-                    frm.Close();
+                frm.Close();
             }
             Register registerForm = new Register();
             registerForm.Show();

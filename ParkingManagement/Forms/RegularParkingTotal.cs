@@ -24,10 +24,18 @@ namespace ParkingManagement.Forms
         private readonly object _lastFrameLock = new object(); // Lock object for _lastFrame
         private decimal _totalAmount = 0m; // Store the total amount for change calculation
 
+        // Add these fields to your form class
+        private PrintDialog printDialog = new PrintDialog();
+        private System.Drawing.Printing.PrintDocument printDocument = new System.Drawing.Printing.PrintDocument();
+        private string printContent = "";
+
         public RegularParkingTotal()
         {
             InitializeComponent();
             InitializeQRReader();
+
+            printDocument.PrintPage += PrintDocument_PrintPage;
+            btnPrint.Enabled = false; // Disable print button initially
         }
 
         private void InitializeQRReader()
@@ -495,11 +503,35 @@ namespace ParkingManagement.Forms
                     db.SaveChanges();
                 }
                 // --- End Save TransactionReg ---
+
+                btnPrint.Enabled = true; // Enable print button after confirmation
             }
             else
             {
                 MessageBox.Show("Please enter a valid cash amount.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            // Prepare content to print
+            printContent = rtbReceipt.Text +
+                Environment.NewLine +
+                $"Cash: ₱ {txtCash.Text}" +
+                Environment.NewLine +
+                $"Change: {rtbChange.Text}";
+
+            printDialog.Document = printDocument;
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                printDocument.Print();
+            }
+        }
+
+        // PrintPage event handler
+        private void PrintDocument_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString(printContent, rtbReceipt.Font, Brushes.Black, e.MarginBounds.Left, e.MarginBounds.Top);
         }
     }
 }

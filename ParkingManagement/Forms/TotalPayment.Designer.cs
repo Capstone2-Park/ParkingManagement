@@ -35,6 +35,7 @@
             rtbChange = new RichTextBox();
             label3 = new Label();
             txtCash = new TextBox();
+            btnPrint = new Button();
             SuspendLayout();
             // 
             // label1
@@ -100,11 +101,22 @@
             txtCash.Size = new Size(175, 23);
             txtCash.TabIndex = 10;
             // 
+            // btnPrint
+            // 
+            btnPrint.Location = new Point(688, 525);
+            btnPrint.Name = "btnPrint";
+            btnPrint.Size = new Size(119, 38);
+            btnPrint.TabIndex = 14;
+            btnPrint.Text = "Print";
+            btnPrint.UseVisualStyleBackColor = true;
+            btnPrint.Click += btnPrint_Click;
+            // 
             // TotalPayment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(828, 726);
+            Controls.Add(btnPrint);
             Controls.Add(btnConfirm);
             Controls.Add(rtbChange);
             Controls.Add(label3);
@@ -130,5 +142,6 @@
         private RichTextBox rtbChange;
         private Label label3;
         private TextBox txtCash;
+        private Button btnPrint;
     }
 }

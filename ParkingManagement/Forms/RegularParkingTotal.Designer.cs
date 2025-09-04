@@ -37,6 +37,7 @@
             rtbChange = new RichTextBox();
             label2 = new Label();
             btnConfirm = new Button();
+            btnPrint = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbCheckOut).BeginInit();
             SuspendLayout();
             // 
@@ -120,11 +121,22 @@
             btnConfirm.UseVisualStyleBackColor = true;
             btnConfirm.Click += btnConfirm_Click;
             // 
+            // btnPrint
+            // 
+            btnPrint.Location = new Point(772, 629);
+            btnPrint.Name = "btnPrint";
+            btnPrint.Size = new Size(106, 30);
+            btnPrint.TabIndex = 10;
+            btnPrint.Text = "Print";
+            btnPrint.UseVisualStyleBackColor = true;
+            btnPrint.Click += btnPrint_Click;
+            // 
             // RegularParkingTotal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(967, 720);
+            Controls.Add(btnPrint);
             Controls.Add(btnConfirm);
             Controls.Add(label2);
             Controls.Add(rtbChange);
@@ -153,5 +165,6 @@
         private RichTextBox rtbChange;
         private Label label2;
         private Button btnConfirm;
+        private Button btnPrint;
     }
 }

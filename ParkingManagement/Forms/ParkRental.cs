@@ -493,6 +493,12 @@ namespace ParkingManagement.Forms
             }
 
             dgvList.DataSource = dt;
+
+            // Format TotalAmount column to show 2 decimals
+            if (dgvList.Columns.Contains("TotalAmount"))
+            {
+                dgvList.Columns["TotalAmount"].DefaultCellStyle.Format = "N2";
+            }
         }
 
         private async Task LoadScheduledVehiclesToListViewAsync()
