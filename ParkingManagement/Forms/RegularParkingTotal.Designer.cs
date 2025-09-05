@@ -123,7 +123,7 @@
             // 
             // btnPrint
             // 
-            btnPrint.Location = new Point(772, 629);
+            btnPrint.Location = new Point(766, 593);
             btnPrint.Name = "btnPrint";
             btnPrint.Size = new Size(106, 30);
             btnPrint.TabIndex = 10;

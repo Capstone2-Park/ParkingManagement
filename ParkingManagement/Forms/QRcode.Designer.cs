@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             pbQRCode = new PictureBox();
+            btnPrint = new Button();
             ((System.ComponentModel.ISupportInitialize)pbQRCode).BeginInit();
             SuspendLayout();
             // 
@@ -41,11 +42,22 @@
             pbQRCode.TabIndex = 0;
             pbQRCode.TabStop = false;
             // 
+            // btnPrint
+            // 
+            btnPrint.Location = new Point(499, 669);
+            btnPrint.Name = "btnPrint";
+            btnPrint.Size = new Size(169, 41);
+            btnPrint.TabIndex = 1;
+            btnPrint.Text = "Print QR code";
+            btnPrint.UseVisualStyleBackColor = true;
+            btnPrint.Click += btnPrint_Click;
+            // 
             // QRcode
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1185, 736);
+            Controls.Add(btnPrint);
             Controls.Add(pbQRCode);
             Name = "QRcode";
             Text = "QRcode";
@@ -57,5 +69,6 @@
         #endregion
 
         private PictureBox pbQRCode;
+        private Button btnPrint;
     }
 }

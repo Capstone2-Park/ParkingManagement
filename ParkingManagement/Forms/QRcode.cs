@@ -5,6 +5,7 @@ using QRCoder;
 using ParkingManagement.Models;
 using System.Linq;
 using System.IO;
+using System.Drawing.Printing; // Add this at the top
 
 namespace ParkingManagement.Forms
 {
@@ -139,6 +140,33 @@ namespace ParkingManagement.Forms
                     {
                         pbQRCode.Image = Image.FromStream(ms);
                     }
+                }
+            }
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            if (pbQRCode.Image == null)
+            {
+                MessageBox.Show("No QR code to print.", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrintPage += (s, ev) =>
+            {
+                // Center the image on the page
+                int x = (ev.PageBounds.Width - pbQRCode.Image.Width) / 2;
+                int y = (ev.PageBounds.Height - pbQRCode.Image.Height) / 2;
+                ev.Graphics.DrawImage(pbQRCode.Image, x, y, pbQRCode.Image.Width, pbQRCode.Image.Height);
+            };
+
+            using (PrintDialog printDialog = new PrintDialog())
+            {
+                printDialog.Document = printDoc;
+                if (printDialog.ShowDialog() == DialogResult.OK)
+                {
+                    printDoc.Print();
                 }
             }
         }
