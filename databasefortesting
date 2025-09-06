@@ -16,11 +16,12 @@ CREATE TABLE Users (
 CREATE TABLE CurrentUser (
     CurrentUserID INT IDENTITY(1,1) PRIMARY KEY,
     FullName NVARCHAR(100) NOT NULL,
-    Username NVARCHAR(50) UNIQUE NOT NULL,
+    Username NVARCHAR(50) NOT NULL,
     [Role] NVARCHAR(20) NOT NULL, -- e.g., Admin, Cashier, Staff
-    TimeLoggedin DATETIME DEFAULT GETDATE(),
-	TimeLoggedout DATETIME NULL
+    TimeLoggedin DATETIME2 DEFAULT GETDATE(),
+	TimeLoggedout DATETIME2 NULL
 );
+drop table CurrentUser
 [3]
 -- Client Table
 CREATE TABLE Client (
@@ -224,4 +225,3 @@ CREATE TABLE MonthlyFinanceSum (
 	TotalRegRevenue DECIMAL(12,2) DEFAULT 0,
 	TotalRevenue DECIMAL(12,2) DEFAULT 0,
 );
-
