@@ -13,5 +13,6 @@ namespace ParkingManagement.Models
         public string Username { get; set; }
         public string Role { get; set; }
         public DateTime TimeLoggedin { get; set; } = DateTime.Now;
+        public DateTime TimeLoggedout { get; set; }
     }
 }

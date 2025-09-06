@@ -79,6 +79,7 @@ namespace ParkingManagement
                     btnFeeM.Visible = false;
                     btnSlotNav.Visible = false;
                     btnReport.Visible = false;
+                    pbUser.Visible = false; // Hide pbUser for Staff
                 }
                 // Existing SlotHistory logic...
                 var today = DateTime.Today;
@@ -247,6 +248,28 @@ namespace ParkingManagement
         {
             UserManagement UserForm = new UserManagement();
             UserForm.Show();
+        }
+
+        private void btnLogOut_Click(object sender, EventArgs e)
+        {
+            using (var db = new ParkingDbContext())
+            {
+                // Get the latest CurrentUser record
+                var currentUser = db.Set<CurrentUser>()
+                    .OrderByDescending(u => u.CurrentUserID)
+                    .FirstOrDefault();
+
+                if (currentUser != null)
+                {
+                    currentUser.TimeLoggedout = DateTime.Now;
+                    db.SaveChanges();
+                }
+            }
+
+            // Show LogIn form and close HomePage
+            var loginForm = new LogIn();
+            loginForm.Show();
+            this.Close();
         }
     }
 }

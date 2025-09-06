@@ -44,6 +44,7 @@
             btnRegParkSess = new Button();
             btnFeeM = new Button();
             btnClientM = new Button();
+            btnLogOut = new Button();
             ((System.ComponentModel.ISupportInitialize)ptbLogo).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbUser).BeginInit();
@@ -73,6 +74,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnLogOut);
             panel1.Controls.Add(pbUser);
             panel1.Controls.Add(btnRecords);
             panel1.Controls.Add(btnFinance);
@@ -94,7 +96,7 @@
             // pbUser
             // 
             pbUser.BackColor = Color.FromArgb(255, 128, 128);
-            pbUser.Location = new Point(102, 510);
+            pbUser.Location = new Point(98, 450);
             pbUser.Name = "pbUser";
             pbUser.Size = new Size(39, 38);
             pbUser.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -159,7 +161,7 @@
             lblNotif.BackColor = Color.FromArgb(255, 128, 128);
             lblNotif.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblNotif.ForeColor = Color.Red;
-            lblNotif.Location = new Point(102, 478);
+            lblNotif.Location = new Point(61, 450);
             lblNotif.Name = "lblNotif";
             lblNotif.Size = new Size(0, 21);
             lblNotif.TabIndex = 12;
@@ -168,7 +170,7 @@
             // 
             pbNotif.BackColor = Color.FromArgb(255, 128, 128);
             pbNotif.Image = Properties.Resources.hi;
-            pbNotif.Location = new Point(26, 510);
+            pbNotif.Location = new Point(22, 450);
             pbNotif.Name = "pbNotif";
             pbNotif.Size = new Size(39, 38);
             pbNotif.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -236,6 +238,17 @@
             btnClientM.UseVisualStyleBackColor = false;
             btnClientM.Click += btnClientM_Click_1;
             // 
+            // btnLogOut
+            // 
+            btnLogOut.BackColor = Color.FromArgb(255, 128, 128);
+            btnLogOut.Location = new Point(35, 509);
+            btnLogOut.Name = "btnLogOut";
+            btnLogOut.Size = new Size(82, 39);
+            btnLogOut.TabIndex = 19;
+            btnLogOut.Text = "Log Out";
+            btnLogOut.UseVisualStyleBackColor = false;
+            btnLogOut.Click += btnLogOut_Click;
+            // 
             // HomePage
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -274,5 +287,6 @@
         private Button btnFinance;
         private Button btnReports;
         private PictureBox pbUser;
+        private Button btnLogOut;
     }
 }

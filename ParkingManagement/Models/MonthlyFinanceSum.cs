@@ -8,11 +8,11 @@ namespace ParkingManagement.Models
 {
     public class MonthlyFinanceSum
     {
-        public int MonthlyFinanceID { get; set; }          // Primary Key
-        public DateTime MonthStart { get; set; }      // DATE
+        public int MonthlyFinanceID { get; set; }  
+        public DateTime MonthStart { get; set; }     
         public DateTime MonthEnd { get; set; }
         public int TotalTransaction { get; set; }
-        public int TotalRentTransaction { get; set; }    // INT - total daily rent revenue
+        public int TotalRentTransaction { get; set; }   
         public int TotalRegTransaction { get; set; }
         public decimal TotalRentRevenue { get; set; }
         public decimal TotalRegRevenue { get; set; }

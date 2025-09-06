@@ -84,7 +84,7 @@ namespace ParkingManagement
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeIn).IsRequired();
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TimeOut).IsRequired(false);
             modelBuilder.Entity<RegularParkingSession>().Property(rps => rps.TotalAmount).HasColumnType("DECIMAL(10,2)").IsRequired(false);
-          
+
 
             modelBuilder.Entity<Parkingslot>().ToTable("Parkingslot");
             modelBuilder.Entity<Parkingslot>().HasKey(ps => ps.SlotID);
@@ -140,6 +140,7 @@ namespace ParkingManagement
 
             modelBuilder.Entity<CurrentUser>().ToTable("CurrentUser");
             modelBuilder.Entity<CurrentUser>().HasKey(cu => cu.CurrentUserID);
+
         }
     }
 }
