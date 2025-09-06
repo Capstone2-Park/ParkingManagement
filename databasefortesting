@@ -223,21 +223,3 @@ CREATE TABLE SlotHistory (
 	AvailableSlotV INT NOT NULL,
 	AvailableParkingSlots INT NOT NULL,
 );
-
-
-CREATE TABLE Users (
-    UserID INT IDENTITY(1,1) PRIMARY KEY,
-    FullName NVARCHAR(100) NOT NULL,
-    Username NVARCHAR(50) UNIQUE NOT NULL,
-    PasswordHash NVARCHAR(255) NOT NULL,
-    UserRole NVARCHAR(20) NOT NULL, -- e.g., Admin, Cashier, Staff
-    DateCreated DATETIME DEFAULT GETDATE()
-);
-
-CREATE TABLE CurrentUser (
-    CurrentUserID INT IDENTITY(1,1) PRIMARY KEY,
-    FullName NVARCHAR(100) NOT NULL,
-    Username NVARCHAR(50) UNIQUE NOT NULL,
-    [Role] NVARCHAR(20) NOT NULL, -- e.g., Admin, Cashier, Staff
-    TimeLoggedin DATETIME DEFAULT GETDATE()
-);
