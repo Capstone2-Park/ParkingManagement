@@ -175,9 +175,6 @@ CREATE TABLE DailyReport (
     DailyReportID INT IDENTITY(1,1) PRIMARY KEY,
     ReportDateFrom DATE NOT NULL DEFAULT GETDATE(),
 	ReportDateTo DATE NOT NULL DEFAULT GETDATE(),
-    ParkingUsage NVARCHAR (MAX),              -- number of vehicles for the day
-    TotalRevenue DECIMAL(12,2) DEFAULT 0,  -- total daily revenue
-    AvailableSlots NVARCHAR (MAX),
 	PeakHoursJson NVARCHAR (MAX),
 );
 
@@ -227,13 +224,6 @@ CREATE TABLE SlotHistory (
 	AvailableParkingSlots INT NOT NULL,
 );
 
-
-CREATE TABLE EnterLogRent (
-    LogID NVARCHAR(10) PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL,
-	PlateNumber NVARCHAR(20) NOT NULL,
-    VehicleType NVARCHAR(50)NOT NULL,
-);
 
 CREATE TABLE Users (
     UserID INT IDENTITY(1,1) PRIMARY KEY,
