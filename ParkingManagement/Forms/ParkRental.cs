@@ -77,11 +77,10 @@ namespace ParkingManagement.Forms
         private void SetupDurationTypeComboBox()
         {
             cmbDurationType.Items.Clear();
-            cmbDurationType.Items.Add("Daily");
             cmbDurationType.Items.Add("Weekly");
             cmbDurationType.Items.Add("Monthly");
             cmbDurationType.Items.Add("Yearly");
-            cmbDurationType.SelectedIndex = 0; // Default to Daily
+            cmbDurationType.SelectedIndex = 0; // Default to Weekly
         }
 
         // Replace the existing UpdateNextButtonState with this async version:
@@ -200,9 +199,6 @@ namespace ParkingManagement.Forms
 
             switch (durationType)
             {
-                case "Daily":
-                    endDate = startDate.AddDays(1);
-                    break;
                 case "Weekly":
                     endDate = startDate.AddDays(7);
                     break;
@@ -264,7 +260,7 @@ namespace ParkingManagement.Forms
             _selectedVehicle = null;
             dtpDateStart.Value = DateTime.Now;
             dtpTime.Value = DateTime.Now;
-            cmbDurationType.SelectedIndex = 0;
+            cmbDurationType.SelectedIndex = 0; // Default to Weekly
             _calculatedEndDateTime = DateTime.MinValue;
             _calculatedTotalAmount = 0;
             lblVSelect.Text = "Vehicle Selection";
@@ -321,9 +317,6 @@ namespace ParkingManagement.Forms
 
             switch (durationType)
             {
-                case "Daily":
-                    endDate = startDate.AddDays(1);
-                    break;
                 case "Weekly":
                     endDate = startDate.AddDays(7);
                     break;

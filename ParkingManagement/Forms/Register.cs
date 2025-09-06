@@ -40,6 +40,14 @@ namespace ParkingManagement.Forms
 
             using (var db = new ParkingDbContext())
             {
+                // Check if username already exists
+                bool usernameExists = db.Users.Any(u => u.Username == username);
+                if (usernameExists)
+                {
+                    MessageBox.Show("Username already exists. Please choose a different username.", "Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 var user = new Users
                 {
                     UserRole = role,
