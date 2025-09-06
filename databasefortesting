@@ -1,4 +1,3 @@
-
 -- Create the database
 CREATE DATABASE ParkingSystem;
 
@@ -17,10 +16,12 @@ CREATE TABLE Users (
 CREATE TABLE CurrentUser (
     CurrentUserID INT IDENTITY(1,1) PRIMARY KEY,
     FullName NVARCHAR(100) NOT NULL,
-    Username NVARCHAR(50) UNIQUE NOT NULL,
+    Username NVARCHAR(50) NOT NULL,
     [Role] NVARCHAR(20) NOT NULL, -- e.g., Admin, Cashier, Staff
-    TimeLoggedin DATETIME DEFAULT GETDATE()
+    TimeLoggedin DATETIME2 DEFAULT GETDATE(),
+	TimeLoggedout DATETIME2 NULL
 );
+drop table CurrentUser
 [3]
 -- Client Table
 CREATE TABLE Client (
@@ -158,6 +159,15 @@ CREATE TABLE Fee (
 );
 
 
+CREATE TABLE SlotHistory (
+	SlotHistoryID INT IDENTITY(1,1) PRIMARY KEY,
+    [Date] DATE NOT NULL DEFAULT GETDATE(),
+	AvailableSlotM INT NOT NULL,
+	AvailableSlotV INT NOT NULL,
+	AvailableParkingSlots INT NOT NULL,
+);
+
+
 -- Insert initial data into Fee table
 INSERT INTO Fee (VehicleType, FixedPrice, DurationType)
 VALUES
@@ -214,12 +224,4 @@ CREATE TABLE MonthlyFinanceSum (
 	TotalRentRevenue DECIMAL(12,2) DEFAULT 0,
 	TotalRegRevenue DECIMAL(12,2) DEFAULT 0,
 	TotalRevenue DECIMAL(12,2) DEFAULT 0,
-);
-
-CREATE TABLE SlotHistory (
-	SlotHistoryID INT IDENTITY(1,1) PRIMARY KEY,
-    [Date] DATE NOT NULL DEFAULT GETDATE(),
-	AvailableSlotM INT NOT NULL,
-	AvailableSlotV INT NOT NULL,
-	AvailableParkingSlots INT NOT NULL,
 );
