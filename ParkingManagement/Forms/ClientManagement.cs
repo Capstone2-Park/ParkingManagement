@@ -60,10 +60,18 @@ namespace ParkingManagement
             btnCaptureImage.Enabled = false;
             btnRetakeImage.Enabled = false;
             btnAddVehicle.Enabled = true;
-            btnRemoveVehicle.Enabled = true;
+            btnRemoveVehicle.Enabled = false;
             dgvInformation.Enabled = true;
 
-    
+            // Fill cbColor with all color names
+            cbColor.Items.Clear();
+            foreach (var color in typeof(Color).GetProperties(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
+                .Where(p => p.PropertyType == typeof(Color))
+                .Select(p => p.Name))
+            {
+                cbColor.Items.Add(color);
+            }
+            cbColor.SelectedIndex = 0; // Default to first color
         }
 
         // --- Camera Initialization ---
@@ -306,7 +314,7 @@ namespace ParkingManagement
         private async void btnAddVehicle_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtBrand.Text) ||
-                string.IsNullOrWhiteSpace(txtColor.Text) ||
+                cbColor.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(txtPlateNo.Text) ||
                 cmbVehicleType.SelectedItem == null)
             {
@@ -318,10 +326,10 @@ namespace ParkingManagement
             {
                 VehicleID = txtVehicleIDNo.Text,
                 Brand = txtBrand.Text,
-                Color = txtColor.Text,
+                Color = cbColor.SelectedItem.ToString(),
                 PlateNumber = txtPlateNo.Text,
                 VehicleType = cmbVehicleType.SelectedItem.ToString(),
-                ClientID = currentClient.ClientID // Still link to current client in memory
+                ClientID = currentClient.ClientID
             };
 
             currentClientVehicles.Add(newVehicle);
@@ -352,7 +360,7 @@ namespace ParkingManagement
         {
             txtVehicleIDNo.Clear();
             txtBrand.Clear();
-            txtColor.Clear();
+            cbColor.SelectedIndex = (cbColor.Items.Count > 0) ? 0 : -1;
             txtPlateNo.Clear();
             cmbVehicleType.SelectedIndex = (cmbVehicleType.Items.Count > 0) ? 0 : -1;
         }
@@ -516,7 +524,7 @@ namespace ParkingManagement
 
             // Reset UI for new client entry
             btnAddVehicle.Enabled = true;
-            btnRemoveVehicle.Enabled = true;
+            btnRemoveVehicle.Enabled = false;
             dgvInformation.Enabled = true; // Still enabled even if showing all data
         }
 

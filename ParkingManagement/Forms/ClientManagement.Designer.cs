@@ -43,7 +43,6 @@
             panel1 = new Panel();
             txtVehicleIDNo = new TextBox();
             txtBrand = new TextBox();
-            txtColor = new TextBox();
             txtPlateNo = new TextBox();
             cmbVehicleType = new ComboBox();
             label5 = new Label();
@@ -59,6 +58,7 @@
             flowLayoutPanel1 = new FlowLayoutPanel();
             label10 = new Label();
             cbDiscount = new ComboBox();
+            cbColor = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)pcbIDPic).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvInformation).BeginInit();
             flowLayoutPanel1.SuspendLayout();
@@ -188,13 +188,6 @@
             txtBrand.Name = "txtBrand";
             txtBrand.Size = new Size(191, 23);
             txtBrand.TabIndex = 14;
-            // 
-            // txtColor
-            // 
-            txtColor.Location = new Point(248, 527);
-            txtColor.Name = "txtColor";
-            txtColor.Size = new Size(191, 23);
-            txtColor.TabIndex = 15;
             // 
             // txtPlateNo
             // 
@@ -337,12 +330,22 @@
             cbDiscount.Size = new Size(191, 23);
             cbDiscount.TabIndex = 31;
             // 
+            // cbColor
+            // 
+            cbColor.FormattingEnabled = true;
+            cbColor.Items.AddRange(new object[] { "2-Wheels", "4-Wheels" });
+            cbColor.Location = new Point(248, 527);
+            cbColor.Name = "cbColor";
+            cbColor.Size = new Size(191, 23);
+            cbColor.TabIndex = 32;
+            // 
             // ClientManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1266, 749);
+            Controls.Add(cbColor);
             Controls.Add(cbDiscount);
             Controls.Add(label10);
             Controls.Add(flowLayoutPanel1);
@@ -355,7 +358,6 @@
             Controls.Add(label5);
             Controls.Add(cmbVehicleType);
             Controls.Add(txtPlateNo);
-            Controls.Add(txtColor);
             Controls.Add(txtBrand);
             Controls.Add(txtVehicleIDNo);
             Controls.Add(panel1);
@@ -399,7 +401,6 @@
         private Panel panel1;
         private TextBox txtVehicleIDNo;
         private TextBox txtBrand;
-        private TextBox txtColor;
         private TextBox txtPlateNo;
         private ComboBox cmbVehicleType;
         private Label label5;
@@ -415,5 +416,6 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private Label label10;
         private ComboBox cbDiscount;
+        private ComboBox cbColor;
     }
 }
