@@ -104,17 +104,6 @@ CREATE TABLE RegularParkingSessions (
 	Discount NVARCHAR (50) NOT NULL
 );
 
-[9]
-CREATE TABLE RegularSlot (
-	RegSlotID INT IDENTITY(1,1) PRIMARY KEY,
-	SessionID int NULL,
-	AvailableSlotM INT NOT NULL,
-	AvailableSlotV INT NOT NULL,
-	OccupiedSlotM INT DEFAULT 0,
-	OccupiedSlotV INT DEFAULT 0,
-	FOREIGN KEY (SessionID) REFERENCES RegularParkingSessions(SessionID),
-);
-
 
 INSERT INTO RegularSlot (AvailableSlotM, AvailableSlotV)
 VALUES
@@ -142,6 +131,15 @@ CREATE TABLE TransactionsReg (
 	TotalID INT,
 	FOREIGN KEY (TotalID) REFERENCES RegularParkingTotals(TotalID)
 );
+
+CREATE TABLE RegularSlot (
+	RegSlotID INT IDENTITY(1,1) PRIMARY KEY,
+	AvailableSlotM INT NOT NULL,
+	AvailableSlotV INT NOT NULL,
+	OccupiedSlotM INT DEFAULT 0,
+	OccupiedSlotV INT DEFAULT 0,
+);
+
 
 [12]
 -- Fee Table
